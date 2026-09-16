@@ -90,9 +90,20 @@ LLM допустим для извлечения структуры из сла�
 
 ## Документы CAUDEX
 
-- [`01_PRODUCT_BOUNDARY.md`](01_PRODUCT_BOUNDARY.md) — граница продукта, пользовательские решения, scope/anti-scope.
-- [`02_AS_IS_VOLKOVSKY.md`](02_AS_IS_VOLKOVSKY.md) — восстановленный AS-IS по Волковскому ГОК.
-- дальнейшие документы: problem map, TO-BE, canonical domain model, data contracts, MVP requirements, acceptance cases и migration map текущего кода.
+1. [`01_PRODUCT_BOUNDARY.md`](01_PRODUCT_BOUNDARY.md) — граница продукта, пользователи, JTBD, scope/anti-scope.
+2. [`02_AS_IS_VOLKOVSKY.md`](02_AS_IS_VOLKOVSKY.md) — восстановленный AS-IS по Волковскому ГОК.
+3. [`03_AI_BOUNDARY.md`](03_AI_BOUNDARY.md) — где AI действительно нужен, где является fallback и где его применение запрещено.
+4. [`04_PROBLEM_MAP.md`](04_PROBLEM_MAP.md) — симптомы → root causes → требования к продукту.
+5. [`05_TO_BE.md`](05_TO_BE.md) — целевой сквозной процесс от источников до business findings и денег.
+6. [`06_DOMAIN_MODEL.md`](06_DOMAIN_MODEL.md) — канонические сущности, события, blockers, invariants и read model.
+
+Следующий пакет:
+
+- `07_DATA_CONTRACTS.md` — структуры входов и canonical payloads;
+- `08_MVP_REQUIREMENTS.md` — функциональные/нефункциональные требования первого vertical slice;
+- `09_ACCEPTANCE_CASES.md` — измеримые кейсы Волковского и второго объекта;
+- `10_CURRENT_CODE_MAPPING.md` — что из текущего СтройИнтел reuse / adapt / freeze / remove;
+- `11_DELIVERY_BACKLOG.md` — задачи для разработчиков после утверждения аналитики.
 
 ## Правило изменений
 
