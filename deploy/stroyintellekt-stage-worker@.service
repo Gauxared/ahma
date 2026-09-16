@@ -1,0 +1,48 @@
+[Unit]
+# ШАБЛОН, как и у прода: экземпляры stroyintellekt-stage-worker@1, @2 …
+#
+# НА СТЕНДЕ ПОТОК ОДИН, И ЭТО СЧИТАНО, А НЕ ПРИНЯТО ПО ПРИВЫЧКЕ. Худший случай
+# на машине: два потока прода по 3 ГБ, сборка выпуска 3,2 ГБ, две базы и два
+# интерфейса — уже около 10 ГБ из 11,7 при отсутствии подкачки. Второй поток
+# стенда в этот остаток не помещается.
+#
+# Цена решения названа: состязание двух воркеров за одну задачу на стенде не
+# воспроизводится. Держит его не стенд, а набор против настоящей базы —
+# `platform/jobs/job-repository.test.ts`, «SKIP LOCKED: два воркера не берут
+# одну задачу». Понадобится проверить это на стенде живьём — на время замера
+# останавливается поток прода, а не добавляется третий.
+Description=СтройИнтеллект СТЕНД — воркер фоновых задач (поток %i)
+After=network.target postgresql@16-stage.service
+Requires=postgresql@16-stage.service
+
+[Service]
+Type=simple
+User=ubuntu
+# Рабочий каталог — ССЫЛКА на текущий выпуск, а не сам выпуск
+# (см. deploy/release.sh).
+WorkingDirectory=/opt/stroyintellekt-stage/current
+EnvironmentFile=/opt/stroyintellekt-stage/.env
+# Номер потока — это имя замка воркера; пояснение в
+# deploy/stroyintellekt-worker@.service.
+Environment=STROYINTELLECT_WORKER_ID=%i
+# Потолок кучи: книга Excel на 39 МБ забирает несколько гигабайт, и воркер
+# обязан пережить такой файл, а не упасть на нём.
+Environment=NODE_OPTIONS=--max-old-space-size=2048
+# Наружу к модели ходит ИМЕННО ВОРКЕР. Пояснение к переменной см. в
+# stroyintellekt-web.service: без неё HTTPS_PROXY из .env не действует.
+Environment=NODE_USE_ENV_PROXY=1
+ExecStart=/opt/stroyintellekt-stage/current/node_modules/.bin/tsx apps/worker/src/main.ts
+Restart=always
+RestartSec=10
+
+# СТЕНД УСТУПАЕТ ПРОДУ, А НЕ КОНКУРИРУЕТ С НИМ.
+#
+# Предел выше потолка кучи (2 ГБ) с запасом на внешние буферы: воркер обязан
+# дожить до конца большого документа, а не быть убитым на нём. Но 11,7 ГБ на
+# машине общие, подкачки нет — без предела прогон на стенде уводит в OOM весь
+# сервер, и ядро выбирает жертву само, с равной вероятностью боевой воркер.
+MemoryMax=3G
+CPUWeight=20
+
+[Install]
+WantedBy=multi-user.target

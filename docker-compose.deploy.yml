@@ -1,0 +1,125 @@
+# ИМЯ ПРОЕКТА — ЧАСТЬ ЛИЧНОСТИ УСТАНОВКИ, А НЕ УКРАШЕНИЕ.
+#
+# Первая версия называлась `stroyintellekt` — как и рабочий стек разработчика,
+# у которого имя проекта берётся из имени каталога. Запуск развёртывания
+# ЗАХВАТИЛ рабочий контейнер базы и том с данными: compose увидел «свои»
+# контейнеры по имени и переиспользовал их.
+#
+# Обнаружилось это по отказу миграций («credentials are not valid»): пароль в
+# переменных сменился, а данные в томе остались от прежней инициализации. Могло
+# обнаружиться иначе — успешной миграцией ЧУЖОЙ базы.
+#
+# Поэтому имя задаётся переменной и по умолчанию отличается от рабочего. У
+# каждой установки — своё: `si-demo`, `si-stage`, `si-apri`.
+name: ${COMPOSE_PROJECT_NAME:-si-demo}
+
+# Демонстрационный стек: этап 1, модели по API, ускорителей нет.
+#
+# Разворачивается одной командой на сервере 8 ядер / 32 ГБ / 500 ГБ NVMe
+# (обоснование — docs/architecture-and-infrastructure.md §7).
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: 10m
+    max-file: '3'
+
+x-app-env: &app-env
+  NODE_ENV: production
+  DATABASE_URL: postgresql://stroyintellect_app:${DB_APP_PASSWORD}@postgres:5432/stroyintellect
+  STROYINTELLECT_DEPLOYMENT_PROFILE: ${DEPLOYMENT_PROFILE:-single-tenant-onprem}
+  STROYINTELLECT_MODEL_BASE_URL: ${MODEL_BASE_URL:-}
+  STROYINTELLECT_MODEL_ID: ${MODEL_ID:-}
+  STROYINTELLECT_MODEL_API_KEY: ${MODEL_API_KEY:-}
+  STROYINTELLECT_MODEL_REASONING_EFFORT: ${MODEL_REASONING_EFFORT:-}
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    logging: *logging
+    environment:
+      POSTGRES_DB: stroyintellect
+      POSTGRES_USER: stroyintellect
+      POSTGRES_PASSWORD: ${DB_OWNER_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U stroyintellect -d stroyintellect']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Миграции и провизионирование роли — ОДНОРАЗОВО, до старта приложения.
+  #
+  # Отдельным контейнером, а не шагом в приложении: приложение, умеющее менять
+  # схему, обязано иметь на это права — и тогда ограничение роли приложения,
+  # на котором держится RLS, перестаёт быть ограничением.
+  migrate:
+    image: stroyintellekt:${TAG:-dev}
+    logging: *logging
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_OWNER_URL: postgresql://stroyintellect:${DB_OWNER_PASSWORD}@postgres:5432/stroyintellect
+      STROYINTELLECT_DB_APP_PASSWORD: ${DB_APP_PASSWORD}
+    command:
+      - sh
+      - -ec
+      - |
+        pnpm prisma migrate deploy
+        pnpm tsx tooling/provision-db-role.ts
+    restart: 'no'
+
+  web:
+    image: stroyintellekt:${TAG:-dev}
+    restart: unless-stopped
+    logging: *logging
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment: *app-env
+    volumes:
+      # Документы заказчика подключаются томом и в образ не входят (§11).
+      - ${OBJECTS_PATH:-./var/objects}:/data/objects:ro
+    ports:
+      - '${WEB_PORT:-3000}:3000'
+    healthcheck:
+      test: ['CMD-SHELL', 'node -e "fetch(\"http://127.0.0.1:3000/\").then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"']
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
+
+  worker:
+    image: stroyintellekt:${TAG:-dev}
+    restart: unless-stopped
+    logging: *logging
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+    environment: *app-env
+    volumes:
+      - ${OBJECTS_PATH:-./var/objects}:/data/objects:ro
+    command: ['pnpm', 'tsx', 'apps/worker/src/main.ts']
+    # На Linux host.docker.internal сам не заводится. Нужен, когда модель живёт
+    # на хосте: прокси разработки или vLLM рядом со стендом. Имя оканчивается на
+    # .internal, поэтому egress-шлюз относит его к внутреннему контуру — но
+    # объявить его в model-routes.json всё равно обязан тот, кто разворачивает.
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    # Два воркера: один разбирает объект, второй остаётся свободным. Число
+    # уточняется замером — см. docs/architecture-and-infrastructure.md §10.
+    deploy:
+      replicas: 2
+      resources:
+        limits:
+          # Книга на 39 МБ забирает 4,6 ГБ (замер). Предел ниже означает, что
+          # воркер умрёт на первом же большом документе заказчика.
+          memory: 8G
+    # Остановка по SIGTERM дорабатывает текущую задачу; таймаут даёт ей время.
+    stop_grace_period: 120s
+
+volumes:
+  postgres_data:

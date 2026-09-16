@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СтройИнтеллект - Premium Tech Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --red: #E60000;
+  --red-gradient: linear-gradient(135deg, #FF1A1A 0%, #B30000 100%);
+  --white: #FFFFFF;
+  --black: #0A0A0A;
+  --bg-color: #F8F9FA;
+  --card-bg: #FFFFFF;
+  --text-main: #2D3136;
+  --text-muted: #8A929A;
+  --border-light: rgba(0,0,0,0.05);
+  --shadow-soft: 0 20px 50px rgba(0,0,0,0.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Montserrat', sans-serif; background-color: #E5E7EB;
+  display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 80px;
+}
+
+.slide {
+  width: 1920px; height: 1080px; background-color: var(--bg-color);
+  position: relative; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+  page-break-after: always; flex-shrink: 0; color: var(--text-main);
+  background-image: radial-gradient(circle at 100% 0%, rgba(230,0,0,0.02) 0%, transparent 40%);
+  display: flex; flex-direction: column;
+}
+@media print {
+  body { background: none; padding: 0; gap: 0; display: block; }
+  .slide { box-shadow: none; margin: 0; }
+  @page { size: 1920px 1080px; margin: 0; }
+}
+
+h1 { font-size: 52px; font-weight: 800; color: var(--black); margin-bottom: 15px; letter-spacing: -1px; }
+.subtitle { font-size: 24px; font-weight: 400; color: var(--text-muted); margin-bottom: 40px; line-height: 1.4; }
+p, li { font-size: 20px; color: var(--text-main); line-height: 1.5; margin-bottom: 15px; font-weight: 400; }
+.highlight { color: var(--red); font-weight: 600; }
+.strong { font-weight: 700; color: var(--black); }
+
+.header-area { padding: 60px 80px 20px 80px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 40px; font-weight: 800; color: var(--black); letter-spacing: -1px; }
+.logo span { color: var(--red); }
+
+.content { padding: 0 80px 40px 80px; flex-grow: 1; display: flex; flex-direction: column; }
+
+.footer {
+  padding: 0 80px; height: 80px; display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--border-light); margin-top: auto; flex-shrink: 0;
+}
+.footer-text { font-size: 16px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+.page-num { font-size: 18px; font-weight: 700; color: var(--red); }
+
+.bento-grid {
+  display: grid; grid-template-columns: repeat(12, 1fr); gap: 30px; flex-grow: 1; height: 100%; min-height: 0;
+}
+.bento-card {
+  background: var(--card-bg); border-radius: 20px; padding: 40px;
+  box-shadow: var(--shadow-soft); border: 1px solid var(--border-light);
+  display: flex; flex-direction: column;
+}
+.bento-card.dark { background: var(--black); color: white; }
+.bento-card.dark .card-title { color: white; }
+.bento-card.dark p { color: #ccc; }
+.bento-card.red { background: var(--red-gradient); color: white; }
+.bento-card.red .card-title { color: white; }
+.bento-card.red p { color: rgba(255,255,255,0.9); }
+
+.card-icon {
+  width: 56px; height: 56px; border-radius: 14px; background: var(--red-gradient);
+  color: var(--white); display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 25px; flex-shrink: 0;
+}
+.bento-card.dark .card-icon { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
+.card-title { font-size: 28px; font-weight: 700; color: var(--black); margin-bottom: 20px; letter-spacing: -0.5px; }
+
+.hero-num {
+  font-size: 80px; font-weight: 800; background: var(--red-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1; margin: 15px 0; letter-spacing: -2px;
+}
+.hero-label { font-size: 18px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+.col-3 { grid-column: span 3; }
+.col-4 { grid-column: span 4; }
+.col-6 { grid-column: span 6; }
+.col-8 { grid-column: span 8; }
+.col-12 { grid-column: span 12; }
+.row-2 { grid-row: span 2; }
+
+.glass-tag {
+  background: rgba(230,0,0,0.05); color: var(--red); padding: 8px 16px;
+  border-radius: 12px; font-size: 14px; font-weight: 700; text-transform: uppercase;
+  display: inline-block; margin-bottom: 20px; align-self: flex-start;
+}
+.bento-card.dark .glass-tag { background: rgba(255,255,255,0.1); color: white; }
+.bento-card.red .glass-tag { background: rgba(255,255,255,0.2); color: white; }
+
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide">
+  <div style="position: absolute; top: 0; right: 0; bottom: 0; width: 40%; background: var(--card-bg); z-index: 1;"></div>
+  <div class="header-area" style="z-index: 2;"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content" style="z-index: 2; flex-direction: row; align-items: center; padding-top: 40px; padding-bottom: 120px;">
+    <div style="width: 60%; padding-right: 80px;">
+      <div class="glass-tag">Technical Deep Dive</div>
+      <h1 style="font-size: 72px; line-height: 1.1; margin-bottom: 40px;">Архитектура и Безопасность</h1>
+      <p style="font-size: 26px; font-weight: 300; max-width: 800px; line-height: 1.4;">Изоляция коммерческой тайны, локальные LLM с открытыми весами и детерминированная расчётная модель.</p>
+    </div>
+    <div style="width: 40%; padding-left: 80px; display: flex; flex-direction: column; justify-content: center; gap: 50px;">
+      <div>
+        <div class="hero-num" style="font-size: 64px;">On-Prem</div>
+        <div class="hero-label">Установка в контуре Заказчика</div>
+      </div>
+      <div>
+        <div class="hero-num" style="font-size: 64px;">2 Контура</div>
+        <div class="hero-label">Закрытый и Внешний (анонимный)</div>
+      </div>
+      <div>
+        <div class="hero-num" style="font-size: 64px;">StorHaus</div>
+        <div class="hero-label">Базовая интеграция</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: Два контура безопасности -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Модель двух контуров (Zero Trust)</h1>
+    <div class="subtitle">Изоляция коммерческой тайны на физическом и логическом уровнях.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6" style="border: 2px solid var(--red);">
+        <div class="glass-tag">Внутренний контур (Закрытый)</div>
+        <div class="card-title">Изоляция коммерческой тайны</div>
+        <p>Обрабатывает документы, опорную базу и результаты расчётов исключительно локальными моделями с открытыми весами (размещёнными на мощностях Заказчика).</p>
+        <p><span class="strong">Архитектурный принцип:</span> Документы Заказчика в исходном виде не передаются за пределы контура.</p>
+      </div>
+      <div class="bento-card col-6 dark">
+        <div class="glass-tag">Внешний контур (Анонимный)</div>
+        <div class="card-title" style="color: white;">Регламент передачи данных</div>
+        <p>Применяется для задач, требующих обращения к внешним источникам и моделям (например, поиск подрядчиков).</p>
+        <p><span class="highlight">Маскирование:</span> Передача данных выполняется по регламенту с обязательной анонимизацией (удаление ИНН, сумм) исходных данных до запуска процесса. Регламент фиксируется на Этапе 1.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">Tech Deep Dive / Security Architecture</div><div class="page-num">02</div></div>
+</div>
+
+<!-- SLIDE 3: Модели и Стек -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Локальные модели и Расчётный модуль</h1>
+    <div class="subtitle">Никакой платы за токены. Детерминированные вычисления.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="card-icon"><i class="fas fa-server"></i></div>
+        <div class="card-title">Выбор LLM-семейства</div>
+        <p>Мы не привязываемся к одной нейросети. Конкретный состав семейства LLM (с открытыми весами) фиксируется протоколом на Этапе 1 по результатам <span class="highlight">тестирования на реальных документах АПРИ</span>.</p>
+        <p>Смена и обновление модели выполняются простым <span class="strong">изменением конфигурации</span> без переработки прикладного кода Системы.</p>
+      </div>
+      <div class="bento-card col-6">
+        <div class="card-icon"><i class="fas fa-calculator"></i></div>
+        <div class="card-title">Детерминированный модуль</div>
+        <p>Модели используются только для анализа текстов и поиска аномалий. Все числовые показатели (сумма по разделам, БДДС, налоги) рассчитывает <span class="strong">строгий расчётный модуль</span>. Сумма разделов обязана сходиться с итогом источника до рубля.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">Tech Deep Dive / Core Engine</div><div class="page-num">03</div></div>
+</div>
+
+<!-- SLIDE 4: Интеграция и Развёртывание -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Интеграция и План развёртывания (135 дней)</h1>
+    <div class="subtitle">Порядок выполнения работ и условия запуска.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="glass-tag">Интеграция</div>
+        <div class="card-title">Контур получения данных</div>
+        <p>Наполнение данными (сметы, КС, договоры) решается посредством <span class="strong">интеграции со StorHaus</span> или через структурированные файлы по API. Система не требует ручного переноса пользователем.</p>
+        <p>Достигнутая точность фиксируется протоколом при приёмке и переизмеряется при каждом цикле актуализации.</p>
+      </div>
+      <div class="bento-card col-6 red">
+        <div class="glass-tag">Timeline</div>
+        <div class="card-title">4 этапа до OПЭ</div>
+        <p>Срок исчисляется со дня предоставления инфраструктуры (доступы, VPN). Проект длится 135 дней.</p>
+        <p>На Этапе 1 замеряется производительность и фиксируется чек-лист приёмки (порог >80% для агентов). Приёмка проходит на двух <span class="strong" style="color:white;">реальных исторических объектах</span> Заказчика.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">Tech Deep Dive / Deployment</div><div class="page-num">04</div></div>
+</div>
+
+</body>
+</html>

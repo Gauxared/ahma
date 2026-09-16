@@ -1,0 +1,29 @@
+{
+  "id": "object-passport",
+  "version": 1,
+  "kind": "agent",
+  "implements": "1.0.0",
+  "contour": "internal",
+  "dataClasses": [
+    "positions",
+    "prices"
+  ],
+  "requiresPermissions": [
+    "check.run"
+  ],
+  "provides": [
+    "object_passport"
+  ],
+  "displayName": "Администратор",
+  "sourcePrompt": "reference-system-new/Выход/Настенька_Админ_v9.7.txt",
+  "promptFile": "prompt.md",
+  "modelRole": "primary",
+  "checklistId": "настенька",
+  "roster": {
+    "person": "Настенька",
+    "capability": "object_passport",
+    "scope": "объект",
+    "order": 1
+  },
+  "referenceBase": "config/crew/bases/Опорная_база_Настенька_Админ_v1.0.xlsx"
+}

@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СтройИнтеллект - Premium Pitch Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --red: #E60000;
+  --red-gradient: linear-gradient(135deg, #FF1A1A 0%, #B30000 100%);
+  --white: #FFFFFF;
+  --black: #0A0A0A;
+  --bg-color: #F8F9FA;
+  --card-bg: #FFFFFF;
+  --text-main: #2D3136;
+  --text-muted: #8A929A;
+  --border-light: rgba(0,0,0,0.05);
+  --shadow-soft: 0 20px 50px rgba(0,0,0,0.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Montserrat', sans-serif; background-color: #E5E7EB;
+  display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 80px;
+}
+
+.slide {
+  width: 1920px; height: 1080px; background-color: var(--bg-color);
+  position: relative; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+  page-break-after: always; flex-shrink: 0; color: var(--text-main);
+  background-image: radial-gradient(circle at 100% 0%, rgba(230,0,0,0.02) 0%, transparent 40%);
+  display: flex; flex-direction: column;
+}
+@media print {
+  body { background: none; padding: 0; gap: 0; display: block; }
+  .slide { box-shadow: none; margin: 0; }
+  @page { size: 1920px 1080px; margin: 0; }
+}
+
+h1 { font-size: 52px; font-weight: 800; color: var(--black); margin-bottom: 15px; letter-spacing: -1px; }
+.subtitle { font-size: 24px; font-weight: 400; color: var(--text-muted); margin-bottom: 40px; line-height: 1.4; }
+p, li { font-size: 20px; color: var(--text-main); line-height: 1.5; margin-bottom: 15px; font-weight: 400; }
+.highlight { color: var(--red); font-weight: 600; }
+.strong { font-weight: 700; color: var(--black); }
+
+.header-area { padding: 60px 80px 20px 80px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 40px; font-weight: 800; color: var(--black); letter-spacing: -1px; }
+.logo span { color: var(--red); }
+
+.content { padding: 0 80px 40px 80px; flex-grow: 1; display: flex; flex-direction: column; }
+
+.footer {
+  padding: 0 80px; height: 80px; display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--border-light); margin-top: auto; flex-shrink: 0;
+}
+.footer-text { font-size: 16px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+.page-num { font-size: 18px; font-weight: 700; color: var(--red); }
+
+.bento-grid {
+  display: grid; grid-template-columns: repeat(12, 1fr); gap: 30px; flex-grow: 1; height: 100%; min-height: 0;
+}
+.bento-card {
+  background: var(--card-bg); border-radius: 20px; padding: 40px;
+  box-shadow: var(--shadow-soft); border: 1px solid var(--border-light);
+  display: flex; flex-direction: column;
+}
+.bento-card.dark { background: var(--black); color: white; }
+.bento-card.dark .card-title { color: white; }
+.bento-card.dark p { color: #ccc; }
+.bento-card.red { background: var(--red-gradient); color: white; }
+.bento-card.red .card-title { color: white; }
+.bento-card.red p { color: rgba(255,255,255,0.9); }
+
+.card-icon {
+  width: 56px; height: 56px; border-radius: 14px; background: var(--red-gradient);
+  color: var(--white); display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 25px; flex-shrink: 0;
+}
+.bento-card.dark .card-icon { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
+.card-title { font-size: 28px; font-weight: 700; color: var(--black); margin-bottom: 20px; letter-spacing: -0.5px; }
+
+.hero-num {
+  font-size: 80px; font-weight: 800; background: var(--red-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1; margin: 15px 0; letter-spacing: -2px;
+}
+.hero-label { font-size: 18px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+.col-3 { grid-column: span 3; }
+.col-4 { grid-column: span 4; }
+.col-6 { grid-column: span 6; }
+.col-8 { grid-column: span 8; }
+.col-9 { grid-column: span 9; }
+.col-12 { grid-column: span 12; }
+.row-2 { grid-row: span 2; }
+
+.glass-tag {
+  background: rgba(230,0,0,0.05); color: var(--red); padding: 8px 16px;
+  border-radius: 12px; font-size: 14px; font-weight: 700; text-transform: uppercase;
+  display: inline-block; margin-bottom: 20px; align-self: flex-start;
+}
+.bento-card.dark .glass-tag { background: rgba(255,255,255,0.1); color: white; }
+.bento-card.red .glass-tag { background: rgba(255,255,255,0.2); color: white; }
+
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide">
+  <div style="position: absolute; top: 0; right: 0; bottom: 0; width: 40%; background: var(--card-bg); z-index: 1;"></div>
+  <div class="header-area" style="z-index: 2;"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content" style="z-index: 2; flex-direction: row; align-items: center; padding-top: 40px; padding-bottom: 120px;">
+    <div style="width: 60%; padding-right: 80px;">
+      <div class="glass-tag">Premium Enterprise Solution</div>
+      <h1 style="font-size: 72px; line-height: 1.1; margin-bottom: 40px;">СтройИнтеллект (Девелопмент)</h1>
+      <p style="font-size: 26px; font-weight: 300; max-width: 800px; line-height: 1.4;">Цифровая служба технического заказчика, разворачиваемая в собственном контуре Заказчика.</p>
+    </div>
+    <div style="width: 40%; padding-left: 80px; display: flex; flex-direction: column; justify-content: center; gap: 50px;">
+      <div>
+        <div class="hero-num" style="font-size: 64px;">135 дней</div>
+        <div class="hero-label">Срок внедрения (4 этапа)</div>
+      </div>
+      <div>
+        <div class="hero-num" style="font-size: 64px;">250+</div>
+        <div class="hero-label">Объектов в опорной базе</div>
+      </div>
+      <div>
+        <div class="hero-num" style="font-size: 64px;">9 агентов</div>
+        <div class="hero-label">ИИ-команда аналитиков</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: Оценка и Аномалии -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Расчётно-аналитическая оценка стоимости</h1>
+    <div class="subtitle">Сопоставление с единственным предложением не работает — нужна база сравнения.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-search-dollar"></i></div>
+        <div class="card-title">Классификация отклонений</div>
+        <p>Система формирует собственную оценку стоимости по каждой позиции, используя нормализованный массив из 250+ исторических объектов (приведённый к сопоставимым единицам, конструктивам и регионам). Отклонения коммерческих предложений подрядчиков классифицируются по 5 векторам:</p>
+        <ul style="margin-left: 20px; margin-top: 15px; margin-bottom: 0;">
+          <li><span class="strong">Рыночное движение цен</span> (легитимная инфляция)</li>
+          <li><span class="strong">Особенность тех. решения</span> (оправданное удорожание)</li>
+          <li><span class="highlight">Ошибка в объёмах</span> (человеческий фактор)</li>
+          <li><span class="highlight">Завышение расценки</span> (наценка подрядчика)</li>
+          <li><span class="highlight">Двойной учёт</span> (скрытые переплаты, дубликаты)</li>
+        </ul>
+      </div>
+      <div class="bento-card col-4 red">
+        <div class="glass-tag">Механика работы</div>
+        <div class="card-title">Аномалии в рублях</div>
+        <p>Аномалии выделяются отдельно с указанием суммы влияния в рублях и основания расчёта. Вы получаете не абстрактный процент, а точную целевую цену для переговоров.</p>
+        <div class="hero-num" style="color: white; -webkit-text-fill-color: white; font-size: 60px; margin-top: auto;">>95%</div>
+        <div class="hero-label" style="color: rgba(255,255,255,0.7);">Точность извлечения позиций</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Отклонения</div><div class="page-num">02</div></div>
+</div>
+
+<!-- SLIDE 3: 9 Агентов -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Команда из девяти ИИ-агентов</h1>
+    <div class="subtitle">Создание единой цифровой информационной модели объекта без человеческого фактора.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-4">
+        <div class="card-title" style="font-size: 22px;"><i class="fas fa-hard-hat highlight"></i> ГИП и Сметчик</div>
+        <p style="font-size: 16px;">Анализируют сметы, объёмы, расценки и коэффициенты. Сверяют с опорной базой.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="card-title" style="font-size: 22px;"><i class="fas fa-truck highlight"></i> Снабжение & Подряд</div>
+        <p style="font-size: 16px;">Анализ и подбор подрядчиков, работа со спецификациями материалов.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="card-title" style="font-size: 22px;"><i class="fas fa-chart-line highlight"></i> Экономист</div>
+        <p style="font-size: 16px;">БДДС, маржинальность, эскроу, потребность в проектном финансировании.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="card-title" style="font-size: 22px;"><i class="fas fa-clipboard-check highlight"></i> Инженер ПТО</div>
+        <p style="font-size: 16px;">Построчная сверка актов (КС-2) с изначальной сметой и проектом.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="card-title" style="font-size: 22px;"><i class="fas fa-balance-scale highlight"></i> Юрист</div>
+        <p style="font-size: 16px;">Правовой аудит подряда, выявление рисков по авансам и штрафным санкциям.</p>
+      </div>
+      <div class="bento-card col-4 dark">
+        <div class="card-title" style="font-size: 22px;"><i class="fas fa-tasks text-muted"></i> РП & Администратор</div>
+        <p style="font-size: 16px;">Контроль исполнения плана-графика, сбор и структуризация данных.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / ИИ Агенты</div><div class="page-num">03</div></div>
+</div>
+
+<!-- SLIDE 4: Экономика проекта -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Результат: Экономика проекта</h1>
+    <div class="subtitle">От выявления расхождений к предиктивному управлению финансами.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="card-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+        <div class="card-title">Себестоимость и Маржа</div>
+        <p>Расчёт себестоимости строительно-монтажных работ (СМР) по элементам, приведённая к рублям за м², в сравнении со значениями опорной базы Заказчика.</p>
+        <p>Автоматическое моделирование <span class="highlight">маржи проекта в трёх сценариях</span> (оптимистичный, базовый, пессимистичный).</p>
+      </div>
+      <div class="bento-card col-6 dark">
+        <div class="card-icon"><i class="fas fa-university"></i></div>
+        <div class="card-title">БДДС и Финансирование</div>
+        <p>Построение графика выборки проектного кредита в строгом соответствии с графиком производства работ.</p>
+        <p>Помесячный <span class="strong" style="color:white;">Бюджет движения денежных средств (БДДС)</span>, прогнозирование кассовых разрывов и точный расчёт даты раскрытия эскроу-счетов.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Экономика</div><div class="page-num">04</div></div>
+</div>
+
+<!-- SLIDE 5: ИБ и Два Контура -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Информационная безопасность: Два Контура</h1>
+    <div class="subtitle">Никакой абонентской платы за токены. Полная изоляция данных.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="glass-tag">On-Premise</div>
+        <div class="card-title">Внутренний контур (Закрытый)</div>
+        <p>Здесь обрабатывается коммерческая тайна: сметы, финмодели, историческая БД. Работает <span class="strong">исключительно на моделях с открытыми весами</span> внутри инфраструктуры Заказчика.</p>
+        <p><span class="highlight">Важно:</span> Плата за обращения к локальной модели не взимается и не зависит от интенсивности использования. Выход в интернет физически закрыт.</p>
+      </div>
+      <div class="bento-card col-6">
+        <div class="glass-tag">Zero Trust</div>
+        <div class="card-title">Внешний контур (Анонимный)</div>
+        <p>Применяется для задач, требующих обращения к внешним источникам (например, поиск подрядчиков).</p>
+        <p>Данные проходят <span class="strong">обязательную анонимизацию и маскирование</span> до запуска процесса. Передача данных между контурами выполняется строго по регламенту, согласованному на Этапе 1.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Безопасность</div><div class="page-num">05</div></div>
+</div>
+
+<!-- SLIDE 6: Условия и Границы -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Ограничения и Интеграция</h1>
+    <div class="subtitle">Что входит в границы проекта, а что нет.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="card-icon" style="background: var(--black);"><i class="fas fa-plug"></i></div>
+        <div class="card-title">Слой интеграции</div>
+        <p>Вопросы наполнения данными и работы системы решаются посредством <span class="strong">интеграции со StorHaus</span>. Тестовый набор загружается через API или структурированный файловый интерфейс без ручного переноса.</p>
+        <p class="highlight" style="font-size: 16px;">* Глубокая двусторонняя интеграция с 1С и разработка коннекторов не входит в базовый объём запуска.</p>
+      </div>
+      <div class="bento-card col-6">
+        <div class="card-icon" style="background: var(--black);"><i class="fas fa-ban"></i></div>
+        <div class="card-title">Границы ответственности</div>
+        <ul style="margin-left: 20px; font-size: 18px;">
+          <li>Система <span class="strong">не заменяет</span> юриста и главбуха: она выдаёт позицию с рекомендацией привлечь профильного специалиста.</li>
+          <li>Система не принимает управленческие решения — она выдаёт обоснованные варианты.</li>
+          <li>Оценивается финансовое влияние расхождений, а не визуальный контроль на площадке.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Границы проекта</div><div class="page-num">06</div></div>
+</div>
+
+<!-- SLIDE 7: Roadmap и SLA -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Таймлайн и Приёмка (135 дней)</h1>
+    <div class="subtitle">Единый авансовый платёж. Бессрочная лицензия. 12 месяцев гарантии.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-4">
+        <div class="glass-tag">Этапы внедрения</div>
+        <ul style="font-size: 16px; margin-left: 15px; margin-top: 10px;">
+          <li><span class="strong">Этап 1:</span> Развёртывание моделей и фиксация архитектуры, замер нагрузки.</li>
+          <li><span class="strong">Этап 2:</span> Настройка расчётного модуля и опорной базы (250+ объектов).</li>
+          <li><span class="strong">Этап 3:</span> Разработка веб-приложения и 9 ИИ-агентов.</li>
+          <li><span class="strong">Этап 4:</span> Приёмка на двух реальных объектах.</li>
+        </ul>
+      </div>
+      <div class="bento-card col-4">
+        <div class="glass-tag">Критерии SLA</div>
+        <ul style="font-size: 16px; margin-left: 15px; margin-top: 10px;">
+          <li>Порог приёмки: не менее 80% пунктов чек-листа по каждому из 9 агентов.</li>
+          <li>Сумма разделов сходится с итогом источника до рубля (модуль Decimal).</li>
+          <li>Время ответа: <br>15 мин — короткий вывод<br>1 час — полный расчёт.</li>
+        </ul>
+      </div>
+      <div class="bento-card col-4 dark">
+        <div class="glass-tag">Коммерция</div>
+        <p style="font-size: 18px;">Заказчик получает <span class="highlight">бессрочное неисключительное право</span>. Плата за токены отсутствует.</p>
+        <p style="font-size: 18px;">Гарантийное сопровождение включено на 12 месяцев (устранение дефектов, восстановление сбоев, SLA реакции 24 часа).</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Roadmap</div><div class="page-num">07</div></div>
+</div>
+
+</body>
+</html>

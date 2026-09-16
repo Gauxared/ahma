@@ -1,0 +1,3216 @@
+@import "tailwindcss";
+
+/* Manrope — самохостом, пакетом, а не ссылкой на Google Fonts.
+   Pulse тянет шрифт `@import url('https://fonts.googleapis.com/...')`, и это
+   единственное его решение, которое переносить нельзя: on-prem-контур заказчика
+   в интернет не ходит (`Ф-ADR-008`), а стек молча деградировал до системного —
+   то есть у клиента продукт выглядел не так, как у нас. `@fontsource-variable`
+   отдаёт те же начертания как woff2 рядом со сборкой: один переменный файл
+   200–800 на подмножество, кириллица отдельным `unicode-range`, поэтому лишние
+   подмножества не скачиваются вовсе. `font-display: swap` — из пакета.
+   Этим снимается риск `Ф-R-3`. */
+@import "@fontsource-variable/manrope";
+
+/* ==========================================================================
+   СтройИнтеллект — визуальный слой
+   ==========================================================================
+
+   Устройство перенесено из дизайн-системы Pulse (`7rl/domovey`,
+   `apps/web-crm/app/globals.css`): тонкие React-примитивы поверх семантических
+   классов и токенов, Tailwind — для раскладки.
+
+   ТЕМА — АТРИБУТ ПОДДЕРЕВА, А НЕ КЛАСС НА <html>
+
+   Рабочие поверхности светлые, штабные дашборды тёмные, и оба вида встречаются
+   в одном приложении — иногда на одной странице. Токены объявлены на
+   `[data-theme]`, поэтому поддерево переключает тему само:
+
+       <html data-theme="light">             рабочая поверхность
+         <section data-theme="dark">         штабной дашборд внутри неё
+
+   ТРИ УРОВНЯ ПОВЕРХНОСТИ, А НЕ ОДИН
+
+   Первая версия рисовала фон, панель и карточку почти одним цветом, и экран
+   читался плоским: глаз не отличал «что на чём лежит». Введены четыре ступени —
+   `sunken` → `bg` → `surface` → `raised`, — и разница между соседними видна, но
+   не криклива. Это то, что отличает собранный интерфейс от набора рамок.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Шкала, не зависящая от темы
+   -------------------------------------------------------------------------- */
+:root {
+  /* Manrope лежит в сборке (см. `@import` выше), поэтому первым в стеке стоит
+     имя из пакета — `Manrope Variable`. Дальше — установленный в системе
+     Manrope, затем системный стек: файл может не догрузиться, и текст обязан
+     остаться читаемым, а не исчезнуть. */
+  --font-sans: "Manrope Variable", "Manrope", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* МОНОШИРИННЫЙ — ТОТ ЖЕ ШРИФТ, А НЕ ВТОРОЙ.
+     Решение перенесено из Pulse вместе с его обоснованием: JetBrains Mono
+     давал два шрифта на одном экране и выглядел инородно рядом с основным.
+     Числа всё равно выстраиваются в столбцы — за это отвечает
+     `font-variant-numeric: tabular-nums`, а не начертание. */
+  --font-mono: "Manrope Variable", "Manrope", "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* ТИПОГРАФИЧЕСКАЯ ШКАЛА — ШЕСТЬ РОЛЕЙ, И БОЛЬШЕ НИКАКИХ.
+     Прежде на экране жили девять кеглей в диапазоне 10.5–13.5px: разница между
+     соседними была меньше, чем погрешность восприятия, поэтому иерархии не
+     возникало вовсе. Шесть ступеней с честными интервалами читаются как
+     иерархия, а не как случайность. */
+  --t-display: 34px;   /* главный показатель экрана, ровно один */
+  --t-metric: 23px;    /* прочие показатели */
+  --t-title: 15px;     /* заголовок карточки */
+  --t-body: 13px;      /* основной текст, ячейки таблиц */
+  --t-meta: 12px;      /* пояснения, вторые строки ячеек */
+  --t-micro: 11px;     /* надзаголовки, шапки колонок, маркеры */
+
+  /* Радиусы Pulse (`8/12/14/18`), а не наши прежние `6/10/12/16`. Разница в два
+     пикселя на карточке незаметна по отдельности и очень заметна на экране
+     целиком: продукт становится мягче и перестаёт выглядеть служебным. */
+  /* ФОН ВХОДА — ОДИН НА ОБЕ ТЕМЫ, И ЭТО ОСОЗНАННО.
+     Вход тёмный всегда: он единственный экран без каркаса, и тёмное поле со
+     светлой карточкой — тот же приём, что тёмный рельс при светлом содержании.
+     Переключать тему на входе нечем и незачем, поэтому цвета объявлены здесь, в
+     шкале, а не в блоках тем.
+
+     Тона брендовые: чёрное поле, красная сетка. Ни на одном из них нет текста,
+     поэтому пар в гейте контраста они не добавляют — проверять нечего. */
+  --auth-ground: #101013;
+  --auth-grid: rgba(143, 29, 43, 0.26);
+  --auth-node: rgba(196, 48, 62, 0.5);
+
+  --r-xs: 6px;
+  --r-sm: 8px;
+  --r: 12px;
+  --r-md: 14px;
+  --r-lg: 18px;
+
+  /* Вертикальный ритм 4px; все отступы кратны. */
+  --step: 4px;
+
+  /* ---- Рельс навигации ------------------------------------------------
+     У рельса СВОЯ палитра, не «тёмная тема страницы».
+
+     Прежде рельс включал `data-theme="dark"` на себе. Приём работал, но означал,
+     что любой компонент внутри перекрашивается целиком, и статус-токен рельса
+     начинал жить по правилам штабного экрана. В Pulse у рельса отдельные
+     `--rail-*`, и это правильнее: рельс остаётся тёмным независимо от темы
+     страницы, а проверка контраста видит его отдельными парами.
+
+     Значения взяты из нашей тёмной палитры, а не из зинка Pulse: рельс стоит
+     рядом со штабными экранами, и две почти-одинаковые тёмные поверхности
+     читались бы как ошибка сборки.
+     -------------------------------------------------------------------- */
+  --rail: #18181b;
+  --rail-hover: #27272a;
+  --rail-text: #a1a1aa;
+  --rail-text-strong: #fafafa;
+  /* #7f8b9c давал 4.41:1 на подложке активного пункта — ниже AA на девять
+     сотых. Найдено гейтом на первом же прогоне: пары рельса он до этого не
+     проверял вовсе, потому что палитра рельса появилась вместе с ним. */
+  /* Pulse ставит здесь #71717A, и нам он не годится: у них этой роли отдан
+     декоративный текст, у нас ею набраны надзаголовок группы (10px) и подпись
+     счётчика (9.5px) — мелкий текст, порог 4.5:1. #71717A даёт 3.08 на подложке
+     активного пункта. Взят ближайший зинк, который проходит: 4.71. */
+  --rail-text-dim: #909099;
+  --rail-border: #000000;
+  --rail-divider: #27272a;
+  --rail-mark: #3f3f46;
+
+
+  /* Тени Pulse. Наши были плотнее, и карточки на светлом фоне читались
+     наклеенными. Здесь тень — намёк на слой, а не рамка. */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px -4px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 12px 32px -8px rgba(0, 0, 0, 0.16);
+}
+
+/* --------------------------------------------------------------------------
+   2. Светлая тема — рабочие поверхности
+   -------------------------------------------------------------------------- */
+:root,
+[data-theme="light"] {
+  color-scheme: light;
+
+  /* НЕЙТРАЛЬ — ZINC PULSE, а не наша прежняя синеватая.
+     Значения перенесены дословно: `#FAFAFA / #F4F4F5 / #E4E4E7 / #D4D4D8`.
+     Разница в тоне на одном элементе неразличима, на экране целиком —
+     заметна: холодная синева читалась как «служебный интерфейс». */
+  --bg: #fafafa;
+  --surface: #ffffff;
+  --surface-raised: #ffffff;
+  --surface-sunken: #f4f4f5;
+  --surface-hover: #f4f4f5;
+
+  --text: #0b0d11;
+  --text-2: #4d525c;
+  /* Гейт поймал две регрессии подряд при осветлении фонов: #6d7280 давал
+     4.48:1 на `--bg`, а #6a6f7d — те же 4.48:1 на `--surface-sunken`, то есть
+     на шапке таблиц. Проверяются все четыре грунта, а не один. */
+  --text-3: #656a78;
+  /* #87878f давал 3.18:1 на шапке таблиц. Роль `text-4` задумывалась
+     «декоративной», с порогом крупного текста, но на экране ею набраны
+     приписка карточки (12px) и шапка колонки (11px) — это МЕЛКИЙ текст, и ему
+     нужно 4.5:1. Найдено axe, а не моим гейтом: гейт кодировал намерение, а
+     axe смотрел на применение. */
+  --text-4: #6b6b75;
+
+  --line: #e4e4e7;
+  --line-2: #f4f4f5;
+  --line-strong: #d4d4d8;
+
+  /* ЗНАК КЛИЕНТА — ЧЁРНО-КРАСНЫЙ, И ЭТО РЕШЕНИЕ ВЛАДЕЛЬЦА, А НЕ МОЙ ВЫБОР.
+     До этого здесь стоял золотой `#8a6316` — он не был ничем объявлен, я взял
+     его сам, и это оказалось неверно.
+
+     Красный тут ГЛУБОКИЙ, а не яркий, и различие обязательное: у тревоги свой
+     красный (`--danger: #c22a24`), и два красных рядом сделали бы знак похожим
+     на предупреждение. Этот темнее и глуше — он читается как принадлежность, а
+     не как сигнал.
+
+     Правило прежнее и теперь важнее: знак живёт ТОЛЬКО на хроме — рельс, вход,
+     бейдж режима — и никогда не окрашивает данные. С золотым нарушение этого
+     правила было незаметным, с красным оно кричит. */
+  --brand: #8f1d2b;
+  --brand-hover: #7a1824;
+  /* Цвет текста НА брендовой заливке — по теме, а не прибитый к белому.
+     Заведён так же, как `--accent-text`, и по той же причине: в тёмной теме
+     знак светлеет, и белый текст на нём давал 2.27:1. Гейт это назвал сразу,
+     как только пара в него попала. */
+  --brand-text: #ffffff;
+  --brand-soft: #fdeef0;
+  --brand-line: #e8b4bb;
+
+  /* Основное действие. Умышленно НЕ красный: у красного здесь уже есть работа —
+     «критично», — и вторая роль сделала бы кнопку тревогой. */
+  --accent: #1f5fd0;
+  --accent-hover: #1a51b3;
+  --accent-soft: #ebf2ff;
+  --accent-line: #a8c4f5;
+  --accent-text: #ffffff;
+
+  --ok: #157f3c;
+  --ok-soft: #e8f6ec;
+  --ok-line: #9fd4ae;
+
+  --warn: #9c5b00;
+  --warn-soft: #fdf1e0;
+  --warn-line: #eabc78;
+
+  --danger: #c22a24;
+  --danger-soft: #fdebea;
+  --danger-line: #f0a8a4;
+
+  --info: #1f5fd0;
+  --info-soft: #ebf2ff;
+  --info-line: #a8c4f5;
+
+  --unknown: #6b6b78;
+  --unknown-soft: #f1f1f4;
+  --unknown-line: #cfcfd6;
+
+  --focus: #1f5fd0;
+  --selection: rgba(31, 95, 208, 0.16);
+}
+
+/* --------------------------------------------------------------------------
+   3. Тёмная тема — штабные дашборды
+   --------------------------------------------------------------------------
+   Не инверсия светлой. Фон уводится в холодный графит, а не в чистый чёрный: на
+   чистом чёрном тонкие линии таблиц пропадают, а насыщенные красный и янтарный
+   начинают «звенеть». Нейтраль смещена в ту же синеву, что и акцент, — тогда
+   серый читается выбранным, а не оставшимся по умолчанию.
+   -------------------------------------------------------------------------- */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --bg: #090c12;
+  --surface: #10161f;
+  --surface-raised: #161e2a;
+  --surface-sunken: #0c1017;
+  --surface-hover: #1c2634;
+
+  --text: #eef2f7;
+  --text-2: #bcc6d4;
+  --text-3: #8e9aab;
+  /* См. светлую тему: `text-4` — мелкий текст, порог обычный. */
+  --text-4: #8794a6;
+
+  --line: #202a38;
+  --line-2: #182130;
+  --line-strong: #31405a;
+
+  /* На тёмном знак светлеет: глубокий красный на тёмной панели неразличим от
+     самой панели, а знак обязан быть виден. */
+  --brand: #f2909b;
+  --brand-hover: #f7a8b1;
+  --brand-text: #1a0d10;
+  --brand-soft: rgba(242, 144, 155, 0.13);
+  --brand-line: rgba(242, 144, 155, 0.34);
+
+  --accent: #5b96f5;
+  --accent-hover: #74a7f8;
+  --accent-soft: rgba(91, 150, 245, 0.15);
+  --accent-line: rgba(91, 150, 245, 0.38);
+  --accent-text: #07142b;
+
+  --ok: #5fd08a;
+  --ok-soft: rgba(95, 208, 138, 0.13);
+  --ok-line: rgba(95, 208, 138, 0.34);
+
+  --warn: #f0ae4e;
+  --warn-soft: rgba(240, 174, 78, 0.13);
+  --warn-line: rgba(240, 174, 78, 0.34);
+
+  --danger: #ff7b72;
+  --danger-soft: rgba(255, 123, 114, 0.13);
+  --danger-line: rgba(255, 123, 114, 0.36);
+
+  --info: #5b96f5;
+  --info-soft: rgba(91, 150, 245, 0.15);
+  --info-line: rgba(91, 150, 245, 0.38);
+
+  --unknown: #8d99ab;
+  --unknown-soft: rgba(141, 153, 171, 0.13);
+  --unknown-line: rgba(141, 153, 171, 0.32);
+
+  --focus: #74a7f8;
+  --selection: rgba(91, 150, 245, 0.28);
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.45);
+  --shadow-md: 0 8px 22px -10px rgba(0, 0, 0, 0.6);
+  --shadow-lg: 0 24px 56px -20px rgba(0, 0, 0, 0.75);
+}
+
+/* --------------------------------------------------------------------------
+   4. База
+   -------------------------------------------------------------------------- */
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  /* Фон задаётся и корню, и телу.
+     Распространение фона тела на холст работает, только пока у корня фона нет,
+     — а корень у нас несёт `data-theme` и однажды получит собственный фон.
+     Красить оба стоит ничего и снимает целый класс отказов, где страница
+     оказывается прозрачной и берёт цвет от среды. */
+  html {
+    background: var(--bg);
+  }
+
+  html,
+  body {
+    margin: 0;
+    min-height: 100%;
+  }
+
+  body {
+    background: var(--bg);
+    min-height: 100dvh;
+    color: var(--text);
+    font-family: var(--font-sans);
+    font-size: var(--t-body);
+    line-height: 1.5;
+    letter-spacing: -0.006em;
+    /* Табулярные цифры на весь продукт: смета — это столбцы чисел, и
+       пропорциональные цифры в них выглядят неряшливо на любом шрифте. */
+    font-variant-numeric: tabular-nums;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  input,
+  select,
+  textarea,
+  button {
+    font: inherit;
+    color: inherit;
+  }
+
+  ::selection {
+    background: var(--selection);
+  }
+
+  /* Фокус видимый и одинаковый везде — требование доступности (WCAG 2.1 AA на
+     договорных путях). */
+  :focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: 2px;
+    border-radius: var(--r-xs);
+  }
+
+  a {
+    color: inherit;
+    text-decoration-color: var(--line-strong);
+    text-underline-offset: 2px;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+    font-weight: 650;
+    letter-spacing: -0.018em;
+    text-wrap: balance;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+  .shell { transition: none; }
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   5. Компоненты
+   --------------------------------------------------------------------------
+   Слой `components` объявлен Tailwind'ом ДО `utilities`, поэтому утилита в
+   `className` всегда перебивает компонентный класс. Без этого `cn("btn",
+   "mt-4")` работал бы через случай: кто позже в собранном CSS, тот и прав.
+   -------------------------------------------------------------------------- */
+@layer components {
+  /* ---- Типографские роли ----------------------------------------------
+     Капс — дорогой приём, и тратить его надо на одно. Он остался только у
+     надзаголовка и шапки колонки: на прежнем экране заглавными были ещё и
+     бейджи, и заголовок врезки, и маркеры — четыре вида капса разом читались
+     как крик, а не как структура.
+     -------------------------------------------------------------------- */
+  .eyebrow {
+    font-size: var(--t-micro);
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  .meta {
+    font-size: var(--t-meta);
+    line-height: 1.45;
+    color: var(--text-3);
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+    font-size: 0.94em;
+  }
+
+  /* ---- Кнопки ---------------------------------------------------------- */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    height: 32px;
+    padding: 0 13px;
+    border: 1px solid transparent;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--text);
+    font-size: var(--t-meta);
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: background-color 0.13s ease, border-color 0.13s ease, color 0.13s ease;
+  }
+
+  .btn:disabled,
+  .btn[aria-disabled="true"] {
+    opacity: 0.55;
+    cursor: not-allowed;
+  }
+
+  .btn--primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .btn--primary:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+  }
+
+  .btn--outline {
+    border-color: var(--line-strong);
+    background: var(--surface-raised);
+    color: var(--text-2);
+  }
+
+  .btn--outline:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  .btn--ghost {
+    color: var(--text-3);
+  }
+
+  .btn--ghost:hover:not(:disabled):not([aria-disabled="true"]) {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  .btn--danger {
+    background: var(--danger);
+    border-color: var(--danger);
+    color: #fff;
+  }
+
+  .btn--sm {
+    height: 27px;
+    padding: 0 10px;
+    font-size: var(--t-micro);
+  }
+
+  .btn--lg {
+    height: 38px;
+    padding: 0 17px;
+    font-size: var(--t-body);
+  }
+
+  .icon-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid transparent;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--text-3);
+    cursor: pointer;
+  }
+
+  .icon-btn:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  .icon-btn--outline {
+    border-color: var(--line-strong);
+    background: var(--surface-raised);
+  }
+
+  /* ---- Статус-токен ---------------------------------------------------
+     СЛОВО ОБЯЗАТЕЛЬНО, И ЭТО ВЫРАЖЕНО ТИПОМ (см. `pill.tsx`): договор требует
+     text/icon labels у каждого статуса.
+
+     ТИХИЙ ПО УМОЛЧАНИЮ. На прежнем экране жило около двадцати пяти токенов, и
+     все одинаково громкие — с рамкой, заливкой, капсом и разрядкой. Когда
+     кричит всё, не слышно ничего. Теперь по умолчанию это цветное слово с
+     точкой, а заливка и капс включаются вариантом `--loud` там, где статус
+     действительно исключение: критично, разрыв, отсутствие расчёта.
+     -------------------------------------------------------------------- */
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: var(--t-micro);
+    font-weight: 600;
+    letter-spacing: 0;
+    white-space: nowrap;
+    color: var(--text-3);
+  }
+
+  .pill__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentcolor;
+    flex: none;
+  }
+
+  .pill--ok { color: var(--ok); }
+  .pill--warn { color: var(--warn); }
+  .pill--danger { color: var(--danger); }
+  .pill--info { color: var(--info); }
+  .pill--brand { color: var(--brand); }
+  .pill--plain { color: var(--text-3); }
+
+  .pill--loud {
+    height: 20px;
+    padding: 0 7px;
+    border: 1px solid var(--unknown-line);
+    border-radius: var(--r-xs);
+    background: var(--unknown-soft);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .pill--loud.pill--ok { border-color: var(--ok-line); background: var(--ok-soft); }
+  .pill--loud.pill--warn { border-color: var(--warn-line); background: var(--warn-soft); }
+  .pill--loud.pill--danger { border-color: var(--danger-line); background: var(--danger-soft); }
+  .pill--loud.pill--info { border-color: var(--info-line); background: var(--info-soft); }
+  .pill--loud.pill--brand { border-color: var(--brand-line); background: var(--brand-soft); }
+  .pill--loud.pill--plain { border-color: var(--line); background: transparent; }
+
+  /* ---- Карточка -------------------------------------------------------- */
+  .card {
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: var(--surface-raised);
+    box-shadow: var(--shadow-sm);
+  }
+
+  /* ШАПКА КАРТОЧКИ: ПОЯСНЕНИЕ ПОД ЗАГОЛОВКОМ, А НЕ СПРАВА ОТ НЕГО.
+     Приём Домовея, и он про чтение, а не про вкус: у него заголовок и под ним
+     серая строка объяснения («Открытые заявки с нарушенным сроком или дольше
+     всего без движения»). У нас объяснение стояло справа, у самого края, —
+     глаз, прочитав заголовок слева, до него не доходил, а на узком экране оно
+     сползало под заголовок вперемешку с кнопками.
+     Справа теперь только ДЕЙСТВИЕ: ссылка «все 167 →», «разбор →». */
+  .card__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 10px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  .card__head-main {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .card__title {
+    font-size: var(--t-title);
+    font-weight: 650;
+    letter-spacing: -0.016em;
+  }
+
+  .card__note {
+    font-size: var(--t-meta);
+    line-height: 1.35;
+    color: var(--text-4);
+  }
+
+  .card__aside {
+    margin-left: auto;
+    align-self: center;
+    font-size: var(--t-meta);
+    color: var(--text-4);
+  }
+
+  .card__body {
+    padding: 14px 16px;
+  }
+
+  .card__body--flush {
+    padding: 0;
+  }
+
+  .card__foot {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--line-2);
+    font-size: var(--t-meta);
+    color: var(--text-3);
+  }
+
+  /* ---- Показатель -----------------------------------------------------
+     Ровно один показатель на экране главный. У него своя ступень кегля и
+     больше воздуха; остальные тише. Прежде все шесть стояли одним весом — то
+     есть первого места не было ни у одного.
+     -------------------------------------------------------------------- */
+  .metric__face {
+    font-size: var(--t-metric);
+    line-height: 1.1;
+    font-weight: 750;
+    letter-spacing: -0.03em;
+  }
+
+  .metric__face--hero {
+    font-size: var(--t-display);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+
+  .metric__unit {
+    font-size: var(--t-body);
+    font-weight: 600;
+    color: var(--text-3);
+    letter-spacing: -0.01em;
+  }
+
+  .metric__absent {
+    font-size: var(--t-title);
+    line-height: 1.25;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    /* Перенос только по пробелам. `anywhere` рвал слово посреди корня —
+       «НЕ РАССЧ / ИТАНО», — и значение читалось как сбой вёрстки. */
+    overflow-wrap: break-word;
+    hyphens: none;
+  }
+
+  .metric__absent--hero {
+    font-size: var(--t-metric);
+    line-height: 1.15;
+  }
+
+  /* ---- Цепочка состояний ----------------------------------------------
+     «Выполнено → предъявлено → подписано → оплачено» — это цепочка, и она
+     обязана выглядеть цепочкой. Списком из четырёх строк она была раньше, и
+     главное в ней терялось: видно ЧТО не сделано, но не видно, ГДЕ рвётся.
+     Рельс между звеньями окрашен по состоянию, и место разрыва читается само.
+     -------------------------------------------------------------------- */
+  .vchain {
+    display: grid;
+    gap: 0;
+  }
+
+  .vchain__row {
+    display: grid;
+    grid-template-columns: 14px 1fr;
+    gap: 10px;
+    align-items: stretch;
+  }
+
+  /* Метка и рельс позиционируются от центра колонки, а не от её края: без
+     `left: 50%` рельс уезжал к границе и визуально исчезал — цепочка снова
+     превращалась в список из четырёх точек. */
+  .vchain__mark {
+    position: relative;
+    width: 14px;
+  }
+
+  .vchain__mark::before {
+    content: "";
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 2px solid currentcolor;
+    background: var(--surface-raised);
+  }
+
+  .vchain__row--done .vchain__mark::before {
+    background: currentcolor;
+  }
+
+  /* Рельс тянется от метки до низа строки; у последнего звена его нет. */
+  .vchain__row:not(:last-child) .vchain__mark::after {
+    content: "";
+    position: absolute;
+    top: 15px;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 2px;
+    background: currentcolor;
+    opacity: 0.45;
+  }
+
+  /* Разрыв красится тревогой явно, а не currentcolor выполненного звена: иначе
+     место обрыва рисуется зелёным, то есть противоположным смыслом.
+
+     `:not(:last-child)` в селекторе не для отбора, а для СПЕЦИФИЧНОСТИ: базовое
+     правило рельса содержит три класса, и без уравнивания оно перебивало это.
+     Ошибка была не видна в коде — только на экране, где обрыв остался сплошным
+     зелёным. */
+  .vchain__row--broken:not(:last-child) .vchain__mark::after {
+    background: repeating-linear-gradient(to bottom, var(--danger) 0 3px, transparent 3px 6px);
+    opacity: 1;
+  }
+
+  .vchain__label {
+    font-size: var(--t-meta);
+    line-height: 17px;
+    padding: 0 0 7px;
+  }
+
+  .vchain__row:last-child .vchain__label { padding-bottom: 0; }
+
+  .vchain__row--done { color: var(--ok); }
+  .vchain__row--pending { color: var(--danger); }
+  .vchain__row--done .vchain__label { color: var(--text-2); }
+  .vchain__row--pending .vchain__label { color: var(--danger); font-weight: 650; }
+
+  /* ---- Врезка ---------------------------------------------------------
+     Одна на экран: две означают, что главного нет. Тише прежней — рельс слева
+     и приглушённый фон вместо рамки со всех сторон: врезка обязана выделяться
+     на фоне карточек, а не соревноваться с главным показателем.
+     -------------------------------------------------------------------- */
+  .callout {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 12px;
+    padding: 14px 16px 14px 14px;
+    border-radius: var(--r-md);
+    border-left: 3px solid var(--warn);
+    background: var(--warn-soft);
+  }
+
+  .callout__icon {
+    color: var(--warn);
+    margin-top: 1px;
+  }
+
+  .callout__title {
+    font-size: var(--t-micro);
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--warn);
+    margin-bottom: 4px;
+  }
+
+  .callout__body {
+    font-size: var(--t-body);
+    line-height: 1.5;
+    color: var(--text);
+    max-width: 74ch;
+  }
+
+  .callout--danger { border-left-color: var(--danger); background: var(--danger-soft); }
+  .callout--danger .callout__icon,
+  .callout--danger .callout__title { color: var(--danger); }
+
+  .callout--info { border-left-color: var(--info); background: var(--info-soft); }
+  .callout--info .callout__icon,
+  .callout--info .callout__title { color: var(--info); }
+
+  /* ---- Таблица --------------------------------------------------------
+     Промышленная, а не декоративная: закреплённая шапка, единая высота строки,
+     числа по правому краю табулярными цифрами.
+     -------------------------------------------------------------------- */
+  .table-scroll {
+    overflow: auto;
+    max-width: 100%;
+  }
+
+  /* Фокус на прокручиваемой области рисуется внутренним контуром, а не внешним:
+     наружный обвёл бы карточку целиком и читался как выделение карточки, а не
+     области прокрутки. */
+  .table-scroll:focus-visible {
+    outline: 2px solid var(--focus);
+    outline-offset: -2px;
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    font-size: var(--t-body);
+  }
+
+  .table thead th {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    padding: 9px 12px;
+    background: var(--surface-sunken);
+    border-bottom: 1px solid var(--line);
+    font-size: var(--t-micro);
+    font-weight: 650;
+    letter-spacing: 0.055em;
+    text-transform: uppercase;
+    color: var(--text-4);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  .table tbody td {
+    padding: 11px 12px;
+    border-bottom: 1px solid var(--line-2);
+    vertical-align: top;
+    color: var(--text);
+  }
+
+  .table tbody tr:last-child td {
+    border-bottom: 0;
+  }
+
+  .table tbody tr {
+    transition: background-color 0.1s ease;
+  }
+
+  .table tbody tr:hover td {
+    background: var(--surface-hover);
+  }
+
+  /**
+   * СТРОКА, НАЙДЕННАЯ ПО ССЫЛКЕ ИЗ ЗАМЕЧАНИЯ (веха Д3).
+   *
+   * Краем строки, а не заливкой, и это не вкус: заливка завела бы новую пару
+   * «обычный текст на подсветке», о которой гейт контраста не знает, — тот же
+   * класс слепоты, что `Ф-33`. Край цвет не смешивает и проверяется на месте.
+   *
+   * Цвет здесь НЕ единственный сигнал: в самой строке стоит пилюля «из
+   * замечания», а над таблицей — врезка с номером строки. Правило трека
+   * требует именно этого, и полоса без слова его нарушала бы.
+   */
+  .table tbody tr.row--marked td:first-child {
+    box-shadow: inset 2px 0 0 var(--accent);
+  }
+
+  .table th.num,
+  .table td.num {
+    text-align: right;
+  }
+
+  .table tfoot td {
+    padding: 10px 12px;
+    border-top: 1px solid var(--line);
+    background: var(--surface-sunken);
+    font-weight: 650;
+  }
+
+  /* Двухстрочная ячейка: заголовок и пояснение — одна мысль, а не две строки
+     подряд. Интерлиньяж между ними меньше, чем между строками таблицы. */
+  .cell-title {
+    display: block;
+    font-weight: 650;
+    line-height: 1.35;
+  }
+
+  .cell-sub {
+    display: block;
+    margin-top: 2px;
+    font-size: var(--t-meta);
+    line-height: 1.4;
+    color: var(--text-3);
+  }
+
+  /* ---- Состояния поверхности -----------------------------------------
+     «Данных нет», «нет права», «источник выключен» и «запрос не удался»
+     требуют от смотрящего разного: дозагрузить, попросить доступ, включить
+     источник, повторить. Свести их к одной пустой странице — значит отнять
+     ответ на вопрос «что теперь делать».
+     -------------------------------------------------------------------- */
+  .state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 28px 20px;
+    text-align: center;
+    color: var(--text-3);
+  }
+
+  .state__title {
+    font-size: var(--t-body);
+    font-weight: 650;
+    color: var(--text);
+  }
+
+  .state__body {
+    font-size: var(--t-meta);
+    max-width: 44ch;
+  }
+
+  /* Иконка на подложке, а не сама по себе.
+     Приём и числа из Pulse (`.td-empty__icon`, 44×44, радиус 12): контурная
+     иконка, висящая в пустоте, читается как незакончённая вёрстка, а та же
+     иконка на скруглённой плашке — как оформленное состояние. */
+  .state__icon {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    margin-bottom: 7px;
+    border-radius: var(--r-md);
+    background: var(--surface-sunken);
+    color: var(--text-4);
+  }
+
+  .state--danger .state__icon {
+    background: var(--danger-soft);
+    color: var(--danger);
+  }
+
+  /* ---- Скелетон -------------------------------------------------------
+     Загрузка показывается формой будущего содержимого, а не спиннером:
+     спиннер сообщает «ждите», скелетон — «ждите вот этого».
+     -------------------------------------------------------------------- */
+  .skeleton {
+    border-radius: var(--r-xs);
+    background: linear-gradient(90deg, var(--surface-hover) 25%, var(--surface) 37%, var(--surface-hover) 63%);
+    background-size: 400% 100%;
+    animation: skeleton-sweep 1.4s ease-in-out infinite;
+  }
+
+  @keyframes skeleton-sweep {
+    0% { background-position: 100% 50%; }
+    100% { background-position: 0 50%; }
+  }
+
+  /* ---- Поля ввода ------------------------------------------------------ */
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .field__label {
+    font-size: var(--t-meta);
+    font-weight: 600;
+    color: var(--text-2);
+  }
+
+  .field__hint {
+    font-size: var(--t-micro);
+    color: var(--text-3);
+  }
+
+  .input {
+    height: 34px;
+    padding: 0 11px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    color: var(--text);
+    font-size: var(--t-body);
+    transition: border-color 0.12s ease;
+  }
+
+  .input::placeholder { color: var(--text-4); }
+  .input:hover { border-color: var(--text-4); }
+
+  /* ---- Форма заведения -----------------------------------------------------
+     Сетка, а не строка с переносом. У форм заведения объекта и входа три-пять
+     коротких полей, и в строку они выстраивались в лесенку: «Шифр» шириной в
+     полэкрана рядом с «Регионом» шириной в четверть. Колонка не уже 220 px —
+     ниже этого адрес почты в поле не помещается целиком.
+
+     Кнопка занимает всю ширину сетки и стоит справа: действие завершает форму,
+     а не соседствует с последним полем. */
+  .form-grid {
+    display: grid;
+    gap: 12px 14px;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    /* ПО ВЕРХУ, А НЕ ПО НИЗУ. С выравниванием по низу поля с пояснением
+       поднимали свой `input` на высоту пояснения: «Шифр» и «Регион» вставали
+       выше «Имени объекта», и три поля одной формы переставали читаться как
+       ряд. Подписи здесь однострочные, поэтому верх выравнивает именно то, на
+       что смотрят, — линию ввода. */
+    align-items: start;
+  }
+
+  .form-grid__actions {
+    display: flex;
+    justify-content: flex-end;
+    grid-column: 1 / -1;
+  }
+
+  /* Выпадающий список приведён к виду поля: он стоит в одном ряду с `input`,
+     и системная высота браузера ломала бы линию нижнего края. */
+  select.input {
+    /* Своя стрелка не рисуется: системная доступна с клавиатуры и понятна
+       читалке экрана, а нарисованная требует клиентского кода. */
+    padding-right: 8px;
+  }
+
+  /* Выбор файлов.
+     Своё правило, а не `.input`: у файлового поля высота задаётся кнопкой
+     браузера, и `height: 34px` её обрезал. `::file-selector-button` приведён к
+     виду нашей вторичной кнопки — иначе на экране рядом стоят наша кнопка
+     «Загрузить» и системная кнопка браузера, и они не похожи ни на что общее.
+     Имя выбранного файла рисует браузер, и это правильно: оно приходит из
+     файловой системы, и подменять его нашим текстом значило бы обещать
+     проверку, которая ещё не выполнялась. */
+  .input-file {
+    padding: 5px 7px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    color: var(--text-2);
+    font-size: var(--t-meta);
+  }
+
+  .input-file:hover { border-color: var(--text-4); }
+
+  .input-file::file-selector-button {
+    height: 24px;
+    margin-right: 9px;
+    padding: 0 10px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-xs);
+    background: var(--surface-sunken);
+    color: var(--text);
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .input-file::file-selector-button:hover { background: var(--surface-hover); }
+
+  /* ---- Раскрытие происхождения ---------------------------------------- */
+  .disclosure > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+    font-size: var(--t-meta);
+    color: var(--text-4);
+    cursor: pointer;
+    list-style: none;
+    border-radius: var(--r-xs);
+    transition: color 0.12s ease;
+  }
+
+  .disclosure > summary::-webkit-details-marker { display: none; }
+  .disclosure > summary:hover { color: var(--text-2); }
+  .disclosure > summary::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 4px solid currentcolor;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    transition: transform 0.12s ease;
+  }
+  .disclosure[open] > summary::before { transform: rotate(90deg); }
+
+  .disclosure__body {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 3px 12px;
+    margin: 8px 0 0;
+    padding: 10px 12px;
+    border-radius: var(--r-sm);
+    background: var(--surface-sunken);
+    font-size: var(--t-meta);
+  }
+
+  .disclosure__body dt { color: var(--text-4); }
+  .disclosure__body dd { margin: 0; color: var(--text-2); }
+
+  /* ---- Вход ----------------------------------------------------------------
+     Приём и числа из Домовея (`.crm-auth-*`): карточка `min(460px)` радиусом
+     20 px с полем 2rem, поля радиусом 14 px с внутренним отступом 0.85rem,
+     кнопка во всю ширину тем же радиусом, зазор 1rem.
+     Своё здесь одно — узор фона. У Домовея это замощение их знаком, то есть
+     картинка; внешних запросов и своих файлов у нас быть не должно
+     (`Ф-ADR-008`), поэтому узор нарисован повторяющимся градиентом — приём из
+     самого Pulse (`repeating-linear-gradient(-45deg, …)`). Тон брендовый и
+     очень слабый: вход — единственный экран, где знак клиента уместен во весь
+     фон, но и здесь он не должен спорить с карточкой.
+     -------------------------------------------------------------------------- */
+  .auth {
+    display: grid;
+    min-height: 100dvh;
+    place-items: center;
+    padding: 2rem 1rem;
+    /* УЗОР: ЧЕРТЁЖ И СЕТЬ — то, чем занят продукт.
+       Три слоя, и каждый со своим смыслом, а не для плотности:
+
+        · **узлы** — точки в пересечениях сетки: связи, которые строит машина.
+          Это про ИИ, и они ярче линий, потому что на них держится смысл;
+        · **сетка** 44 px — миллиметровка чертежа. Она про стройку и про то, что
+          система читает документы, а не выдумывает;
+        · **чёрное поле** — хром продукта, тот же, что у рельса.
+
+       Всё нарисовано градиентами: никаких файлов и внешних запросов
+       (`Ф-ADR-008`). Порядок слоёв обязателен — узлы поверх сетки, иначе линии
+       перечёркивают точки.
+
+       Первая версия была диагональной штриховкой брендового тона по светлому
+       фону: она читалась как заливка образца ткани и не говорила ни о стройке,
+       ни о расчёте. */
+    background-color: var(--auth-ground);
+    background-image:
+      radial-gradient(circle at 0 0, var(--auth-node) 0 1.5px, transparent 1.5px),
+      repeating-linear-gradient(to right, var(--auth-grid) 0 1px, transparent 1px 48px),
+      repeating-linear-gradient(to bottom, var(--auth-grid) 0 1px, transparent 1px 48px);
+    /* Шаг 48 px, а не 44: на 44 сетка читалась как решётка и спорила с
+       карточкой. Прозрачность подобрана глазом до порога «тон есть, рисунка
+       нет» — фон обязан быть полем, а не содержанием. */
+    background-size: 48px 48px, auto, auto;
+  }
+
+  .auth__card {
+    width: min(460px, 100%);
+    padding: 2rem;
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    background: var(--surface);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* Знак и название — в карточке, а не в шапке страницы: на входе шапки нет,
+     и человек обязан видеть, КУДА он входит, прежде чем набрать пароль. */
+  .auth__brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    margin-bottom: 1.5rem;
+  }
+
+  /* Плашка под знаком БЕЛАЯ и чуть больше самого знака.
+     Причина не в оформлении: знак несёт серые корпуса, и на тёмном поле или на
+     цветной подложке они пропадают — остаётся красная сеть без того, что она
+     оплетает. Белый прямоугольник возвращает знаку его собственный фон, а запас
+     по 5 px с каждой стороны не даёт скруглению срезать углы рисунка.
+     Тонкая рамка — только чтобы плашка не растворялась на белой карточке. */
+  .auth__mark {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 56px;
+    height: 56px;
+    border-radius: var(--r-md);
+    border: 1px solid var(--line);
+    background: #fff;
+  }
+
+  .auth__name {
+    display: block;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+  }
+
+  .auth__tagline {
+    display: block;
+    font-size: var(--t-meta);
+    color: var(--text-3);
+  }
+
+  .auth__title {
+    margin: 0 0 1.25rem;
+    font-size: 23px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+  }
+
+  .auth__form {
+    display: grid;
+    gap: 1rem;
+  }
+
+  /* Поле с иконкой ВНУТРИ рамки. Иконка — не украшение: она отличает три поля
+     формы друг от друга быстрее подписи, а подпись при этом остаётся на месте
+     (`placeholder` вместо подписи исчезает при первом знаке). */
+  .auth__field {
+    display: grid;
+    gap: 6px;
+  }
+
+  .auth__label {
+    font-size: var(--t-meta);
+    font-weight: 600;
+    color: var(--text-2);
+  }
+
+  .auth__input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 0 0.95rem;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--r-md);
+    background: var(--surface-sunken);
+    color: var(--text-4);
+    transition: border-color 0.12s ease, background 0.12s ease;
+  }
+
+  .auth__input-wrap:hover { border-color: var(--text-4); }
+
+  .auth__input-wrap:focus-within {
+    border-color: var(--focus);
+    background: var(--surface);
+  }
+
+  .auth__input {
+    width: 100%;
+    padding: 0.85rem 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+    font: inherit;
+    font-size: var(--t-body);
+  }
+
+  .auth__input:focus { outline: none; }
+  .auth__input::placeholder { color: var(--text-4); }
+
+  .auth__submit {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 0.25rem;
+    padding: 0.85rem 1rem;
+    border: 0;
+    border-radius: var(--r-md);
+    /* КНОПКА ЗДЕСЬ БРЕНДОВАЯ, А НЕ АКЦЕНТНАЯ, И ЭТО ЕДИНСТВЕННОЕ ИСКЛЮЧЕНИЕ.
+       Правило продукта: основное действие синее (`--accent`), красный отдан
+       тревоге, и второй роли у него быть не должно. На входе исключение
+       безопасно ровно потому, что здесь НЕТ НИ ОДНОГО тревожного элемента и ни
+       одного данного: столкнуться красному не с чем. А действие тут одно и оно
+       про принадлежность — «войти в СтройИнтеллект», — поэтому оно и красится
+       знаком. Синяя кнопка на чёрно-красном поле выглядела чужой.
+
+       Граница исключения: только этот экран. Появится на входе тревога — она
+       будет красной, и тогда кнопку придётся вернуть к акценту. */
+    background: var(--brand);
+    color: var(--brand-text);
+    font: inherit;
+    font-size: var(--t-body);
+    font-weight: 650;
+    cursor: pointer;
+  }
+
+  .auth__submit:hover { background: var(--brand-hover); }
+
+  /* ---- Доска агентов ------------------------------------------------------
+     Сетка плиток и список критичного. Числа из Pulse (`.dash-*`): зазор 10 px,
+     радиус средний, плитка 13 px тела. Своё здесь одно — плитка агента, который
+     НЕ высказался, набрана приглушённо и не является ссылкой: открывать в ней
+     нечего, и ссылка обещала бы содержание.
+     -------------------------------------------------------------------------- */
+  .agents {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(224px, 1fr));
+    gap: 10px;
+  }
+
+  .agent {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 11px 13px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-md);
+    background: var(--surface-sunken);
+    color: var(--text-3);
+    text-decoration: none;
+  }
+
+  .agent--open {
+    background: var(--surface);
+    color: var(--text-2);
+  }
+
+  .agent--open:hover {
+    border-color: var(--line-strong);
+    background: var(--surface-hover);
+  }
+
+  .agent__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .agent__person {
+    font-size: var(--t-body);
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .agent:not(.agent--open) .agent__person { color: var(--text-3); }
+
+  .agent__role {
+    font-size: var(--t-micro);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--text-4);
+  }
+
+  .agent__severity {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 3px 10px;
+    margin-top: 2px;
+  }
+
+  .agent__severity-item {
+    font-size: var(--t-meta);
+    color: var(--text-2);
+  }
+
+  .agent__quiet {
+    margin-top: 2px;
+    font-size: var(--t-micro);
+    color: var(--text-4);
+  }
+
+  /* Предусловие: строка ожидания. Она есть только у того, кто чего-то ждёт, —
+     и это единственное место, где видно, что агенты цепочка, а не список. */
+  .agent__waits {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-top: 4px;
+    padding-top: 6px;
+    border-top: 1px solid var(--line-2);
+  }
+
+  .agent__wait {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--t-micro);
+    color: var(--text-3);
+  }
+
+  /* ---- Критичное с автором ----
+     ЗДЕСЬ ТОН ОДИН У ВСЕХ СТРОК, И ПОМЕЧЕН ОН ОДИН РАЗ.
+
+     В каждой строке стоял знак «⚠». Двадцать одинаковых знаков подряд ничего
+     не различают: блок называется «Что убьёт проект», критичны в нём ВСЕ. Это
+     та же ошибка, которую я уже исправлял с залитой пилюлей — приём для
+     исключения, поставленный в каждую строку, перестаёт быть приёмом.
+
+     У Домовея это разведено по уровням: полоса у СТРОКИ (`.intake-trow`) — там,
+     где важность у строк разная; полоса у КАРТОЧКИ (`.kpi.--red`,
+     `border-left: 3px`) — там, где в тоне весь блок. Здесь второй случай.
+
+     Знак убран, полоса — у карточки. Строки стали на 24 px шире каждая. */
+  .card--danger { border-left: 3px solid var(--danger); }
+
+  .crit {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 0 11px;
+    padding: 11px 16px;
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  .crit:last-child { border-bottom: 0; }
+
+  /* ТОН У СТРОКИ — ГДЕ ВАЖНОСТЬ РАЗНАЯ.
+     На доске агентов тон у карточки: там критичны все. На экране одного агента
+     важность идёт от «критично» до «сведения», и различать её обязана каждая
+     строка. Это второй случай того же правила Домовея (Ф-109). */
+  .crit--danger { border-left: 2px solid var(--danger); }
+  .crit--warn { border-left: 2px solid var(--warn); }
+  .crit--info { border-left: 2px solid var(--accent); }
+  .crit--plain { border-left: 2px solid var(--line-strong); }
+
+  /* ---- Шаговик тракта ------------------------------------------------------
+     Порядок работы в системе жёсткий — объект, загрузка, разбор, прогон,
+     вердикт, пакет, — а в интерфейсе его не было ни одного следа. Владелец
+     назвал это «флоу неочевидный», и это было точным описанием, а не
+     впечатлением.
+
+     Числа Домовея (`.imp-stepper`) целиком: узел 30 px кружком с рамкой 2 px,
+     соединитель 2 px на высоте центра узла, подпись 12 px весом 600, строка-
+     подсказка внизу карточки на `--bg-2` с рамкой сверху.
+
+     ОДНА подсказка на активный шаг, а не текст под каждым узлом: у Домовея так
+     же, и причина та же — шесть пояснений под шестью узлами превращают полосу
+     навигации в абзац.
+     -------------------------------------------------------------------------- */
+  .tract {
+    display: flex;
+    align-items: flex-start;
+    padding: 18px 18px 14px;
+  }
+
+  .tract__step {
+    position: relative;
+    display: flex;
+    min-width: 0;
+    flex: 1 1 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 0 4px;
+    text-align: center;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Соединитель тянется от центра предыдущего узла к центру текущего. */
+  .tract__step::before {
+    position: absolute;
+    top: 14px;
+    right: 50%;
+    width: 100%;
+    height: 2px;
+    background: var(--line);
+    content: "";
+  }
+
+  .tract__step:first-child::before { display: none; }
+  .tract__step--done::before,
+  .tract__step--now::before { background: var(--accent); }
+
+  .tract__mark {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    width: 30px;
+    height: 30px;
+    place-items: center;
+    border: 2px solid var(--line);
+    border-radius: 50%;
+    background: var(--surface);
+    color: var(--text-3);
+    font-size: 12.5px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .tract__step--now .tract__mark {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+  }
+
+  .tract__step--done .tract__mark {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--accent-text);
+  }
+
+  .tract__label {
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text);
+  }
+
+  .tract__step--ahead .tract__label {
+    font-weight: 500;
+    color: var(--text-3);
+  }
+
+  .tract__hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    border-top: 1px solid var(--line-2);
+    border-radius: 0 0 var(--r) var(--r);
+    background: var(--surface-sunken);
+    font-size: 12px;
+    color: var(--text-2);
+  }
+
+  .tract__hint svg { flex-shrink: 0; color: var(--accent); }
+
+  /* На узком экране подписи неактивных шагов скрыты, активная остаётся: шесть
+     подписей по 375 px превращаются в шесть переносов. Приём Домовея —
+     `font-size: 0` у неактивных. */
+  @media (max-width: 700px) {
+    .tract { padding: 14px 12px 10px; }
+    .tract__label { font-size: 0; }
+    .tract__step--now .tract__label { font-size: 11px; }
+  }
+
+  /* ---- Двухколоночный разрез: список и панель ------------------------------
+     Приём Домовея: `.vc-layout { minmax(0, 1.2fr) minmax(380px, 420px) }` —
+     список слева, деталь справа. Узкая колонка задана В ПИКСЕЛЯХ, широкая — во
+     `fr`: панель контекста не должна ни расползаться на половину экрана, ни
+     сжиматься до нечитаемого, а список берёт остальное.
+
+     Панель `sticky`, а не с собственной прокруткой. У Домовея правая колонка
+     скроллится сама (`.td-aside { overflow-y: auto }`), но там вся сетка
+     заперта в высоту экрана. У нас страница прокручивается целиком, и запирать
+     её ради панели значило бы отнять привычную прокрутку у всего экрана.
+     `sticky` даёт то же самое: контекст остаётся на виду, пока листаешь список.
+
+     Порог перехода в одну колонку — 1100 px, как у `.td-layout` Домовея: ниже
+     этого две колонки перестают быть двумя колонками.
+     -------------------------------------------------------------------------- */
+  .split {
+    display: grid;
+    align-items: start;
+    gap: 14px;
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 380px);
+  }
+
+  @media (max-width: 1100px) {
+    .split { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  .split__aside {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  /* Липкость только там, где колонки две: в одноколоночной раскладке панель
+     стоит над списком, и приклеивать её сверху значило бы закрыть собой то,
+     ради чего пришли.
+
+     ПОТОЛОК ВЫСОТЫ — НАЙДЕН НА ЭКРАНЕ ЗАКАЗЧИКА.
+
+     Панель была липкой БЕЗ потолка, и это давало две беды сразу.
+
+     Первая: высоту строки сетки задаёт самая высокая колонка. На объекте, где
+     слева почти пусто («смет 0, нечего проверять»), а справа полсотни
+     поручений, под коротким левым столбцом оставалась дыра в тысячи пикселей —
+     ровно её владелец и увидел.
+
+     Вторая: панель выше экрана не может «липнуть». Смысл `sticky` в том, чтобы
+     контекст оставался на виду при прокрутке; панель, которая сама не
+     помещается, просто уезжает вверх, и от липкости остаётся одно объявление.
+
+     Потолок ставится ТОЛЬКО панели, а не сетке. Запереть в высоту экрана всю
+     сетку значило бы отнять у страницы привычную прокрутку — об этом сказано
+     выше, и это решение в силе. Панель — контекст, ей внутренняя прокрутка
+     уместна; список, ради которого пришли, продолжает прокручиваться страницей.
+
+     `overflow-y` и `max-height` идут ТОЛЬКО ВМЕСТЕ. Потолок без прокрутки
+     обрезал бы содержимое молча, прокрутка без потолка не делает ничего. */
+  @media (min-width: 1101px) {
+    .split__aside {
+      position: sticky;
+      top: 0;
+      max-height: calc(100dvh - 90px);
+      overflow-y: auto;
+      /* Полоса прокрутки не должна прижимать содержимое к самому краю. */
+      padding-right: 2px;
+    }
+  }
+
+  .crit__body {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .crit__statement {
+    font-size: var(--t-body);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .crit__basis {
+    font-size: var(--t-meta);
+    line-height: 1.4;
+    color: var(--text-3);
+  }
+
+  /* ---- Откуда взято замечание (веха Д3) ----
+     Третья строка замечания, после утверждения и основания, и порядок именно
+     такой: сначала ЧТО, потом ПОЧЕМУ, потом ОТКУДА. Поставить источник выше
+     основания значило бы предложить читателю адрес прежде смысла.
+
+     Строкой в один ряд с переносом: координата, уровень доверия и файл — три
+     короткие подписи, и в столбик они растянули бы каждое замечание на треть
+     высоты. У замечания без координаты здесь одна подпись — та, что называет
+     основание текстовым. */
+  .crit__source {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 10px;
+    margin-top: 3px;
+  }
+
+  .crit__author {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 2px;
+    font-size: var(--t-meta);
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  .crit__tact {
+    font-size: var(--t-micro);
+    color: var(--text-4);
+  }
+
+  /* Сумма позиции — графа «значение» формы результата.
+     Кеглем крупнее подписей и весом 600: это единственное число в строке
+     замечания, и оно должно находиться взглядом. Но НЕ цветом состояния —
+     сумма не оценка потерь, и красить её тревожным значило бы сказать то,
+     чего расчёт не говорит. */
+  .crit__amount {
+    font-size: var(--t-meta);
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--text-2);
+  }
+
+  /* ---- Вердикт агента ------------------------------------------------------
+     СЕТКОЙ, А НЕ АБЗАЦЕМ. Вердикты по четырём сметам склеивались в одну строку
+     и печатались в колонке 340 px: полторы тысячи знаков, шестьдесят строк —
+     выше экрана. Читать это нельзя, можно только пролистать.
+
+     `auto-fit` с полом 320 px: на широком экране четыре вердикта встают в три
+     колонки и читаются одним взглядом, на узком — в одну и не ломаются в
+     лесенку. Ниже 320 px проза перестаёт быть прозой.
+     -------------------------------------------------------------------------- */
+  .verdicts {
+    display: grid;
+    margin: 0;
+    padding: 0;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    list-style: none;
+  }
+
+  .verdict {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 7px;
+    padding: 11px 13px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--surface-sunken);
+  }
+
+  /* Светофор и предмет — В СТОЛБИК, а не в строку с переносом.
+     В строку имена смет переносились каждое по-своему: у одного вердикта
+     подпись вставала рядом с пилюлей, у соседнего уезжала под неё, и четыре
+     блока переставали читаться как четыре одинаковых блока. */
+  .verdict__head {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+  }
+
+  .verdict__subject {
+    min-width: 0;
+    font-size: var(--t-micro);
+    /* Имя сметы переносится ПО СЛОВАМ и целиком: обрезать его многоточием
+       значило бы сделать неразличимыми «РИМ Курган_СОТВ_ испр. …» и
+       «РИМ Курган_ЭОМ__ЭОМ испр. …» — а весь смысл подписи в том, чтобы
+       различать вердикты по сметам. */
+    overflow-wrap: anywhere;
+    color: var(--text-3);
+  }
+
+  .verdict__text {
+    margin: 0;
+    font-size: var(--t-meta);
+    line-height: 1.5;
+    color: var(--text);
+  }
+
+  /* Сводка светофоров в «липкой» панели: тому, что остаётся на виду при
+     прокрутке, нужны четыре строки, а не полторы тысячи знаков. */
+  .lights {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .lights__row {
+    display: grid;
+    align-items: baseline;
+    padding: 8px 16px;
+    gap: 2px 9px;
+    grid-template-columns: auto minmax(0, 1fr);
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  .lights__row:last-child { border-bottom: 0; }
+
+  .lights__subject {
+    font-size: var(--t-meta);
+    line-height: 1.35;
+    overflow-wrap: anywhere;
+    color: var(--text-2);
+  }
+
+  /* ---- Договорные гейты ----------------------------------------------------
+     ИТОГ СЛЕВА, И ЭТО НЕ ПЕРЕСТАНОВКА РАДИ ПЕРЕСТАНОВКИ.
+
+     Гейты стояли таблицей с колонкой «Итог» справа. У §12.1а объяснение на две
+     строки, и пилюля оказывалась в девятистах пикселях от того, что она судит:
+     дочитав объяснение, читатель вёл пальцем обратно через весь экран. Ответов
+     всего два, и нужен он ПЕРВЫМ — сначала «пройден», потом «почему».
+     -------------------------------------------------------------------------- */
+  .gates {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .gate {
+    display: grid;
+    align-items: baseline;
+    padding: 10px 16px;
+    gap: 2px 11px;
+    grid-template-columns: 108px minmax(0, 1fr);
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  .gate:last-child { border-bottom: 0; }
+
+  /* Непройденный гейт помечен и краем строки: пилюля различает их словом и
+     цветом, а край — на просмотре списка сбоку, без чтения. */
+  .gate--fail { border-left: 2px solid var(--danger); }
+  .gate--ok { border-left: 2px solid transparent; }
+
+  .gate__body {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 3px;
+  }
+
+  .gate__name {
+    font-size: var(--t-body);
+    font-weight: 600;
+    line-height: 1.35;
+  }
+
+  .gate__detail {
+    /* Мера строки, а не ширина карточки: объяснение гейта на 1400 px без
+       потолка даёт строку в 180 знаков, которую глаз теряет на возврате. */
+    max-width: 96ch;
+    font-size: var(--t-meta);
+    line-height: 1.45;
+    color: var(--text-3);
+  }
+
+  @media (max-width: 700px) {
+    .gate { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  /* ---- Итоги обхода плитками ----------------------------------------------
+     Семь величин шли парами «подпись — число» одной строкой: главные из них —
+     сколько смет прочитано и сколько позиций извлечено — стояли одним кеглем
+     со служебными и тонули. Числа Домовея те же, что у плиток пульта. */
+  .totals {
+    display: grid;
+    margin: 0;
+    padding: 12px 16px;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(104px, 1fr));
+    border-bottom: 1px solid var(--line-2);
+  }
+
+  /* ЧИСЛО СВЕРХУ, ПОДПИСЬ СНИЗУ — и порядок в разметке при этом обратный.
+     `dt` обязан стоять перед `dd`, иначе список определений перестаёт быть
+     списком определений. Но подпись «с нормативным шифром» переносится на две
+     строки, а «позиций» — на одну, и при подписи сверху числа в одном ряду
+     вставали на разной высоте: семь величин переставали читаться как ряд.
+     `column-reverse` разводит порядок чтения и порядок разметки. */
+  .totals__cell {
+    display: flex;
+    flex-direction: column-reverse;
+    justify-content: flex-end;
+    gap: 3px;
+  }
+
+  .totals__word {
+    font-size: var(--t-micro);
+    line-height: 1.3;
+    color: var(--text-3);
+  }
+
+  .totals__value {
+    margin: 0;
+    font-size: var(--t-metric);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+
+  /* ---- Замечания одного агента внутри прогона ------------------------------
+     Сто шестьдесят семь замечаний шли одним плоским списком и растягивали
+     экран на три десятка прокруток. Свёрнутость — родная `<details>`: экран
+     остаётся серверным, а состояние раскрытия не надо ни хранить, ни
+     восстанавливать.
+
+     Раскрыт тот, у кого есть критичное. Свернуть блокер значило бы спрятать
+     ровно то, ради чего экран открывают. */
+  .agroup {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .agroup:last-child { border-bottom: 0; }
+
+  .agroup__head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    padding: 11px 16px;
+    gap: 4px 10px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .agroup__head::-webkit-details-marker { display: none; }
+
+  /* Указатель раскрытия — свой, потому что родной маркер у `list-style: none`
+     пропадает, а блок без признака раскрываемости на него не приглашает. */
+  .agroup__head::before {
+    content: "▸";
+    font-size: 10px;
+    color: var(--text-4);
+  }
+
+  .agroup[open] > .agroup__head::before { content: "▾"; }
+
+  .agroup__head:hover { background: var(--surface-hover); }
+
+  .agroup__person {
+    font-size: var(--t-body);
+    font-weight: 600;
+  }
+
+  .agroup__marks {
+    display: flex;
+    margin-left: auto;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .agroup__link {
+    margin: 0;
+    padding: 0 16px 8px;
+    font-size: var(--t-meta);
+  }
+
+  /* ---- Отбор списка --------------------------------------------------------
+     Плотность и радиус — из Pulse (`.filters-pop`): пилюля 28 px, кегль 12 px,
+     зазор 6 px, подпись группы 10.5 px капсом с разрядкой 0.08em. Из наших
+     токенов взяты только цвета — выбранное красится акцентом, а не
+     знаком клиента, потому что эта пара уже проверена гейтом контраста.
+     -------------------------------------------------------------------------- */
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px 24px;
+  }
+
+  .filters__group {
+    display: flex;
+    min-width: 0;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .filters__label {
+    margin: 0;
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-4);
+  }
+
+  .filters__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .filters__chip {
+    display: inline-flex;
+    height: 28px;
+    align-items: center;
+    gap: 6px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    background: var(--surface);
+    color: var(--text-2);
+    font-size: 12px;
+    text-decoration: none;
+  }
+
+  .filters__chip:hover {
+    border-color: var(--line-strong);
+    background: var(--surface-sunken);
+    color: var(--text);
+  }
+
+  .filters__chip--on {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+    font-weight: 600;
+  }
+
+  .filters__chip--on:hover {
+    border-color: var(--accent-line);
+    background: var(--accent-soft);
+    color: var(--accent-hover);
+  }
+
+  .filters__count {
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-4);
+  }
+
+  .filters__chip--on .filters__count { color: var(--accent-hover); }
+
+  .filters__reset {
+    display: inline-flex;
+    height: 28px;
+    align-items: center;
+    gap: 5px;
+    color: var(--text-3);
+    font-size: 12px;
+    text-decoration: none;
+  }
+
+  .filters__reset:hover { color: var(--text); text-decoration: underline; }
+
+  /* ---- Вкладки раздела -----------------------------------------------------
+     ЭТО ССЫЛКИ, А НЕ ПЕРЕКЛЮЧЕНИЕ СОСТОЯНИЯ.
+
+     У Домовея вкладки справочника (`.tabs` + `DirectoryTabsToolbar`) — три
+     `<Link>` на три отдельных маршрута: `/directory`, `/directory/staff`,
+     `/directory/objects`. Это и есть решение противоречия, из-за которого
+     карточка объекта у нас попала в рельс: адрес у каждой вкладки свой, а
+     раздел один. Состояние в кнопках дало бы один адрес на пять экранов —
+     ровно то, за что нас справедливо ругали.
+
+     Числа Pulse целиком: подложка `--bg-2`, поле 3 px, зазор 2 px, пилюля
+     `5px/12px` радиусом 9 px, кегль 13 px, активная — на `--surface` с тенью.
+     -------------------------------------------------------------------------- */
+  /* ---- Вкладки одного объекта ---------------------------------------------
+     ШЕСТЬ ВКЛАДОК НЕ ВЛЕЗАЮТ В ТЕЛЕФОН, И ЭТО НАДО ПРОКРУЧИВАТЬ ВНУТРИ СЕБЯ.
+
+     Замерено на 375 px: полоса вкладок 515 px при экране 375 — и она уводила
+     в горизонтальную прокрутку ВСЮ СТРАНИЦУ, то есть нарушала WCAG 1.4.10
+     (содержимое недостижимо без двумерной прокрутки). Набор доступности это
+     не ловил: экрана Проверки не было в перечне «масштаб 200 %», а комментарий
+     в наборе утверждал, что «на узком устройстве вкладки уезжают в
+     прокручиваемую полосу», — полосы не существовало.
+
+     `overflow-x: auto` с `max-width: 100%` делает утверждение правдой: полоса
+     прокручивается сама, страница — нет. `scrollbar-width: none` убирает
+     системную полосу: она перекрывала бы нижний край вкладок, а прокрутка
+     здесь делается пальцем.
+     -------------------------------------------------------------------------- */
+  .tabs {
+    display: flex;
+    max-width: 100%;
+    overflow-x: auto;
+    gap: 2px;
+    padding: 3px;
+    border-radius: var(--r);
+    background: var(--surface-sunken);
+    scrollbar-width: none;
+  }
+
+  .tabs::-webkit-scrollbar { display: none; }
+
+  /* Полоса шире содержимого не растягивается: на широком экране вкладки
+     остаются прижатыми влево, как было при `inline-flex`. */
+  @media (min-width: 700px) {
+    .tabs { width: fit-content; }
+  }
+
+  .tabs__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 9px;
+    color: var(--text-2);
+    font-size: 13px;
+    font-weight: 500;
+    white-space: nowrap;
+    text-decoration: none;
+  }
+
+  .tabs__link:hover { color: var(--text); }
+
+  .tabs__link--on {
+    background: var(--surface);
+    color: var(--text);
+    box-shadow: 0 1px 2px rgb(0 0 0 / 6%);
+  }
+
+  /* Счётчик у вкладки набран тем же кеглем, что у Домовея (10 px): он уточняет
+     вкладку, а не спорит с её названием. Ноль ПОКАЗЫВАЕТСЯ, и это отличие от
+     рельса намеренное: в рельсе ноль — шум, а на вкладке «Агенты 0» отвечает
+     на вопрос «а там что-то есть?» до нажатия.
+
+     ПРОЗРАЧНОСТИ ЗДЕСЬ БОЛЬШЕ НЕТ, И ЭТО НЕ ВКУС.
+
+     Стояло `opacity: 0.6`, и axe нашёл 2.8:1 на счётчике «37»: #909399 на
+     #f4f4f5 при кегле 10 px, где норма 4.5:1. Гейт контраста этого не видел и
+     видеть не мог — он считает ПАРЫ ТОКЕНОВ, а прозрачность смешивает цвет
+     после подстановки токена. То есть `opacity` у текста — способ пройти гейт,
+     не выполнив требование, и по классу это `Ф-33`: порог, выведенный из
+     намерения, разрешает ровно то, ради чего гейт заведён.
+
+     Поэтому тон задан ТОКЕНОМ, и пара внесена в `verify-contrast.ts`. Правило
+     общее: у текста прозрачности не бывает — оттенок берётся из палитры, где
+     он проверяется вычислением. */
+  .tabs__count {
+    font-size: 10px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--text-3);
+  }
+
+  /* ---- Панель раздела ------------------------------------------------------
+     Одна строка над данными: вкладки слева, действия справа (`margin-left:
+     auto`), поиск между ними. Перенос разрешён — на 375 px строка становится
+     двумя, а не выдавливает действие за край.
+
+     Числа Домовея (`.dir-toolbar`): зазор 10 px, отступ снизу 14 px, минимальная
+     высота 32 px, действия зазором 6 px.
+     -------------------------------------------------------------------------- */
+  .toolbar {
+    display: flex;
+    min-height: 32px;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .toolbar__actions {
+    display: flex;
+    margin-left: auto;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   6. Встроенный код в тексте
+   --------------------------------------------------------------------------
+   Единственное, что осталось от блока совместимости с экранами, написанными до
+   дизайн-системы. Блок опустел, когда реестр, карточка объекта, журнал, вход и
+   главная перешли на компоненты, — и удалён, как и было условлено при его
+   заведении. `code` пережил его потому, что это разметка текста, а не
+   компонент: он встречается внутри объяснений на страницах.
+   -------------------------------------------------------------------------- */
+@layer components {
+  code {
+    font-family: var(--font-mono);
+    font-size: 0.92em;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   7. Каркас приложения
+   --------------------------------------------------------------------------
+   Рельс разделов и шапка. Единственное, чем прототипы заказчика отличались от
+   нас по СТРУКТУРЕ: у них постоянная навигация, у нас были семь отдельных
+   страниц.
+
+   ЧИСЛА ПЕРЕНЕСЕНЫ ИЗ PULSE, А НЕ УГАДАНЫ
+
+   `domovey/apps/web-crm/app/globals.css`, блок `.rail`: рельс 240 px, брэнд и
+   шапка по 56 px, пункт `7px/16px`, полоса активности 2 px слева, название через
+   `flex: 1` с многоточием, метка справа. Первая версия этого блока числа
+   угадывала и промахнулась трижды: названия ломались на две строки, жёлоб
+   прокрутки торчал серым, личность занимала шапку, оставляя её полупустой.
+   -------------------------------------------------------------------------- */
+@layer components {
+  .shell {
+    display: grid;
+    /* Две строки, и вторая тянется. Без `1fr` сетка растягивала ОБЕ строки
+       поровну, и на узком экране под свёрнутым рельсом оставалось тёмное поле
+       в пол-экрана: рельс занимал место, которого не просил. */
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    min-height: 100dvh;
+    background: var(--bg);
+  }
+
+  .pane {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .rail {
+    display: flex;
+    flex-direction: column;
+    background: var(--rail);
+    color: var(--rail-text);
+    border-bottom: 1px solid var(--rail-border);
+    overflow: hidden;
+  }
+
+  .rail__brand {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 8px;
+    height: 56px;
+    padding: 0 14px;
+    border-bottom: 1px solid var(--rail-divider);
+  }
+
+  .rail__brand-link {
+    display: flex;
+    min-width: 0;
+    flex: 1;
+    align-items: center;
+    gap: 10px;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  /* Плашка знака на рельсе — белая, как на входе, и по той же причине: серые
+     корпуса знака на чёрном рельсе пропадают целиком. Рамки здесь нет — на
+     тёмном фоне белое поле и есть граница. */
+  .rail__brand-mark {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: var(--r-sm);
+    background: #fff;
+  }
+
+  .rail__brand-meta { min-width: 0; flex: 1; }
+
+  .rail__brand-name {
+    display: block;
+    font-size: 14px;
+    font-weight: 650;
+    letter-spacing: -0.015em;
+    color: var(--rail-text-strong);
+  }
+
+  .rail__brand-tenant {
+    display: block;
+    overflow: hidden;
+    font-size: var(--t-micro);
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--rail-text-dim);
+  }
+
+  /* ---- Раскрытие вместо выезжающей панели ------------------------------
+     `<details>` работает без единой строки клиентского кода. На широком экране
+     раскрытие принудительно открыто, и это делается ДВУМЯ правилами разом:
+     современные браузеры прячут содержимое через `::details-content` с
+     `content-visibility`, прежние — через `display: none` на детях. Одного
+     правила хватило бы ровно до первого браузера другого поколения.
+     -------------------------------------------------------------------- */
+  .rail__drawer-summary {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 9px 16px;
+    font-size: var(--t-meta);
+    font-weight: 650;
+    color: var(--rail-text);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .rail__drawer-summary::-webkit-details-marker { display: none; }
+  .rail__drawer-summary::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 4px solid currentcolor;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    transition: transform 0.12s ease;
+  }
+  .rail__drawer[open] > .rail__drawer-summary::before { transform: rotate(90deg); }
+
+  .rail__nav {
+    padding-bottom: 8px;
+    overflow-y: auto;
+  }
+
+  /* Жёлоб прокрутки внутри тёмной панели читается как дефект сборки. Приём и
+     число — из Pulse; правило продублировано для `::details-content`, потому
+     что на широком экране прокручивается именно он, а не сам `nav`, — и первая
+     версия прятала жёлоб не у того элемента. */
+  .rail__nav { scrollbar-width: none; }
+  .rail__nav::-webkit-scrollbar { width: 0; }
+
+  .rail__group { padding: 10px 0 4px; }
+
+  .rail__group-label {
+    margin: 0;
+    padding: 0 16px 6px;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--rail-text-dim);
+  }
+
+  .rail__item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 16px;
+    border-left: 2px solid transparent;
+    font-size: var(--t-body);
+    font-weight: 500;
+    /* Ломающееся название — это не «длинный текст», это рваная панель. */
+    white-space: nowrap;
+    color: var(--rail-text);
+    text-decoration: none;
+  }
+
+  .rail__item-icon { flex-shrink: 0; }
+
+  .rail__item-label {
+    min-width: 0;
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  /* Счётчик у пункта — приём Pulse: число сразу говорит, где работа. Ноль не
+     показывается вовсе, поэтому «пусто» читается спокойным. */
+  .rail__item-count {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 20px;
+    height: 18px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: var(--rail-mark);
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    color: var(--rail-text-strong);
+  }
+
+  /* У АКТИВНОГО ПУНКТА СЧЁТЧИК НЕ ЗАЛИВАЕТСЯ ЗНАКОМ.
+     Здесь стояла брендовая заливка с чернилами `#1a1206`, подобранными под
+     золотой знак. Два изъяна, и оба вылезли при переходе на чёрно-красный:
+
+      · знак оказался НА ДАННЫХ — счётчик это число, и красная плашка на нём
+        читается тревогой, а не «вы здесь»;
+      · чернила были литералом под конкретный оттенок и перестали подходить.
+
+     Активную строку и без того отмечают рельс слева, фон и усиленный текст —
+     третий сигнал на том же месте не добавляет ясности, а отнимает: он спорит
+     с настоящими тревогами в шапке. */
+  .rail__item--active .rail__item-count {
+    background: var(--rail-mark);
+    color: var(--rail-text-strong);
+  }
+
+  /* Класс нехватки — словом, не цветом и не буквой. Моношрифт и капс отделяют
+     метку от названия вернее, чем цвет: метка перестаёт читаться как часть
+     названия раздела. */
+  .rail__item-mark {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: 9.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: var(--rail-text-dim);
+  }
+
+  a.rail__item:hover {
+    background: var(--rail-hover);
+    color: var(--rail-text-strong);
+  }
+
+  .rail__item--active {
+    background: var(--rail-hover);
+    border-left-color: var(--brand);
+    font-weight: 650;
+    color: var(--rail-text-strong);
+  }
+
+  /* Неготовый раздел: не серая ссылка, а вообще не ссылка. Курсор по умолчанию
+     — часть сообщения: нажимать здесь нечего. */
+  .rail__item--off {
+    color: var(--rail-text-dim);
+    cursor: default;
+  }
+
+  /* Группа «В разработке» — тише остальных целиком: и надзаголовок, и пункты.
+     Прежде рядом с каждым пунктом стояла метка «вне договора», и таких меток
+     было двадцать — рельс сообщал в основном о том, чего нет. */
+  .rail__group--pending .rail__group-label { color: var(--rail-mark); }
+  .rail__group--pending .rail__item { font-size: var(--t-meta); }
+
+  .rail__footer {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-top: 1px solid var(--rail-divider);
+  }
+
+  .rail__avatar {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--brand-soft);
+    border: 1px solid var(--brand-line);
+    font-size: var(--t-meta);
+    font-weight: 700;
+    color: var(--brand);
+  }
+
+  .rail__user { min-width: 0; flex: 1; }
+
+  .rail__user-name,
+  .rail__user-role {
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .rail__user-name {
+    font-size: var(--t-meta);
+    font-weight: 650;
+    color: var(--rail-text-strong);
+  }
+
+  .rail__user-role {
+    font-size: 10px;
+    color: var(--rail-text-dim);
+  }
+
+  .rail__logout {
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 0;
+    border-radius: var(--r-sm);
+    background: transparent;
+    color: var(--rail-text-dim);
+    cursor: pointer;
+  }
+
+  .rail__logout:hover {
+    background: var(--rail-hover);
+    color: var(--danger);
+  }
+
+  /* ---- Пульт: слои внимания ------------------------------------------
+     Перенесено из Pulse (`domovey/apps/web-crm`, блок `.dash-*`) вместе с
+     числами: шапка обстановки, заголовок слоя капсом, плитки «реагировать
+     сейчас», строка застрявшего предмета, строка очага с относительной полосой.
+
+     ЧТО ЗДЕСЬ ГЛАВНОЕ И ЧЕГО У НАС НЕ БЫЛО
+
+     Плитка ПОДСВЕЧИВАЕТСЯ ТОЛЬКО ПРИ НЕНУЛЕВОМ СЧЁТЧИКЕ. Пять одинаково белых
+     карточек — это ровно то, чем был первый Пульт: числа разной важности одним
+     весом, и глазу негде начать. Заливка и полоса слева появляются, когда есть
+     повод; «всё чисто» читается спокойным.
+
+     Содержание при этом наше, строительное: не SLA и аварии, а непройденные
+     гейты, критичные замечания сметчика, неподписанные ревизии и позиции без
+     шифра нормы.
+     -------------------------------------------------------------------- */
+  /* -----------------------------------------------------------------------
+     ПЕРЕКЛЮЧАТЕЛЬ ОБЪЕКТА ПУЛЬТА.
+
+     Ссылками, а не выпадающим списком: адрес объекта делится, сохраняется в
+     закладке и открывается в соседней вкладке — выпадающий список не умеет
+     ничего из этого и требует скрипта.
+
+     Текущий помечен и цветом, и рамкой: цвет один не годится — им нельзя
+     пользоваться как единственным признаком состояния.
+     -------------------------------------------------------------------- */
+  .dash-objects {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .dash-objects__item {
+    padding: 4px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    font-size: 12px;
+    color: var(--ink-muted);
+    text-decoration: none;
+  }
+
+  .dash-objects__item:hover { border-color: var(--accent); color: var(--ink); }
+
+  .dash-objects__item--current {
+    border-color: var(--accent);
+    color: var(--ink);
+    font-weight: 600;
+  }
+
+  .dash-hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 18px;
+    border: 1px solid var(--line);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--r);
+    background: var(--surface);
+  }
+
+  .dash-hero--warn { border-left-color: var(--warn); }
+  .dash-hero--danger { border-left-color: var(--danger); }
+
+  .dash-hero__pulse {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .dash-hero__dot {
+    flex-shrink: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+
+  .dash-hero--warn .dash-hero__dot { background: var(--warn); box-shadow: 0 0 0 4px var(--warn-soft); }
+  .dash-hero--danger .dash-hero__dot { background: var(--danger); box-shadow: 0 0 0 4px var(--danger-soft); }
+
+  .dash-hero__state {
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: var(--text);
+  }
+
+  .dash-hero__sub {
+    margin: 2px 0 0;
+    font-size: var(--t-meta);
+    color: var(--text-3);
+  }
+
+  .dash-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .dash-section__head {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dash-section__title {
+    margin: 0;
+    font-size: var(--t-micro);
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-3);
+  }
+
+  .dash-alert-row {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  @media (min-width: 1100px) {
+    .dash-alert-row {
+      grid-template-columns: repeat(var(--dash-alert-cols, 4), minmax(0, 1fr));
+    }
+  }
+
+  .dash-alert {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 14px 16px;
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--line-strong);
+    border-radius: var(--r);
+    background: var(--surface);
+    color: inherit;
+    text-decoration: none;
+    transition: box-shadow 0.12s ease;
+  }
+
+  a.dash-alert:hover { box-shadow: var(--shadow-sm); }
+
+  .dash-alert--calm { border-left-color: var(--accent); }
+  .dash-alert--warn { border-left-color: var(--warn); background: var(--warn-soft); }
+  .dash-alert--danger { border-left-color: var(--danger); background: var(--danger-soft); }
+
+  .dash-alert__icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: var(--text-4);
+  }
+
+  .dash-alert--warn .dash-alert__icon { color: var(--warn); }
+  .dash-alert--danger .dash-alert__icon { color: var(--danger); }
+
+  .dash-alert__value {
+    font-size: 30px;
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--text);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .dash-alert__label {
+    margin-top: 8px;
+    font-size: var(--t-meta);
+    font-weight: 650;
+    color: var(--text);
+  }
+
+  .dash-alert__hint {
+    font-size: var(--t-micro);
+    color: var(--text-3);
+  }
+
+  /* Строка предмета, требующего внимания: точка, суть, место, вес. */
+  /* ---- Область данных с фиксированной высотой ------------------------------
+     Виджеты в одной строке обязаны держать общую высоту: список на двести
+     позиций рядом со списком на четыре растягивал карточку и разносил сетку.
+     Прокрутка внутри блока, а не у страницы, — и ничего не обрезано: список
+     остаётся полным, просто листается на месте.
+
+     Жёлоб виден намеренно, в отличие от рельса: там прокрутка неожиданна, а
+     здесь она и есть сообщение «список длиннее, чем видно».
+     -------------------------------------------------------------------------- */
+  /* ВЫСОТУ ЗАДАЁТ ЭКРАН, А НЕ ВЫДУМАННОЕ ЧИСЛО.
+     Здесь стояло `max-height: 22rem` — 352 px, взятые из головы. На ноутбуке
+     13″ они съедали пол-экрана, на большом мониторе оставляли жёлоб там, где
+     список уместился бы целиком.
+
+     У Домовея высоту областей данных задаёт видимая область:
+     `.td-layout { height: calc(100vh - 56px - 32px) }`, и уже внутри неё лента
+     получает свою прокрутку. Число там не выдумано — это высота экрана минус
+     шапка минус поля.
+
+     `dvh`, а не `vh`: на телефоне `vh` считается по экрану БЕЗ адресной строки
+     браузера, и блок, посчитанный в `vh`, уезжает под неё. `dvh` следует за
+     тем, что действительно видно.
+
+     `clamp` держит края: на коротком экране список не выродится в три строки,
+     на очень высоком — не растянется так, что два виджета рядом перестанут
+     читаться одним взглядом. Переменная одна, чтобы виджеты в строке держали
+     общую высоту: разные числа у соседей и есть «разъезжание». */
+  :root { --dash-list-h: clamp(13rem, 42dvh, 34rem); }
+
+  .dash-scroll {
+    max-height: var(--dash-list-h);
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  /* ПОЛОСА СЛЕВА ВМЕСТО ТОЧКИ.
+     Было: колонка 8 px с кружком-точкой. Точка сообщает важность, но её надо
+     НАЙТИ — она размером со знак препинания, и при пятнадцати строках подряд
+     глаз читает их как одинаковые.
+
+     У Домовея цветом помечен КРАЙ строки: `.intake-trow.--urgent::before` —
+     полоса 2 px по всей высоте, `.kpi.--red` — `border-left: 3px`. Край
+     непрерывен, и важность видна на просмотре списка сбоку, без чтения.
+
+     Прозрачная полоса стоит и у строк без тона: иначе строка с полосой была бы
+     сдвинута на два пикселя относительно строки без неё. */
+  .dash-attn {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--line-2);
+    border-left: 2px solid transparent;
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .dash-attn:last-child { border-bottom: 0; }
+  a.dash-attn:hover { background: var(--surface-hover); }
+
+  .dash-attn--danger { border-left-color: var(--danger); }
+  .dash-attn--warn { border-left-color: var(--warn); }
+  .dash-attn--ok { border-left-color: var(--ok); }
+  /* Спокойное состояние помечено линией, а не пустотой: отсутствие полосы
+     читалось бы как «тон не определён», а он определён — он спокойный. */
+  .dash-attn--calm { border-left-color: var(--line-strong); }
+
+  /* ---- Слой итогов --------------------------------------------------------
+     Четыре плитки накопленного. Числа стояли строкой подзаголовка — «проверок 3
+     · позиций 101 · событий журнала 24», — то есть шрифтом подписи, вплотную,
+     без единого различия по весу. Прочитать их можно было только вглядываясь, а
+     вглядываться в подзаголовок никто не станет.
+
+     Числа Домовея (`.dash-recap__cell`): поле `12px/14px`, значение 24 px
+     весом 700 с табличными цифрами, подпись 11 px, знак в правом верхнем углу
+     `--text-4`. Отличие от плиток «реагировать сейчас» намеренное: там значение
+     30 px и тон по состоянию, здесь 24 px и тона нет вовсе — накопленное не
+     требует реакции, и красить его значило бы объявить работу происшествием.
+     -------------------------------------------------------------------------- */
+  .dash-recap {
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  @media (max-width: 900px) {
+    .dash-recap { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+
+  .dash-recap__cell {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+  }
+
+  .dash-recap__value {
+    font-size: 24px;
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    color: var(--text);
+  }
+
+  .dash-recap__label {
+    font-size: 11px;
+    color: var(--text-3);
+  }
+
+  .dash-recap__icon {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    color: var(--text-4);
+  }
+
+  .dash-attn__main { min-width: 0; }
+
+  /* Замечание — ДВЕ СТРОКИ, а не сколько получится.
+     Замерено на демо-прогоне: двадцать критичных замечаний по три-четыре строки
+     прозы плюс три строки основания давали сто сорок строк подряд. Список
+     перестаёт быть списком: глазу не за что зацепиться, и «двадцать критичных»
+     читается как один абзац.
+     Ничего не теряется: полный текст открывается раскрытием ниже. */
+  .dash-attn__title {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    font-size: var(--t-body);
+    font-weight: 500;
+    color: var(--text);
+  }
+
+  /* Документ — одной строкой и приглушённо. Имена смет длинные («РИМ
+     Курган_СОТВ_ испр. - ЛСР по Методике 2020 _PM_.xlsx»), и в полный рост они
+     перебивают само замечание. */
+  .dash-attn__doc {
+    display: block;
+    overflow: hidden;
+    margin-top: 2px;
+    font-size: var(--t-micro);
+    color: var(--text-4);
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  /* Раскрытие основания.
+     Основание обязательно по ТЗ §9 — но обязательно ПРИСУТСТВОВАТЬ, а не
+     занимать три строки в каждой из двадцати позиций. Здесь оно на расстоянии
+     одного щелчка и целиком, без обрезки: обрезанное основание нельзя
+     проверить, а именно для проверки оно и нужно. */
+  .dash-attn__why {
+    margin-top: 3px;
+    font-size: var(--t-micro);
+  }
+
+  .dash-attn__why > summary {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    width: fit-content;
+    color: var(--text-4);
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .dash-attn__why > summary::-webkit-details-marker { display: none; }
+
+  .dash-attn__why > summary::before {
+    content: "";
+    width: 0;
+    height: 0;
+    border-left: 4px solid currentcolor;
+    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    transition: transform 0.12s ease;
+  }
+
+  .dash-attn__why[open] > summary::before { transform: rotate(90deg); }
+  .dash-attn__why > summary:hover { color: var(--text-2); }
+
+  .dash-attn__why-body {
+    margin-top: 5px;
+    padding: 8px 10px;
+    border-radius: var(--r-xs);
+    background: var(--surface-sunken);
+    line-height: 1.45;
+    color: var(--text-2);
+  }
+
+  /* Вторая строка ОБРЕЗАЕТСЯ ДВУМЯ СТРОКАМИ, а полный текст остаётся в
+     подсказке. Причина не в аккуратности: `detail` непройденного гейта пришёл
+     из ядра длиной в полторы тысячи знаков — семь повторов одной ошибки
+     endpoint'а, — и строка списка превратилась в простыню, под которой не видно
+     остальных гейтов. Обрезать вывод честно, потерять его — нет. */
+  .dash-attn__place {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    margin-top: 1px;
+    font-size: var(--t-meta);
+    color: var(--text-3);
+  }
+
+  /* Очаг: где сосредоточено. Полоса относительная — сравнивают между строками. */
+  .dash-spot { padding: 8px 0; }
+  .dash-spot + .dash-spot { border-top: 1px solid var(--line-2); }
+
+  .dash-spot__head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .dash-spot__name {
+    display: inline-flex;
+    min-width: 0;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--t-body);
+    color: var(--text);
+  }
+
+  .dash-spot__count {
+    flex-shrink: 0;
+    font-family: var(--font-mono);
+    font-size: var(--t-body);
+    font-weight: 700;
+    color: var(--text);
+  }
+
+  .dash-spot__bar {
+    display: block;
+    height: 6px;
+    margin: 6px 0 4px;
+    border-radius: 3px;
+    background: var(--surface-sunken);
+    box-shadow: inset 0 0 0 1px var(--line-2);
+    overflow: hidden;
+  }
+
+  .dash-spot__bar > span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+  }
+
+  .dash-spot__bar > span.dash-spot__fill--warn { background: var(--warn); }
+
+  .dash-spot__meta {
+    margin: 0;
+    font-size: var(--t-micro);
+    color: var(--text-3);
+  }
+
+  /* ---- Полоса доли (веха Ф10) -----------------------------------------
+     Первый графический примитив продукта. Нарисован `div`-ами, как в
+     прототипах заказчика: библиотека здесь не нужна, а внешние запросы из
+     интерфейса запрещены (`Ф-ADR-008`).
+
+     Число рядом с полосой обязательно — полоса добавка к числу, а не замена:
+     длину читалка экрана не произносит.
+     -------------------------------------------------------------------- */
+  .share {
+    flex: 0 0 clamp(80px, 22vw, 220px);
+    height: 8px;
+    border-radius: 999px;
+    background: var(--surface-sunken);
+    box-shadow: inset 0 0 0 1px var(--line-2);
+    overflow: hidden;
+  }
+
+  .share__fill {
+    display: block;
+    height: 100%;
+    border-radius: 999px;
+    background: var(--accent);
+  }
+
+  /* ---- Шапка ----------------------------------------------------------
+     Несёт путь, а не личность: личность не меняется от экрана к экрану, а путь
+     меняется. Поиска здесь нет намеренно — поиск, который не ищет, та же
+     ловушка, что кнопка, которая не нажимается (`Ф-ADR-009`).
+     -------------------------------------------------------------------- */
+  /* Шапка ПЕРЕНОСИТСЯ, а не сжимает своё содержимое до нуля.
+     Замерено на 375 px: переключатель объекта занял 205 px, и строка поиска
+     сжалась до нулевой ширины — она осталась в разметке, но перестала
+     существовать для пользователя и для читалки. Набор поймал это как «элемент
+     не виден», и это был настоящий регресс от переключателя.
+     Высота фиксированной быть перестала: при переносе она обязана расти,
+     иначе вторая строка уедет под содержимое. */
+  .topbar {
+    display: flex;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px 12px;
+    min-height: 48px;
+    padding: 7px 24px;
+    border-bottom: 1px solid var(--line);
+    background: var(--surface);
+  }
+
+  .topbar__crumbs {
+    display: flex;
+    min-width: 0;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .topbar__group {
+    font-size: var(--t-meta);
+    color: var(--text-3);
+  }
+
+  .topbar__sep {
+    font-size: var(--t-meta);
+    color: var(--text-4);
+  }
+
+  .topbar__now {
+    font-size: var(--t-meta);
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: var(--text);
+  }
+
+  .topbar__crumb {
+    font-size: var(--t-meta);
+    color: var(--text-2);
+  }
+
+  /* Кнопка шапки: 30×30, как иконочные кнопки Pulse. */
+  .topbar__btn {
+    display: grid;
+    flex-shrink: 0;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--surface);
+    color: var(--text-3);
+    cursor: pointer;
+  }
+
+  .topbar__btn:hover {
+    background: var(--surface-hover);
+    color: var(--text);
+  }
+
+  /* Поиск занимает свободное место и не растёт бесконечно: у Pulse он ограничен
+     480 px, иначе строка на широком мониторе выглядит полем ввода письма. */
+  .topbar__search {
+    margin-left: auto;
+    /* Поиск не уступает меньше своей осмысленной ширины: поле, в которое видно
+       три знака, поиском не является. Прежде здесь стоял `min-width: 0`, и на
+       375 px поле сжималось ДО НУЛЯ — оставалось в разметке и переставало
+       существовать для человека и для читалки. Не хватает места — шапка
+       переносит строку, а не съедает поле. */
+    flex: 1 1 13rem;
+    min-width: 13rem;
+    max-width: 420px;
+  }
+
+  .topbar__search-field {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 30px;
+    padding: 0 10px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--surface-sunken);
+  }
+
+  .topbar__search-field:focus-within {
+    border-color: var(--focus);
+    background: var(--surface);
+  }
+
+  .topbar__search-input {
+    min-width: 0;
+    flex: 1;
+    border: 0;
+    background: transparent;
+    font-size: var(--t-meta);
+    color: var(--text);
+    outline: none;
+  }
+
+  .topbar__search-input::placeholder { color: var(--text-4); }
+
+  /* Переключатель объекта.
+     Плотность та же, что у строки поиска: 30 px, кегль подписи. Собственный
+     вид у `<select>` оставлен браузеру — рисовать свой список значило бы
+     завести клиентское состояние ради внешности. */
+  .topbar__object {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .topbar__object-select {
+    max-width: 15rem;
+    height: 30px;
+    padding: 0 7px;
+    border: 1px solid var(--line);
+    border-radius: var(--r-sm);
+    background: var(--surface-sunken);
+    color: var(--text);
+    font: inherit;
+    font-size: var(--t-meta);
+  }
+
+  .topbar__object-select:hover { border-color: var(--line-strong); }
+  .topbar__object-select:focus { border-color: var(--focus); background: var(--surface); }
+
+  /* На телефоне переключатель отдаёт название и оставляет шифр.
+     Замерено: с полным названием шапка вырастала до 162 px — треть экрана
+     телефона на органы управления. Шифр опознаёт объект однозначно, а название
+     стоит в заголовке экрана строкой ниже, то есть не теряется. */
+  @media (max-width: 767px) {
+    .topbar__object-select { max-width: 8.5rem; }
+  }
+
+  /* Индикатор показывается ТОЛЬКО когда есть что показать: спокойное состояние
+     не требует пометки, а постоянная пометка перестаёт читаться. */
+  .topbar__badge {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 9px;
+    border: 1px solid var(--warn-line);
+    border-radius: 999px;
+    background: var(--warn-soft);
+    font-size: var(--t-micro);
+    font-weight: 600;
+    color: var(--warn);
+  }
+
+  .topbar__badge-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--warn);
+  }
+
+  @media (min-width: 1024px) {
+    .shell {
+      /* 264, а не 240 как в Pulse. Ширина ВЫВЕДЕНА ИЗ ЗАМЕРА, а не выбрана:
+         самое длинное название требует 117 px, самая длинная метка «вне
+         договора» — 71, постоянные части (поля, иконка, зазоры, полоса) — 69.
+         Итого 257; округлено вверх. При 240 шесть названий обрезались
+         многоточием, и рельс выглядел так, будто в нём не хватает места. */
+      grid-template-columns: 264px minmax(0, 1fr);
+      grid-template-rows: minmax(0, 1fr);
+      /* ВЫСОТА, А НЕ МИНИМАЛЬНАЯ — как в Pulse (`.shell { height: 100vh }`).
+
+         С `min-height` оболочка растягивалась под содержание, и рельс уезжал
+         вместе со страницей: `position: sticky` прилипает внутри своего блока,
+         а блоком была растянутая дорожка сетки. На длинном экране навигация
+         просто уходила вверх — то есть перестала быть постоянной, ради чего и
+         заведена. Прокрутка переезжает на область содержания. */
+      height: 100dvh;
+      min-height: 0;
+      /* Число дорожек постоянно, поэтому браузер интерполирует ширину первой —
+         отсюда плавное сворачивание без анимации вручную (приём Pulse). */
+      transition: grid-template-columns 0.22s ease;
+    }
+
+    .pane { overflow-y: auto; }
+
+    .rail {
+      height: 100%;
+      border-right: 1px solid var(--rail-border);
+      border-bottom: 0;
+    }
+
+    .rail__drawer {
+      display: flex;
+      min-height: 0;
+      flex: 1;
+      flex-direction: column;
+    }
+
+    .rail__drawer-summary { display: none; }
+
+    /* ---- Свёрнутый рельс ------------------------------------------------
+       Приём и число из Pulse (`52px`): остаются иконки, названия и счётчики
+       скрываются, подсказка берёт на себя объяснение. Ширина дорожки меняется
+       на самой сетке, поэтому переход плавный — число дорожек постоянно.
+       -------------------------------------------------------------------- */
+    .shell--narrow { grid-template-columns: 56px minmax(0, 1fr); }
+
+    /* На свёрнутом рельсе центрируется ЗНАК, а не ссылка.
+       `justify-content: center` на `.rail__brand` центрировал ссылку, но сама
+       ссылка растянута (`flex: 1`), и знак внутри неё оставался слева: замерено
+       8 px слева против 20 справа. На узкой полосе это видно сразу — знак стоит
+       не по оси остальных иконок. */
+    .shell--narrow .rail__brand { justify-content: center; padding: 0 8px; }
+    .shell--narrow .rail__brand-link { flex: none; justify-content: center; }
+    .shell--narrow .rail__brand-meta { display: none; }
+    .shell--narrow .rail__group-label { display: none; }
+    .shell--narrow .rail__group + .rail__group {
+      margin-top: 6px;
+      padding-top: 6px;
+      border-top: 1px solid var(--rail-divider);
+    }
+
+    .shell--narrow .rail__item {
+      justify-content: center;
+      padding: 7px 0;
+      border-left: 0;
+    }
+
+    .shell--narrow .rail__item-label,
+    .shell--narrow .rail__item-count { display: none; }
+
+    .shell--narrow .rail__item--active { position: relative; }
+    .shell--narrow .rail__item--active::after {
+      content: "";
+      position: absolute;
+      top: 6px;
+      bottom: 6px;
+      left: 0;
+      width: 2px;
+      background: var(--brand);
+    }
+
+    .shell--narrow .rail__user,
+    .shell--narrow .rail__logout { display: none; }
+    .shell--narrow .rail__footer { justify-content: center; padding: 10px 8px; }
+    /* Прокрутка разделов, а не выезд за край.
+       Замерено: список разделов набирал 1180 px при рельсе 901 px, и лишние
+       335 px уезжали ПОД подвал с пользователем — «В разработке» лежал под
+       именем и кнопкой выхода. Причина не в `overflow`, он был объявлен: у
+       `::details-content` как элемента гибкой колонки минимальная высота по
+       умолчанию равна содержанию, поэтому он не сжимался и сжимать нечего было.
+       `min-block-size: 0` — то самое разрешение сжаться; без него `flex: 1`
+       ничего не значит. Тот же приём и та же причина, что у `.pane`. */
+    .rail__drawer::details-content {
+      display: flex;
+      min-block-size: 0;
+      flex: 1 1 auto;
+      flex-direction: column;
+      overflow: hidden;
+      scrollbar-width: none;
+      content-visibility: visible;
+      block-size: auto;
+    }
+
+    .rail__drawer::details-content::-webkit-scrollbar { width: 0; }
+    .rail__drawer > .rail__nav {
+      display: block;
+      min-height: 0;
+      flex: 1 1 auto;
+    }
+  }
+}
+
+/* --------------------------------------------------------------------------
+   8. Печать
+   --------------------------------------------------------------------------
+   Штабные экраны вкладывают в протоколы. Без печатного стиля их начнут снимать
+   скриншотами, и в протокол уйдёт тёмный прямоугольник.
+   -------------------------------------------------------------------------- */
+@media print {
+  [data-theme="dark"] {
+    color-scheme: light;
+    --bg: #fff;
+    --surface: #fff;
+    --surface-raised: #fff;
+    --surface-sunken: #fff;
+    --surface-hover: #fff;
+    --text: #000;
+    --text-2: #222;
+    --text-3: #444;
+    --text-4: #666;
+    --line: #bbb;
+    --line-2: #ddd;
+    --line-strong: #888;
+  }
+
+  .card,
+  .callout {
+    box-shadow: none;
+    break-inside: avoid;
+  }
+
+  .table thead th { position: static; }
+
+  /* На печати оболочка перестаёт быть окном: внутренняя прокрутка области
+     содержания обрезала бы отчёт первой страницей, а рельс и путь в протоколе
+     не нужны вовсе. */
+  .shell {
+    display: block;
+    height: auto;
+  }
+
+  .pane { overflow: visible; }
+  .rail,
+  .topbar { display: none; }
+  .disclosure > summary { display: none; }
+  .disclosure__body { margin-top: 0; }
+}

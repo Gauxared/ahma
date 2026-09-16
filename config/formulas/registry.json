@@ -1,0 +1,237 @@
+{
+  "formulas": [
+    {
+      "id": "calculation.convergence",
+      "title": "Сходимость: сумма слагаемых против объявленного итога",
+      "version": 1,
+      "clause": "ТЗ §6.4, критерий приёмки §12.1б",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "arity": "variadic",
+      "inputs": [
+        "слагаемое"
+      ],
+      "output": "delta",
+      "note": "Считается на трёх уровнях: позиции→раздел, разделы→смета, смета→шапка. Уровень уточняется областью в идентификаторе следа."
+    },
+    {
+      "id": "calculation.object-total",
+      "title": "Итог по объекту: сумма смет",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "arity": "variadic",
+      "inputs": [
+        "смета"
+      ],
+      "output": "total",
+      "note": "Слагаемые именуются путями файлов смет: набор входов открыт по построению."
+    },
+    {
+      "id": "calculation.vat-gap",
+      "title": "Разрыв по НДС при твёрдой цене",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "inputs": [
+        "baseAmount",
+        "contractRate",
+        "currentRate"
+      ],
+      "output": "gap",
+      "note": "База — итог с непредвиденными, а не сумма глав 1–9. Ставки приходят из реестра параметров на дату, не из кода."
+    },
+    {
+      "id": "calculation.scenario-margin",
+      "title": "Маржа в сценарии",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "inputs": [
+        "revenue",
+        "costs",
+        "revenueShift",
+        "costsShift"
+      ],
+      "output": "margin"
+    },
+    {
+      "id": "calculation.guarantee-comparison",
+      "title": "Банковская гарантия против денежного удержания",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "inputs": [
+        "retentionAmount",
+        "years",
+        "guaranteeRatePerYear",
+        "capitalCostPerYear"
+      ],
+      "output": "difference"
+    },
+    {
+      "id": "calculation.cost-per-sqm",
+      "title": "Себестоимость на квадратный метр",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "inputs": [
+        "cost",
+        "area"
+      ],
+      "output": "perSqm",
+      "note": "Площадь — свойство источника, а не догадка. Нулевая или неизвестная площадь делает показатель невычислимым, а не бесконечным."
+    },
+    {
+      "id": "calculation.cost-structure",
+      "title": "Себестоимость по элементам затрат",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "arity": "variadic",
+      "inputs": [
+        "элемент"
+      ],
+      "output": "total",
+      "note": "Элементы §6.4: материалы, оплата труда, эксплуатация машин, накладные, сметная прибыль. Доля считается от суммы ОБЪЯВЛЕННЫХ элементов, и непокрытый остаток называется отдельно."
+    },
+    {
+      "id": "calculation.credit-schedule",
+      "title": "График выборки кредита и проценты",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "inputs": [
+        "principal",
+        "annualRate",
+        "days",
+        "basis"
+      ],
+      "output": "interest",
+      "note": "Ставка приходит из реестра параметров на дату периода: у кредита, выбранного за год, каждый период может считаться по своей ставке."
+    },
+    {
+      "id": "calculation.cash-flow",
+      "title": "БДДС: остаток на конец периода",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "inputs": [
+        "opening",
+        "inflow",
+        "outflow"
+      ],
+      "output": "closing"
+    },
+    {
+      "id": "calculation.penalty",
+      "title": "Пеня от ключевой ставки",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "inputs": [
+        "debt",
+        "keyRate",
+        "share",
+        "days"
+      ],
+      "output": "penalty",
+      "note": "Ключевая ставка — параметр с датой действия. Доля ставки ЗА ДЕНЬ (1/300, 1/130) задаётся условием договора. Деления на базу года здесь нет, в отличие от процентов по кредиту: разделить ещё и на 365 значило бы занизить пеню в 365 раз."
+    },
+    {
+      "id": "calculation.deadline-reverse",
+      "title": "Обратный расчёт срока от даты потребности",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "unit": "day",
+      "arity": "variadic",
+      "inputs": [
+        "этап"
+      ],
+      "output": "startDate",
+      "note": "Считается назад от даты потребности через этапы поставки. Отрицательный запас — не ошибка расчёта, а найденный срыв."
+    },
+    {
+      "id": "calculation.deviation",
+      "title": "Отклонение факта от базы",
+      "version": 1,
+      "clause": "ТЗ §6.4, §5.2",
+      "rounding": "half-up",
+      "unit": "fraction",
+      "inputs": [
+        "actual",
+        "base"
+      ],
+      "output": "deviation",
+      "note": "Нулевая база делает относительное отклонение невычислимым: показатель называется неопределённым, а не приравнивается нулю (§9)."
+    },
+    {
+      "id": "calculation.spread",
+      "title": "Разброс, медиана, минимум и максимум по сопоставимым",
+      "version": 1,
+      "clause": "ТЗ §6.4, §5.2",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "arity": "variadic",
+      "inputs": [
+        "предложение"
+      ],
+      "output": "median",
+      "note": "По §5.2 несопоставленные позиции в расчёт разброса НЕ входят и называются отдельным исходом."
+    },
+    {
+      "id": "calculation.volume-reversal",
+      "title": "Реверс объёма: базовый объём и кратность блока",
+      "version": 1,
+      "clause": "ТЗ §6.4",
+      "rounding": "half-up",
+      "inputs": [
+        "base",
+        "positionVolume"
+      ],
+      "output": "multiple",
+      "note": "База берётся модальным значением по таблице норм: минимум даёт ложную кратность на побочной позиции."
+    },
+    {
+      "id": "calculation.independent-estimate",
+      "title": "Расчётно-аналитическая оценка позиции",
+      "version": 1,
+      "clause": "ТЗ §5.2",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "arity": "variadic",
+      "inputs": [
+        "наблюдение"
+      ],
+      "output": "total",
+      "note": "Строится на обучающем массиве, опорной базе и истории заказчика. Предложения подрядчиков в расчёт НЕ входят: оценка, подсмотревшая в них, подтвердит любую цену, включая завышенную. Независимость доказывается тестом, меняющим только цены подрядчиков."
+    },
+    {
+      "id": "calculation.finance-model",
+      "title": "Финансовая модель объекта: выручка без НДС, три сценария, обеспечение, стоимость денег, разрыв",
+      "version": 1,
+      "clause": "ТЗ §6.4; ADR-V3-010 — арифметика за кодом; skill construction-cost-analysis, лист «Себестоимость_итог»",
+      "rounding": "half-up",
+      "unit": "RUB",
+      "inputs": [
+        "priceWithVat",
+        "vatRate",
+        "costs",
+        "months",
+        "redLine"
+      ],
+      "output": "profit",
+      "note": "Введена 08.09.2026 после пяти прогонов одного входа с разбросом прибыли от −50,8 до +74,5 млн ₽: роль-экономист считала в голове. Параметры называет роль, каждый — с источником; считает код."
+    }
+  ]
+}

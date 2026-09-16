@@ -1,0 +1,65 @@
+{
+  "id": "contract-audit",
+  "version": 1,
+  "kind": "agent",
+  "implements": "1.0.0",
+  "contour": "internal",
+  "dataClasses": [
+    "positions",
+    "prices"
+  ],
+  "requiresPermissions": [
+    "check.run"
+  ],
+  "provides": [
+    "contract_audit"
+  ],
+  "displayName": "Договорник",
+  "sourcePrompt": "reference-system-new/Выход/Виктор_Договорник_v9.6.txt",
+  "promptFile": "prompt.md",
+  "modelRole": "primary",
+  "checklistId": "виктор",
+  "referenceBase": "config/crew/bases/Опорная_база_Виктор_Договорник_v1.0.xlsx",
+  "requiredSections": [
+    {
+      "id": "legal_passport",
+      "title": "Правовой паспорт",
+      "why": "стороны, предмет, цена, сроки и применимое право — рамка, в которой читается всё остальное",
+      "columns": [
+        "Реквизит",
+        "Значение",
+        "Источник",
+        "Замечание"
+      ]
+    },
+    {
+      "id": "risk_register",
+      "title": "Реестр правовых рисков",
+      "why": "риск, основание, последствие и мера; договор без реестра рисков разобран не был",
+      "columns": [
+        "Риск",
+        "Основание в договоре",
+        "Последствие",
+        "Мера",
+        "Держатель"
+      ]
+    },
+    {
+      "id": "scope_boundary",
+      "title": "Разграничение объёма",
+      "why": "кто что делает и чем это подтверждено; неразграниченный объём оплачивается дважды или не оплачивается вовсе",
+      "columns": [
+        "Работа или затрата",
+        "Чья зона",
+        "Чем подтверждено",
+        "Спорность"
+      ]
+    }
+  ],
+  "roster": {
+    "person": "Виктор",
+    "capability": "contract_audit",
+    "scope": "объект",
+    "order": 8
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "id": "target-local",
+  "description": "Потолок целевой локальной модели класса qwen-30b. Применяется к ЛЮБОМУ провайдеру, включая внешний, чтобы разрыв между разработкой и контуром не копился незаметно (ADR-R-020).",
+  "contextWindow": 32768,
+  "maxOutputTokens": 8192,
+  "structuredOutput": "json_schema",
+  "toolCalling": "prompted",
+  "vision": false
+}

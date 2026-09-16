@@ -1,0 +1,55 @@
+{
+  "id": "procurement",
+  "version": 1,
+  "kind": "agent",
+  "implements": "1.0.0",
+  "contour": "internal",
+  "dataClasses": [
+    "positions",
+    "prices"
+  ],
+  "requiresPermissions": [
+    "check.run"
+  ],
+  "provides": [
+    "procurement_map"
+  ],
+  "displayName": "Снабжение",
+  "sourcePrompt": "reference-system-new/Выход/Марина_Снаб_v9.6.txt",
+  "promptFile": "prompt.md",
+  "modelRole": "primary",
+  "checklistId": "марина",
+  "referenceBase": "config/crew/bases/Опорная_база_Марина_Снаб_v1.0.xlsx",
+  "requiredSections": [
+    {
+      "id": "supply_schedule",
+      "title": "Карта сроков поставки",
+      "why": "срок по каждой закупаемой позиции и то, что этот срок сдвигает; закупка есть на любом объекте",
+      "columns": [
+        "Позиция",
+        "Срок поставки, недель",
+        "Что сдвигает",
+        "Держатель",
+        "Основание"
+      ]
+    },
+    {
+      "id": "margin_impact",
+      "title": "Влияние закупки на маржу",
+      "why": "чем цена и срок поставки меняют финрезультат — иначе снабжение остаётся списком желаний",
+      "columns": [
+        "Позиция",
+        "Влияние, ₽",
+        "Направление",
+        "Вероятность",
+        "Основание"
+      ]
+    }
+  ],
+  "roster": {
+    "person": "Марина",
+    "capability": "procurement_map",
+    "scope": "объект",
+    "order": 5
+  }
+}

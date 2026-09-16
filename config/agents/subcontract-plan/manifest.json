@@ -1,0 +1,55 @@
+{
+  "id": "subcontract-plan",
+  "version": 1,
+  "kind": "agent",
+  "implements": "1.0.0",
+  "contour": "internal",
+  "dataClasses": [
+    "positions",
+    "prices"
+  ],
+  "requiresPermissions": [
+    "check.run"
+  ],
+  "provides": [
+    "subcontract_plan"
+  ],
+  "displayName": "Подряд",
+  "sourcePrompt": "reference-system-new/Выход/Халиль_Подряд_v9.6.txt",
+  "promptFile": "prompt.md",
+  "modelRole": "primary",
+  "checklistId": "халиль",
+  "referenceBase": "config/crew/bases/Опорная_база_Халиль_Подряд_v1.0.xlsx",
+  "requiredSections": [
+    {
+      "id": "distribution",
+      "title": "Ведомость распределения",
+      "why": "что делается своими силами, что отдаётся на сторону и почему; это решение принимается на любом объекте",
+      "columns": [
+        "Пакет работ",
+        "Своими силами или подряд",
+        "Объём",
+        "Обоснование выбора",
+        "Риск"
+      ]
+    },
+    {
+      "id": "margin_impact",
+      "title": "Влияние подряда на маржу",
+      "why": "цена подряда против собственной себестоимости — иначе выбор ничем не обоснован",
+      "columns": [
+        "Пакет работ",
+        "Влияние, ₽",
+        "Направление",
+        "Вероятность",
+        "Основание"
+      ]
+    }
+  ],
+  "roster": {
+    "person": "Халиль",
+    "capability": "subcontract_plan",
+    "scope": "объект",
+    "order": 6
+  }
+}

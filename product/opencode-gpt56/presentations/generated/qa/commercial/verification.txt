@@ -1,0 +1,8 @@
+fontconfig Montserrat: /home/govard/projects/7rl/stroyintellekt/product/opencode-gpt56/presentations/generator/assets/fonts/Montserrat[wght].ttf
+pptx slides: 32
+pptx notes: 32
+pdfinfo pages: 32
+pdffonts embedded Montserrat: BAAAAA+Montserrat-Thin
+rendered PNG pages: 32
+placeholder and risky-phrase scan: PASS
+contact sheet: /home/govard/projects/7rl/stroyintellekt/product/opencode-gpt56/presentations/generated/qa/commercial/contact-sheet.png

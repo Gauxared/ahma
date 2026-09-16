@@ -1,0 +1,19 @@
+[project]
+name = "stroyintellect-parsers"
+version = "0.1.0"
+description = "Парсеры авторитетных источников цен и нормативов для ролей экипажа СтройИнтеллект: scrapling + lightpanda (CDP)"
+requires-python = ">=3.12"
+dependencies = ["scrapling[fetchers]>=0.4.15"]
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["parsers"]

@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СтройИнтеллект - Premium Pitch Deck (25 Slides)</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --red: #E60000;
+  --red-gradient: linear-gradient(135deg, #FF1A1A 0%, #B30000 100%);
+  --white: #FFFFFF;
+  --black: #0A0A0A;
+  --bg-color: #F8F9FA;
+  --card-bg: #FFFFFF;
+  --text-main: #2D3136;
+  --text-muted: #8A929A;
+  --border-light: rgba(0,0,0,0.05);
+  --shadow-soft: 0 20px 50px rgba(0,0,0,0.04);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Montserrat', sans-serif; background-color: #E5E7EB;
+  display: flex; flex-direction: column; align-items: center; padding: 0; margin: 0;
+}
+
+.slide {
+  width: 1920px; height: 1080px; background-color: var(--bg-color);
+  position: relative; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+  page-break-after: always; flex-shrink: 0; color: var(--text-main);
+  background-image: radial-gradient(circle at 100% 0%, rgba(230,0,0,0.02) 0%, transparent 40%);
+  display: flex; flex-direction: column; margin-bottom: 40px;
+}
+@media print {
+  body { background: none; padding: 0; margin: 0; display: block; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .slide { box-shadow: none; margin: 0; page-break-after: always; page-break-inside: avoid; }
+  @page { size: 1920px 1080px; margin: 0; }
+}
+
+h1 { font-size: 52px; font-weight: 800; color: var(--black); margin-bottom: 15px; letter-spacing: -1px; }
+.subtitle { font-size: 24px; font-weight: 400; color: var(--text-muted); margin-bottom: 40px; line-height: 1.4; }
+p, li { font-size: 20px; color: var(--text-main); line-height: 1.5; margin-bottom: 15px; font-weight: 400; }
+.highlight { color: var(--red); font-weight: 600; }
+.strong { font-weight: 700; color: var(--black); }
+
+.header-area { padding: 60px 80px 20px 80px; display: flex; justify-content: space-between; align-items: center; }
+.logo { font-size: 40px; font-weight: 800; color: var(--black); letter-spacing: -1px; z-index: 10; }
+.logo span { color: var(--red); }
+
+.content { padding: 0 80px 40px 80px; flex-grow: 1; display: flex; flex-direction: column; z-index: 10; }
+
+.footer {
+  padding: 0 80px; height: 80px; display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--border-light); margin-top: auto; flex-shrink: 0; z-index: 10; background: var(--bg-color);
+}
+.footer-text { font-size: 16px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+.page-num { font-size: 18px; font-weight: 700; color: var(--red); }
+
+.bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 30px; flex-grow: 1; height: 100%; min-height: 0; }
+.bento-card {
+  background: var(--card-bg); border-radius: 20px; padding: 40px;
+  box-shadow: var(--shadow-soft); border: 1px solid var(--border-light);
+  display: flex; flex-direction: column; position: relative; overflow: hidden;
+}
+.bento-card.dark { background: var(--black); color: white; }
+.bento-card.dark .card-title { color: white; }
+.bento-card.dark p { color: #ccc; }
+.bento-card.red { background: var(--red-gradient); color: white; }
+.bento-card.red .card-title { color: white; }
+.bento-card.red p { color: rgba(255,255,255,0.9); }
+
+.card-icon {
+  width: 56px; height: 56px; border-radius: 14px; background: var(--red-gradient);
+  color: var(--white); display: flex; align-items: center; justify-content: center;
+  font-size: 24px; margin-bottom: 25px; flex-shrink: 0;
+}
+.bento-card.dark .card-icon { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
+.card-title { font-size: 28px; font-weight: 700; color: var(--black); margin-bottom: 20px; letter-spacing: -0.5px; }
+
+.hero-num {
+  font-size: 80px; font-weight: 800; background: var(--red-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1; margin: 15px 0; letter-spacing: -2px;
+}
+.hero-label { font-size: 18px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+.col-3 { grid-column: span 3; }
+.col-4 { grid-column: span 4; }
+.col-6 { grid-column: span 6; }
+.col-8 { grid-column: span 8; }
+.col-9 { grid-column: span 9; }
+.col-12 { grid-column: span 12; }
+.row-2 { grid-row: span 2; }
+
+.glass-tag {
+  background: rgba(230,0,0,0.05); color: var(--red); padding: 8px 16px;
+  border-radius: 12px; font-size: 14px; font-weight: 700; text-transform: uppercase;
+  display: inline-block; margin-bottom: 20px; align-self: flex-start;
+}
+.bento-card.dark .glass-tag { background: rgba(255,255,255,0.1); color: white; }
+.bento-card.red .glass-tag { background: rgba(255,255,255,0.2); color: white; }
+
+.bg-image { position: absolute; top: 0; right: 0; bottom: 0; width: 45%; object-fit: cover; z-index: 1; opacity: 0.9; }
+.bg-overlay { position: absolute; top: 0; right: 0; bottom: 0; width: 45%; background: linear-gradient(to right, var(--bg-color) 0%, transparent 100%); z-index: 2; }
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide">
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/red_white_isometric_arch_1786482343569.png" class="bg-image">
+  <div class="bg-overlay"></div>
+  <div class="header-area" style="z-index: 3;"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content" style="z-index: 3; flex-direction: row; align-items: center; padding-top: 40px; padding-bottom: 120px;">
+    <div style="width: 60%; padding-right: 80px;">
+      <div class="glass-tag">Premium Enterprise Solution</div>
+      <h1 style="font-size: 82px; line-height: 1.1; margin-bottom: 40px;">СтройИнтеллект (Девелопмент)</h1>
+      <p style="font-size: 28px; font-weight: 300; max-width: 800px; line-height: 1.4;">Цифровая служба технического заказчика, разворачиваемая в собственном контуре. Детерминированная математика против скрытых потерь.</p>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: Манифест -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Иллюзия контроля в Девелопменте</h1>
+    <div class="subtitle">Масштаб строительства сделал ручной контроль математически невозможным.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-eye-slash"></i></div>
+        <div class="card-title">Скрытые потери в сметах</div>
+        <p>Современная смета на крупный объект — это 500+ страниц сложной документации. При ручной проверке инженеры физически не способны выявить двойной учёт объёмов и скрытые завышения.</p>
+        <p>Подрядчики регулярно применяют нерелевантные коэффициенты стеснённости или маскируют расценки. Без независимой цифровой базы сравнения эти потери легализуются подписью в актах КС-2.</p>
+      </div>
+      <div class="bento-card col-4 red">
+        <div class="glass-tag">Cost of Inaction</div>
+        <div class="card-title">Упущенная маржа</div>
+        <div class="hero-num" style="color: white; -webkit-text-fill-color: white;">3.8%</div>
+        <p style="color:white;">Среднее незамеченное завышение сметной стоимости при ручной проверке на этапе тендера.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Манифест</div><div class="page-num">02</div></div>
+</div>
+
+<!-- SLIDE 3: Проблема ERP -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Почему ERP-системы не решают проблему</h1>
+    <div class="subtitle">Среда общих данных (СОД) ускоряет передачу файлов, но не проверяет их суть.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="card-title">Маршрутизация vs. Аналитика</div>
+        <p>Классические системы (ERP, 1C:Документооборот) отлично решают задачу маршрутизации файлов. Они быстро передают PDF от подрядчика к техзаказчику.</p>
+        <p>Но СОД <span class="highlight">не анализирует смысл документа</span>. Система не защитит вас от подписания математически некорректного договора. Она лишь позволит вам быстрее согласовать собственный убыток.</p>
+      </div>
+      <div class="bento-card col-6 dark">
+        <div class="card-icon"><i class="fas fa-route"></i></div>
+        <div class="card-title">Слепая автоматизация</div>
+        <p>Оцифровка хаоса приводит к оцифрованному хаосу. Вы просто быстрее ставите электронно-цифровую подпись под сметой, в которой зашито 5% скрытой переплаты.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Проблема ERP</div><div class="page-num">03</div></div>
+</div>
+
+<!-- SLIDE 4: Проблема Сметного ПО -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Ограничения сметных программ</h1>
+    <div class="subtitle">Знание формул ГЭСН/ФЕР не равно знанию рынка.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-title">Арифметика без контекста</div>
+        <p>Сметное ПО проверяет соответствие государственным нормативам и правильность умножения объёма на расценку.</p>
+        <p>Но оно <span class="highlight">не обладает знаниями о коммерческом рынке</span>. Программа скажет, что формула верна, но она не скажет, что эта марка бетона закупалась на ваших соседних объектах на 15% дешевле.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="card-icon"><i class="fas fa-calculator"></i></div>
+        <div class="card-title">Устаревшие базы</div>
+        <p>Государственные и региональные базы цен безнадёжно отстают от коммерческих реалий девелопмента.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Проблема ПО</div><div class="page-num">04</div></div>
+</div>
+
+<!-- SLIDE 5: Концепция -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Цифровой Техзаказчик</h1>
+    <div class="subtitle">Синтез семантического анализа LLM и детерминированной математики.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-4">
+        <div class="card-icon"><i class="fas fa-network-wired"></i></div>
+        <div class="card-title">9 ИИ-экспертов</div>
+        <p>ГИП, Сметчик, Юрист и Экономист работают с документом одновременно в параллельных потоках, извлекая фактуру.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="card-icon"><i class="fas fa-database"></i></div>
+        <div class="card-title">Опорная база</div>
+        <p>ИИ опирается на нормализованный массив 250+ реальных объектов. Система знает справедливую цену на основе истории.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="card-icon"><i class="fas fa-microchip"></i></div>
+        <div class="card-title">Decimal-математика</div>
+        <p>Нейросети извлекают текст. Налоги и финмодели считает жёсткий алгоритм на Python. Нулевой риск галлюцинаций в цифрах.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Концепция</div><div class="page-num">05</div></div>
+</div>
+
+<!-- SLIDE 6: Обзор агентов -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Команда из девяти ИИ-агентов</h1>
+    <div class="subtitle">Создание единой цифровой информационной модели объекта без человеческого фактора.</div>
+    <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/red_white_neural_ai_1786482363903.png" style="position: absolute; right: 0; bottom: 0; height: 60%; opacity: 0.15; z-index: 0; mix-blend-mode: multiply;">
+    <div class="bento-grid" style="z-index: 1;">
+      <div class="bento-card col-12">
+        <div class="card-title">Параллельный процессинг</div>
+        <p>Каждый агент решает свой класс задач (от извлечения рисков из договора до пересчёта объёмов арматуры). Результаты объединяются в единое заключение по объекту. Скорость проверки: 15 минут для сводного отчёта, 1 час для попозиционного пересчёта.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Обзор агентов</div><div class="page-num">06</div></div>
+</div>
+
+<!-- SLIDE 7: Агент 1: ГИП -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Агент 1: Главный Инженер Проекта (ГИП)</h1>
+    <div class="subtitle">Смысловая и техническая экспертиза проектных решений.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-hard-hat"></i></div>
+        <div class="card-title">Технический аудит</div>
+        <p>Агент ГИП анализирует соответствие заявленных в смете видов работ и технологий строительства реальной проектной документации.</p>
+        <p>Он выявляет применение нерелевантных коэффициентов (например, надбавки за "стеснённые условия" там, где строительство ведётся в чистом поле) и использование устаревших технологических карт.</p>
+      </div>
+      <div class="bento-card col-4 red">
+        <div class="glass-tag">KPI Агента</div>
+        <div class="card-title">Фокус контроля</div>
+        <ul style="margin-left: 20px;">
+          <li>Технологические карты</li>
+          <li>Условия стеснённости</li>
+          <li>Сезонные удорожания</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Агент ГИП</div><div class="page-num">07</div></div>
+</div>
+
+<!-- SLIDE 8: Агент 2: Сметчик -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Агент 2: Сметчик</h1>
+    <div class="subtitle">Поиск скрытых наценок, двойного учёта и математических аномалий.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-file-invoice-dollar"></i></div>
+        <div class="card-title">Анализ расценок и объёмов</div>
+        <p>Сличает заявленную стоимость единицы работы с медианной ценой по исторической базе из 250+ объектов Заказчика.</p>
+        <p>Система автоматически находит <span class="highlight">задвоение объёмов работ</span> (когда подготовка площадки включена и в нулевой цикл, и в благоустройство) и завышение норм расхода материалов.</p>
+      </div>
+      <div class="bento-card col-4 dark">
+        <div class="glass-tag">Точность</div>
+        <div class="card-title">100% покрытие</div>
+        <p>Человек физически не может проверить каждую из 15 000 позиций. ИИ проверяет каждую строку за 1 час.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Агент Сметчик</div><div class="page-num">08</div></div>
+</div>
+
+<!-- SLIDE 9: Агент 3: Снабжение -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Агент 3: Снабжение</h1>
+    <div class="subtitle">Контроль спецификаций, материалов и логистических цепочек.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="card-icon"><i class="fas fa-truck"></i></div>
+        <div class="card-title">Аудит прайс-листов</div>
+        <p>Агент выделяет из сметы спецификации черновых и чистовых материалов, оборудования. Сравнивает заявленные цены с рыночными индексами и прайс-листами поставщиков.</p>
+        <p>Выявляет несанкционированную замену дорогих марок на дешёвые аналоги при сохранении изначальной сметной стоимости.</p>
+      </div>
+      <div class="bento-card col-6">
+        <div class="card-title">Логистические затраты</div>
+        <p>Проверяет обоснованность заложенных транспортно-заготовительных расходов (ТЗР) и складских наценок.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Агент Снабжение</div><div class="page-num">09</div></div>
+</div>
+
+<!-- SLIDE 10: Агент 4: Специалист по поиску подрядчиков -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Агент 4: Специалист по поиску подрядчиков</h1>
+    <div class="subtitle">Сравнительный тендерный анализ и скоринг контрагентов.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-users"></i></div>
+        <div class="card-title">Тендерный анализ</div>
+        <p>Система принимает коммерческие предложения от нескольких подрядчиков на один объект. Агент автоматически приводит их разрозненные сметы к <span class="highlight">единому сопоставимому виду</span> (по видам работ и конструктивам).</p>
+        <p>Выводит разброс, медиану, отклонение каждого предложения и рекомендованный целевой диапазон цены для торга.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="glass-tag">Рейтинг</div>
+        <div class="card-title">Скоринг надёжности</div>
+        <p>Учёт исторической репутации подрядчиков (срывы сроков, изменения цен в прошлом).</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Агент Подряд</div><div class="page-num">10</div></div>
+</div>
+
+<!-- SLIDE 11: Агент 5: Экономист -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Агент 5: Экономист</h1>
+    <div class="subtitle">Управление маржинальностью, БДДС и финансовыми сценариями.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-chart-line"></i></div>
+        <div class="card-title">Предиктивное управление капиталом</div>
+        <p>На основе извлечённых данных генерирует Бюджет движения денежных средств (БДДС). Рассчитывает <span class="highlight">маржу проекта в 3 сценариях</span> (оптимистичный, базовый, пессимистичный).</p>
+        <p>Строит точный график выборки проектного кредита для минимизации процентных выплат банку и прогнозирует возможные кассовые разрывы.</p>
+      </div>
+      <div class="bento-card col-4 dark">
+        <div class="glass-tag">Эскроу</div>
+        <div class="card-title">Раскрытие счетов</div>
+        <p>Моделирование сроков ввода объекта для расчёта даты раскрытия эскроу-счетов.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Агент Экономист</div><div class="page-num">11</div></div>
+</div>
+
+<!-- SLIDE 12: Агент 6: Инженер ПТО -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Агент 6: Инженер ПТО</h1>
+    <div class="subtitle">Тотальный контроль закрывающих актов (КС-2 / КС-3).</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-clipboard-check"></i></div>
+        <div class="card-title">Сверка актов со сметой</div>
+        <p>Агент ПТО скрупулёзно сличает подписанные объёмы в актах выполненных работ (КС-2) с изначальной утверждённой коммерческой сметой.</p>
+        <p>Моментально выявляет <span class="highlight">"перевыполнение" объёмов</span>, скрытое заимствование средств из будущих периодов или несанкционированные замены утверждённых материалов.</p>
+      </div>
+      <div class="bento-card col-4 red">
+        <div class="glass-tag">Результат</div>
+        <div class="card-title">Защита от переплат</div>
+        <p>Блокировка актов, в которых подрядчик пытается закрыть больше, чем предусмотрено договором.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Агент ПТО</div><div class="page-num">12</div></div>
+</div>
+
+<!-- SLIDE 13: Агент 7: Юрист -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Агент 7: Юрист</h1>
+    <div class="subtitle">Анализ договоров, штрафных санкций и гарантийных удержаний.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="card-icon"><i class="fas fa-balance-scale"></i></div>
+        <div class="card-title">Правовой аудит подряда</div>
+        <p>Извлекает из скан-копий договоров и доп. соглашений ключевые финансовые риски: размер аванса, порядок его гашения, штрафные санкции, пени и гарантийные удержания.</p>
+        <p>Система подсвечивает отклонения текста договора от вашего корпоративного стандарта.</p>
+      </div>
+      <div class="bento-card col-6 dark">
+        <div class="glass-tag">Ограничение</div>
+        <div class="card-title">Поддержка, а не замена</div>
+        <p>Мы не заменяем юридический департамент. По праву и налогам Система выдаёт позицию с <span class="highlight">рекомендацией привлечь профильного специалиста</span>.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Агент Юрист</div><div class="page-num">13</div></div>
+</div>
+
+<!-- SLIDE 14: Агент 8: Руководитель проекта -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Агент 8: Руководитель проекта</h1>
+    <div class="subtitle">Контроль плана-графика и координация взаимодействия.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-project-diagram"></i></div>
+        <div class="card-title">Синхронизация процессов</div>
+        <p>Связывает извлечённые финансовые данные с графиком производства работ. Контролирует сроки исполнения обязательств подрядчиками.</p>
+        <p>Система формирует алерты при угрозе срыва ключевых вех (милстоунов), что напрямую влияет на дату ввода объекта в эксплуатацию.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="card-title">Комплексный взгляд</div>
+        <p>Обеспечивает целостность цифровой информационной модели объекта.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Агент РП</div><div class="page-num">14</div></div>
+</div>
+
+<!-- SLIDE 15: Агент 9: Администратор -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Агент 9: Администратор</h1>
+    <div class="subtitle">Оркестрация данных, парсинг и структуризация документов.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="card-icon"><i class="fas fa-server"></i></div>
+        <div class="card-title">Машинное зрение и OCR</div>
+        <p>Отвечает за приём грязных данных на входе. Смета в неструктурированном Excel? PDF-скан с печатями? XML из Гранд-Сметы?</p>
+        <p>Агент-администратор использует нейросети для распознавания таблиц и приведения всего хаоса к единому машиночитаемому JSON-формату.</p>
+      </div>
+      <div class="bento-card col-6 red">
+        <div class="glass-tag">Архитектура</div>
+        <div class="card-title">ETL-процесс</div>
+        <p>Подготовка идеального фундамента данных для работы остальных 8 аналитических агентов.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Агент Администратор</div><div class="page-num">15</div></div>
+</div>
+
+<!-- SLIDE 16: Опорная база -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Опорная база исторических данных</h1>
+    <div class="subtitle">Машинное обучение на реальном опыте, а не абстрактных справочниках.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-database"></i></div>
+        <div class="card-title">Справедливая цена</div>
+        <p>Основой оценки служит обезличенный нормализованный массив стоимостных показателей, накопленный практикой более чем по <span class="highlight">250 объектам строительства</span>.</p>
+        <p>На этапах проекта модель дообогащается историческими данными Заказчика (закрытыми объектами, фактической себестоимостью). Точность оценки растёт экспоненциально.</p>
+      </div>
+      <div class="bento-card col-4 dark">
+        <div class="hero-num" style="color: white; -webkit-text-fill-color: white;">250+</div>
+        <div class="hero-label" style="color: rgba(255,255,255,0.7);">Объектов в базе</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Опорная база</div><div class="page-num">16</div></div>
+</div>
+
+<!-- SLIDE 17: Классификация отклонений 1 -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>5 векторов классификации отклонений</h1>
+    <div class="subtitle">Точная дифференциация причин удорожания стройки.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-4">
+        <div class="card-title" style="font-size: 22px;">1. Рыночное движение цен</div>
+        <p style="font-size: 16px;">Легитимная инфляция и дефицит материалов на рынке. Обоснованное удорожание, подтверждаемое макроэкономикой.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="card-title" style="font-size: 22px;">2. Особенность тех. решения</div>
+        <p style="font-size: 16px;">Специфика грунтов или архитектуры, требующая нестандартных, более дорогих инженерных подходов.</p>
+      </div>
+      <div class="bento-card col-4 red">
+        <div class="card-title" style="font-size: 22px;">3. Ошибка в объёмах</div>
+        <p style="font-size: 16px;">Расхождение спецификации с проектной документацией (человеческий фактор или умысел).</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Отклонения</div><div class="page-num">17</div></div>
+</div>
+
+<!-- SLIDE 18: Классификация отклонений 2 -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>5 векторов классификации отклонений</h1>
+    <div class="subtitle">Выявление скрытых наценок подрядчика.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6 red">
+        <div class="card-icon" style="background: white; color: var(--red);"><i class="fas fa-arrow-up"></i></div>
+        <div class="card-title">4. Завышение расценки</div>
+        <p>Прямая маржинальная накрутка стоимости работ или материалов подрядчиком относительно среднерыночной медианы.</p>
+      </div>
+      <div class="bento-card col-6 dark">
+        <div class="card-icon"><i class="fas fa-copy"></i></div>
+        <div class="card-title">5. Двойной учёт</div>
+        <p>Самый сложный для ручного выявления тип переплаты. Дублирование объёмов работ в разных разделах сметы (например, леса учтены в расценке на монтаж фасада и выведены отдельной строкой).</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Отклонения</div><div class="page-num">18</div></div>
+</div>
+
+<!-- SLIDE 19: Финансовый результат -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Целевой финансовый результат</h1>
+    <div class="subtitle">От констатации факта к управлению маржинальностью.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-bullseye"></i></div>
+        <div class="card-title">Аномалии в рублях, а не процентах</div>
+        <p>Система не просто подсвечивает красным строки. Отклонения выделяются отдельно с <span class="highlight">указанием суммы влияния в рублях</span> и основания расчёта.</p>
+        <p>Вы получаете точную целевую цену для переговоров с генподрядчиком ещё до подписания договора подряда.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="glass-tag">Себестоимость</div>
+        <div class="card-title">Контроль СМР</div>
+        <p>Приведение стоимости к показателю ₽/м² для мгновенного бенчмаркинга.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Результат</div><div class="page-num">19</div></div>
+</div>
+
+<!-- SLIDE 20: Информационная безопасность -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Информационная безопасность: On-Premise</h1>
+    <div class="subtitle">Система двух контуров изоляции коммерческой тайны.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="card-icon"><i class="fas fa-lock"></i></div>
+        <div class="card-title">Внутренний контур (Закрытый)</div>
+        <p>Сметы, финмодели и договоры обрабатываются исключительно локальными моделями с открытыми весами на вычислительных мощностях Заказчика.</p>
+        <p>Выход в интернет из контура <span class="highlight">физически закрыт</span>. Данные не передаются в облака OpenAI или Yandex.</p>
+      </div>
+      <div class="bento-card col-6 dark">
+        <div class="card-icon"><i class="fas fa-mask"></i></div>
+        <div class="card-title">Внешний контур (Анонимный)</div>
+        <p>Передача данных для внешних задач (поиск подрядчиков) выполняется по жёсткому регламенту с обязательной <span class="strong" style="color:white;">анонимизацией и маскированием</span> исходных данных (удаление ИНН, адресов, сумм).</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Безопасность</div><div class="page-num">20</div></div>
+</div>
+
+<!-- SLIDE 21: Zero Token Cost -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Zero Token Cost: Финансовая модель владения</h1>
+    <div class="subtitle">Предсказуемый бюджет без сюрпризов от провайдеров ИИ.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-coins"></i></div>
+        <div class="card-title">Бесплатные запросы к LLM</div>
+        <p>При использовании публичных облаков (API) стоимость растёт пропорционально загруженным документам (оплата за токены). 500-страничная смета съедает сотни долларов за один прогон.</p>
+        <p>В СтройИнтеллект плата за обращения к локальной модели <span class="highlight">не взимается и не зависит от интенсивности использования</span>. Ограничения на число проверок не устанавливаются.</p>
+      </div>
+      <div class="bento-card col-4 red">
+        <div class="glass-tag">Лицензия</div>
+        <div class="card-title">Бессрочное право</div>
+        <p>Отдельная абонентская или лицензионная плата за право использования не взимается (единовременный платёж).</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / TCO</div><div class="page-num">21</div></div>
+</div>
+
+<!-- SLIDE 22: Интеграция -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Интеграционный слой</h1>
+    <div class="subtitle">Связь системы с существующим ИТ-ландшафтом компании.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="card-icon"><i class="fas fa-plug"></i></div>
+        <div class="card-title">Архитектура API</div>
+        <p>Система разворачивается как микросервисное ядро (FastAPI). Наполнение данными осуществляется посредством интеграции с хранилищем <span class="highlight">StorHaus</span> или загрузки структурированных файлов.</p>
+      </div>
+      <div class="bento-card col-6 dark">
+        <div class="card-title">Границы проекта</div>
+        <p>В базовый этап запуска не входит глубокая двусторонняя интеграция с 1С:ERP и разработка кастомных коннекторов к закрытым проприетарным системам.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Интеграция</div><div class="page-num">22</div></div>
+</div>
+
+<!-- SLIDE 23: Таймлайн (135 дней) -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Дорожная карта внедрения: 135 дней</h1>
+    <div class="subtitle">4 этапа до запуска в промышленную эксплуатацию.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-3">
+        <div class="glass-tag">Этап 1</div>
+        <div class="card-title" style="font-size: 20px;">Инфраструктура</div>
+        <p style="font-size: 16px;">Развёртывание локальных моделей, фиксация чек-листов приёмки.</p>
+      </div>
+      <div class="bento-card col-3">
+        <div class="glass-tag">Этап 2</div>
+        <div class="card-title" style="font-size: 20px;">База данных</div>
+        <p style="font-size: 16px;">Настройка расчётного модуля на исторических объектах АПРИ.</p>
+      </div>
+      <div class="bento-card col-3">
+        <div class="glass-tag">Этап 3</div>
+        <div class="card-title" style="font-size: 20px;">Веб-приложение</div>
+        <p style="font-size: 16px;">Калибровка всех 9 ИИ-агентов, настройка интерфейсов.</p>
+      </div>
+      <div class="bento-card col-3 red">
+        <div class="glass-tag" style="background: rgba(255,255,255,0.2); color: white;">Этап 4</div>
+        <div class="card-title" style="font-size: 20px;">Приёмка</div>
+        <p style="font-size: 16px;">Сдача системы на контрольных объектах (порог качества >80%).</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Roadmap</div><div class="page-num">23</div></div>
+</div>
+
+<!-- SLIDE 24: Гарантии -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content">
+    <h1>Гарантия и Сопровождение (SLA)</h1>
+    <div class="subtitle">Ответственность интегратора после запуска.</div>
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="card-icon"><i class="fas fa-shield-alt"></i></div>
+        <div class="card-title">12 месяцев гарантии включено</div>
+        <p>Гарантийное сопровождение предоставляется бесплатно в течение первого года эксплуатации.</p>
+        <p>Включает: устранение дефектов, восстановление работоспособности при сбоях программных компонентов. Срок реакции — <span class="highlight">не более 24 астрономических часов</span>.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="card-title">Развитие</div>
+        <p>Актуализация опорной базы и обучение на новых данных оформляются отдельным договором на расширенную техподдержку.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">СтройИнтеллект / Гарантии</div><div class="page-num">24</div></div>
+</div>
+
+<!-- SLIDE 25: Call To Action -->
+<div class="slide">
+  <div class="header-area"><div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="content" style="justify-content: center; align-items: center; text-align: center;">
+    <h1 style="font-size: 72px; max-width: 1400px; margin-bottom: 40px;">Давайте проведём слепой тест на вашем закрытом объекте.</h1>
+    <p style="font-size: 32px; color: var(--text-muted); max-width: 1000px; margin-bottom: 80px;">Мы возьмём смету, по которой вы уже построили объект и рассчитались. Если мы не найдём скрытых потерь — мы признаем, что ваш процесс идеален.</p>
+    
+    <div style="display: flex; gap: 60px;">
+      <div style="text-align: left;">
+        <div class="glass-tag">Телефон</div>
+        <div class="strong" style="font-size: 32px;">+7 (495) 198-14-77</div>
+      </div>
+      <div style="text-align: left;">
+        <div class="glass-tag">Email</div>
+        <div class="strong" style="font-size: 32px;">info@7rlines.com</div>
+      </div>
+      <div style="text-align: left;">
+        <div class="glass-tag">Web</div>
+        <div class="strong" style="font-size: 32px;">7rlines.ru</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,652 @@
+// Каноническое состояние СтройИнтеллекта.
+//
+// Инварианты, заложенные здесь и необратимые задним числом:
+//  · `tenantId` на каждой арендуемой строке + RLS (ADR-R-015). Дописать позже —
+//    это миграция всех данных, переписывание аудита и повторная проверка §12.1л.
+//  · Записи знания неизменны и адресуются хэшем содержимого (ADR-R-027):
+//    база растёт и сужается свободно, прошлые Проверки остаются воспроизводимыми.
+//  · Числа не хранятся в двоичной плавающей точке: суммы и объёмы — Decimal,
+//    иначе §12.1б («расхождение 0 ₽») недостижим.
+//  · Артефакт несёт класс полноты и хэши фактически использованных входов
+//    (ADR-R-022, R-027).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─────────────────────────── Арендаторы и доступ ───────────────────────────
+
+model Tenant {
+  id          String   @id @default(uuid()) @db.Uuid
+  slug        String   @unique
+  displayName String
+  createdAt   DateTime @default(now())
+
+  users               User[]
+  sessions            Session[]
+  groups              Group[]
+  roleBindings        RoleBinding[]
+  objects             ProjectObject[]
+  documents           Document[]
+  checks              Check[]
+  jobs                Job[]
+  artifacts           Artifact[]
+  auditEvents         AuditEvent[]
+  modelCalls          ModelCall[]
+  positions           Position[]
+  extractionRevisions ExtractionRevision[]
+
+  @@map("tenant")
+}
+
+model User {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @db.Uuid
+  email        String
+  displayName  String
+  passwordHash String?
+  disabledAt   DateTime?
+  createdAt    DateTime  @default(now())
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  memberships Membership[]
+  sessions    Session[]
+
+  @@unique([tenantId, email])
+  @@index([tenantId])
+  @@map("app_user")
+}
+
+/// Сессия пользователя (M6, ТЗ §4).
+///
+/// ТОКЕН ХРАНИТСЯ ХЭШЕМ, А НЕ ТЕКСТОМ. Дамп базы — обычное дело: резервная
+/// копия, выгрузка для отладки, доступ администратора БД. Токен в открытом
+/// виде превращает любую такую копию в связку ключей от всех живых сессий,
+/// причём незаметно: воспользоваться ими можно, не оставив следа входа.
+///
+/// Индекс стоит по хэшу: искать сессию нужно именно по нему, а не по
+/// идентификатору, который клиенту не известен.
+model Session {
+  id        String    @id @default(uuid()) @db.Uuid
+  tenantId  String    @db.Uuid
+  userId    String    @db.Uuid
+  /// SHA-256 от токена. Сам токен не хранится нигде.
+  tokenHash String    @unique
+  createdAt DateTime  @default(now())
+  expiresAt DateTime
+  /// Проставляется при выходе или отзыве. Истёкшая и отозванная — разные
+  /// положения дел: вторая означает решение человека.
+  revokedAt DateTime?
+  userAgent String?
+  ip        String?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([userId])
+  @@map("session")
+}
+
+/// Группы — платформенная возможность (ADR-R-016). Пак АПРИ их не включает:
+/// ТЗ §4 даёт две роли, §14 исключает права по объектам.
+model Group {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  slug     String
+  name     String
+
+  tenant      Tenant       @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  memberships Membership[]
+
+  @@unique([tenantId, slug])
+  @@index([tenantId])
+  @@map("app_group")
+}
+
+model Membership {
+  id       String @id @default(uuid()) @db.Uuid
+  tenantId String @db.Uuid
+  userId   String @db.Uuid
+  groupId  String @db.Uuid
+
+  user  User  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  group Group @relation(fields: [groupId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, groupId])
+  @@index([tenantId])
+  @@map("membership")
+}
+
+enum SubjectKind {
+  user
+  group
+}
+
+model RoleBinding {
+  id          String      @id @default(uuid()) @db.Uuid
+  tenantId    String      @db.Uuid
+  subjectKind SubjectKind
+  subjectId   String      @db.Uuid
+  roleId      String
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@unique([tenantId, subjectKind, subjectId, roleId])
+  @@index([tenantId])
+  @@map("role_binding")
+}
+
+// ─────────────────────────── Объекты и документы ───────────────────────────
+
+model ProjectObject {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @db.Uuid
+  code      String
+  name      String
+  region    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  tenant    Tenant     @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  documents Document[]
+  checks    Check[]
+
+  @@unique([tenantId, code])
+  @@index([tenantId])
+  @@map("project_object")
+}
+
+model Document {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @db.Uuid
+  objectId  String   @db.Uuid
+  kind      String
+  fileName  String
+  createdAt DateTime @default(now())
+
+  tenant   Tenant            @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  object   ProjectObject     @relation(fields: [objectId], references: [id], onDelete: Cascade)
+  versions DocumentVersion[]
+
+  @@index([tenantId, objectId])
+  @@map("document")
+}
+
+/// Версии неизменны: правка — это новая версия, а не мутация (v3 §12).
+model DocumentVersion {
+  id          String   @id @default(uuid()) @db.Uuid
+  tenantId    String   @db.Uuid
+  documentId  String   @db.Uuid
+  revision    Int
+  contentHash String   @db.Char(64)
+  mimeType    String
+  byteSize    BigInt
+  storagePath String
+  /// parsed | imported | confirmed_by_human | ocr_unconfirmed (ADR-R-019)
+  acquisition String
+  createdAt   DateTime @default(now())
+
+  document  Document   @relation(fields: [documentId], references: [id], onDelete: Cascade)
+  positions Position[]
+
+  @@unique([documentId, revision])
+  @@index([tenantId])
+  @@index([contentHash])
+  @@map("document_version")
+}
+
+/// Извлечённая позиция сметы.
+///
+/// Принадлежит ВЕРСИИ документа, а не документу: правка исходного файла — это
+/// новая версия и новый разбор, а не мутация строк. Сравнить два разбора можно
+/// только если оба сохранены.
+///
+/// До этой таблицы позиции жили лишь внутри артефакта Проверки — счётчиками
+/// («позиций 101, по шифру 98»). Экран §5.5 «загрузка и разбор» показать их не
+/// мог: считать нечего было, кроме итога.
+model Position {
+  id                String   @id @default(uuid()) @db.Uuid
+  tenantId          String   @db.Uuid
+  documentVersionId String   @db.Uuid
+  /// Порядковый номер в смете. Строка, а не число: в сметах встречается «14.1».
+  ordinal           String
+  /// Номер раздела, к которому позиция относится.
+  section           String
+  sourceName        String
+  /// Шифр нормы: `ГЭСНм20-03-035-01`. Пусто, если позиция не сопоставлена.
+  basis             String
+  unit              String
+  /// Десятичные строки, не float: рубли не переживают двоичного округления.
+  quantity          String?
+  /// Сумма позиции. NULL — сумма НЕИЗВЕСТНА, а не равна нулю.
+  ///
+  /// Встречаются сметы без стоимостной части: шифры, наименования, единицы и
+  /// объёмы есть, денежных колонок нет. Ноль вместо NULL сложился бы в
+  /// сходимости и дал бы «расхождение 0 ₽» на смете, о стоимости которой не
+  /// известно ничего (ТЗ §9: неизвестное не превращается в ноль).
+  amount            String?
+  /// Строка исходного листа — провенанс по §12.1д. Без неё число не защитить.
+  sourceRow         Int
+  /// Лист книги. Пусто у формы 421/пр: там лист один и он подразумевается.
+  sheet             String?
+  /// КАК ПОЛУЧЕНА ПОЗИЦИЯ (Т11): `parsed` — разбор формы 421/пр;
+  /// `agent_normalized` — структуру распознала роль, значения взяты из документа.
+  ///
+  /// Поле у ПОЗИЦИИ, а не у ревизии документа: одна книга даёт и разобранные
+  /// строки формы, и строки, поднятые ролью с других листов. Один уровень
+  /// доверия на весь документ соврал бы про обе половины.
+  acquisition       String   @default("parsed")
+  createdAt         DateTime @default(now())
+
+  tenant  Tenant          @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  version DocumentVersion @relation(fields: [documentVersionId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, documentVersionId])
+  @@map("position")
+}
+
+/// Ревизия извлечённого значения (ADR-R-019).
+///
+/// `ExtractionLedger` вёл их в памяти и терял на выходе процесса. Подтверждение
+/// человеком привязано к ХЭШУ значения: подтвердили одно, а в базе окажется
+/// другое — подтверждение уже не про него. Хранить это в памяти означало, что
+/// сильный вердикт нельзя выдать дважды подряд по одной причине.
+model ExtractionRevision {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @db.Uuid
+  /// Что именно извлечено: `позиция-14/количество`.
+  subject        String
+  value          String
+  unit           String?
+  /// Документ и адрес внутри него: лист, строка, страница.
+  sourceDocument String
+  sourceLocator  String
+  /// разбор | правка
+  origin         String
+  /// Критично ли значение для сильного вердикта (§5.3).
+  critical       Boolean
+  /// Хэш содержания. К нему привязано подтверждение.
+  contentHash    String    @db.Char(64)
+  /// Предыдущая ревизия предмета. Правка не затирает разбор.
+  previousId     String?   @db.Uuid
+  author         String?
+  reason         String?
+  confirmedBy    String?
+  confirmedAt    DateTime?
+  createdAt      DateTime  @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, subject])
+  @@map("extraction_revision")
+}
+
+// ────────────────────────── Знание с адресацией по хэшу ─────────────────────
+
+/// Источник знания объявляет способности, а не разделы (ADR-R-026).
+model KnowledgeSource {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String?  @db.Uuid
+  slug      String   @unique
+  kind      String
+  enabled   Boolean  @default(true)
+  /// ВЕРСИЯ ИСТОЧНИКА — отпечаток файла, из которого загружены строки (Т12).
+  ///
+  /// У записи `contentHash` уникален и означает отпечаток САМОЙ ЗАПИСИ; версия
+  /// книги туда не помещается по определению. Без версии здесь «в находке видно,
+  /// из какого источника и какой версии взято» проверить нечем: имя файла
+  /// версией не является, книгу перезаливают под тем же именем.
+  contentHash String? @db.Char(64)
+  createdAt DateTime @default(now())
+
+  records      KnowledgeRecord[]
+  capabilities SourceCapability[]
+
+  @@map("knowledge_source")
+}
+
+model SourceCapability {
+  id         String   @id @default(uuid()) @db.Uuid
+  sourceId   String   @db.Uuid
+  capability String
+  sections   String[]
+
+  source KnowledgeSource @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+
+  @@unique([sourceId, capability])
+  @@index([capability])
+  @@map("source_capability")
+}
+
+/// Неизменная запись знания, адресуемая хэшем содержимого (ADR-R-027).
+///
+/// Сужение базы — это `supersededById`, а не удаление: прогон, сославшийся
+/// на запись, обязан остаться воспроизводимым.
+///
+/// Обязательные поля числовой строки по ТЗ §7: значение · единица · год ·
+/// источник · статус · дата проверки.
+model KnowledgeRecord {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String?  @db.Uuid
+  sourceId       String   @db.Uuid
+  contentHash    String   @db.Char(64)
+  /// Раздел опорной базы по ТЗ §7: "01".."14"
+  section        String
+  capability     String
+  key            String
+  value          Decimal? @db.Decimal(20, 6)
+  unit           String?
+  year           Int?
+  /// fact | benchmark | no_data (ТЗ §7)
+  status         String
+  checkedAt      DateTime
+  /// ТЗ §7: значения старше 90 дней помечаются как требующие проверки
+  staleAfterDays Int      @default(90)
+  payload        Json?
+  supersededById String?  @db.Uuid
+  createdAt      DateTime @default(now())
+
+  source       KnowledgeSource   @relation(fields: [sourceId], references: [id], onDelete: Cascade)
+  supersedes   KnowledgeRecord?  @relation("Supersession", fields: [supersededById], references: [id])
+  supersededBy KnowledgeRecord[] @relation("Supersession")
+
+  @@unique([contentHash])
+  @@index([capability, section])
+  @@index([sourceId, supersededById])
+  @@map("knowledge_record")
+}
+
+// ────────────────────────────── Проверки и такты ────────────────────────────
+
+enum CheckMode {
+  express
+  standard
+  expert
+  /// Агентный режим (Т9): цикл с инструментами вместо одного вызова на роль.
+  /// Латиницей, как и остальные значения перечисления: имя в базе.
+  agentic
+  /// Экипаж на Codex SDK (spec-demo-stage-1): один тред на роль, такты 0–4,
+  /// передача «БЛОК ДЛЯ». Рядом с `agentic`, а не вместо него.
+  codex
+}
+
+enum CheckStatus {
+  queued
+  running
+  awaiting_human
+  completed
+  cancelled
+  failed
+}
+
+/// Проверка — договорная единица (ТЗ §1), а не конвейер: один запрос, один
+/// объект, один комплект данных, один режим.
+model Check {
+  id             String      @id @default(uuid()) @db.Uuid
+  tenantId       String      @db.Uuid
+  objectId       String      @db.Uuid
+  workflowId     String
+  mode           CheckMode
+  status         CheckStatus @default(queued)
+  /// full | partial | single (ADR-R-022). Сводный вывод §5.3 несёт только full.
+  completeness   String      @default("full")
+  createdBy      String      @db.Uuid
+  createdAt      DateTime    @default(now())
+  startedAt      DateTime?
+  finishedAt     DateTime?
+  /// Этап идущего прогона словом человека: «обход папки», «агенты по сметам»,
+  /// «объектные агенты», «синтез». НЕ такт воркфлоу: такт — это `CheckStep.stage`,
+  /// а здесь то, чем прогон занят прямо сейчас. Пусто у прогона, который ещё не
+  /// начался либо уже кончился — и это разные вещи, различимые по статусу.
+  phase          String?
+  /// Сколько документов нашёл обход и сколько из них уже разобрано.
+  /// Без них экран сообщает «идёт» и не может сказать «идёт и продвинулось».
+  documentsTotal Int?
+  documentsDone  Int?
+
+  tenant    Tenant        @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  object    ProjectObject @relation(fields: [objectId], references: [id], onDelete: Cascade)
+  subjects  GateSubject[]
+  steps     CheckStep[]
+  runs      AgentRun[]
+  artifacts Artifact[]
+  jobs      Job[]
+
+  @@index([tenantId, objectId])
+  @@index([tenantId, status])
+  @@map("check")
+}
+
+/// Общий предмет, на котором стоят гейты (ADR-R-002, R-003).
+/// В курганском кейсе ВОР возвращался Людмиле на пересчёт со статусом 🔴,
+/// а Ванычу адресовано «БЕЗ моего "ОК по ВОР" финмодель НЕ считать».
+/// Исполненный шаг протокола (M2, §5.6: воркер переживает рестарт).
+///
+/// Отдельная таблица, а не запись в журнале аудита: журнал — неизменяемый след
+/// действий, а это СОСТОЯНИЕ прогона, по которому воркер решает, что делать
+/// дальше. Хранить состояние в журнале значит смешать «что произошло» с «где мы
+/// сейчас» и лишиться права чистить журнал.
+model CheckStep {
+  id       String   @id @default(uuid()) @db.Uuid
+  tenantId String   @db.Uuid
+  checkId  String   @db.Uuid
+  stage    String
+  agent    String
+  /// исполнен | заблокирован | не реализован
+  status   String   @default("исполнен")
+  attempts Int      @default(1)
+  doneAt   DateTime @default(now())
+
+  check Check @relation(fields: [checkId], references: [id], onDelete: Cascade)
+
+  /// Шаг уникален в прогоне: повтор — это обновление, а не вторая запись.
+  @@unique([checkId, stage, agent])
+  @@index([tenantId])
+  @@map("check_step")
+}
+
+model GateSubject {
+  id            String   @id @default(uuid()) @db.Uuid
+  tenantId      String   @db.Uuid
+  checkId       String   @db.Uuid
+  subjectId     String
+  /// draft | returned | approved
+  status        String   @default("draft")
+  reason        String?
+  returnedCount Int      @default(0)
+  updatedAt     DateTime @updatedAt
+
+  check Check @relation(fields: [checkId], references: [id], onDelete: Cascade)
+
+  @@unique([checkId, subjectId])
+  @@index([tenantId])
+  @@map("gate_subject")
+}
+
+/// Прогон одного агента по одному предмету.
+///
+/// ДО ЭТОГО ТАБЛИЦА НЕ ЗАПОЛНЯЛАСЬ НИ РАЗУ, и это был механизм без потребителя:
+/// экран считал строки (`agentRunsTotal`) и всегда получал ноль. Заполняет её
+/// теперь ход прогона (Д2): агент, начавший работу, — строка `выполняется`,
+/// высказавшийся — `исполнен` со своими замечаниями, отказавшийся — `отказ` с
+/// причиной. Это и есть «показывать по мере готовности»: замечания попадают в
+/// базу в тот момент, когда агент их дал, а не через полчаса вместе с итогом.
+///
+/// ПОЧЕМУ ЗАМЕЧАНИЯ ЗДЕСЬ, А НЕ ЧАСТИЧНЫМ АРТЕФАКТОМ. Артефакт — канонический
+/// результат операции, и его читают четыре экрана «свежим сверху» (`take: 1`).
+/// Пятнадцать промежуточных артефактов сделали бы свежим неполный, и карточка
+/// объекта показала бы прогон без вердикта. Ход прогона — состояние, а не
+/// результат, и живёт отдельно.
+model AgentRun {
+  id           String    @id @default(uuid()) @db.Uuid
+  tenantId     String    @db.Uuid
+  checkId      String    @db.Uuid
+  agentId      String
+  /// Этап прогона, в котором агент работал: те же слова, что в `check.phase`.
+  /// НЕ такт воркфлоу — такт хранит `CheckStep.stage`, и связь агента с тактом
+  /// восстанавливается по реестру, а не дублируется здесь.
+  stage        String
+  /// queued | выполняется | исполнен | отказ
+  status       String    @default("queued")
+  threadId     String?
+  provider     String?
+  model        String?
+  promptHash   String?   @db.Char(64)
+  inputTokens  Int?
+  outputTokens Int?
+  startedAt    DateTime?
+  finishedAt   DateTime?
+  error        Json?
+  /// Предмет: путь сметы у документного агента, путь объекта у объектного.
+  /// Не `null`, а пустая строка: пара «агент + предмет» уникальна, а в
+  /// Postgres два NULL уникальному индексу не мешают — то есть на `null`
+  /// защиты от двойной строки не было бы вовсе.
+  subject      String    @default("")
+  /// документ | объект | синтез. Объясняет, почему у агента один предмет или четыре.
+  scope        String?
+  verdict      String?
+  /// Замечания агента по этому предмету: `ReviewFinding[]` как их дал агент.
+  findings     Json?
+  /// Что агент просит проверить человеку: `OpenQuestion[]` — вопрос, владелец,
+  /// срок (Д3). Отдельной колонкой, а не внутри `findings`: это не замечание, а
+  /// поручение, и смешивать их в одном поле значит смешивать два разных списка.
+  questions    Json?
+
+  check Check @relation(fields: [checkId], references: [id], onDelete: Cascade)
+
+  @@unique([checkId, agentId, subject])
+  @@index([tenantId, checkId])
+  @@map("agent_run")
+}
+
+/// Конверт результата операции (ADR-R-022).
+model Artifact {
+  id               String   @id @default(uuid()) @db.Uuid
+  tenantId         String   @db.Uuid
+  checkId          String?  @db.Uuid
+  operationId      String
+  operationVersion Int
+  variant          String?
+  /// full | partial | single
+  completeness     String
+  /// Хэши ФАКТИЧЕСКИ использованных входов и записей знания (ADR-R-027).
+  inputHashes      String[]
+  degradations     Json     @default("[]")
+  body             Json
+  producedAt       DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  check  Check? @relation(fields: [checkId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, checkId])
+  @@index([tenantId, operationId])
+  @@map("artifact")
+}
+
+/// След вычисления (ТЗ §6.4, §9). Каждая формульная ячейка выгрузки обязана
+/// иметь сохранённый след — иначе §12.1д не выполняется.
+model FormulaTrace {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  artifactId     String?  @db.Uuid
+  formulaId      String
+  formulaVersion Int
+  inputs         Json
+  output         Decimal  @db.Decimal(20, 6)
+  unit           String?
+  rounding       String
+  createdAt      DateTime @default(now())
+
+  @@index([tenantId, artifactId])
+  @@map("formula_trace")
+}
+
+// ─────────────────────────────── Очередь задач ──────────────────────────────
+
+enum JobStatus {
+  queued
+  running
+  completed
+  failed
+  dead
+  cancelled
+}
+
+/// Очередь на PostgreSQL без отдельного Redis (v3 ADR-V3-014).
+/// Захват через FOR UPDATE SKIP LOCKED, аренда с истечением, heartbeat.
+model Job {
+  id             String    @id @default(uuid()) @db.Uuid
+  tenantId       String    @db.Uuid
+  checkId        String?   @db.Uuid
+  type           String
+  version        Int       @default(1)
+  payload        Json
+  payloadHash    String    @db.Char(64)
+  idempotencyKey String    @unique
+  status         JobStatus @default(queued)
+  attempts       Int       @default(0)
+  maxAttempts    Int       @default(5)
+  notBefore      DateTime  @default(now())
+  leaseOwner     String?
+  leaseExpiresAt DateTime?
+  lastError      Json?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+  check  Check? @relation(fields: [checkId], references: [id], onDelete: Cascade)
+
+  @@index([status, notBefore])
+  @@index([tenantId, checkId])
+  @@map("job")
+}
+
+// ──────────────────────────── Журналы и аудит ───────────────────────────────
+
+/// Журнал обращений к моделям (ТЗ §8.3, §12.1л, ADR-R-020).
+/// Основа Регламента передачи данных и доказательная база приёмки.
+model ModelCall {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @db.Uuid
+  process      String
+  operationId  String
+  /// internal | external
+  contour      String
+  provider     String
+  model        String
+  dataClasses  String[]
+  anonymized   Boolean  @default(false)
+  inputTokens  Int
+  outputTokens Int
+  costMinor    Int?
+  at           DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, contour, at])
+  @@map("model_call")
+}
+
+/// Append-only. ТЗ §11: глубина журнала не менее 12 месяцев.
+model AuditEvent {
+  id           String   @id @default(uuid()) @db.Uuid
+  tenantId     String   @db.Uuid
+  actorId      String?  @db.Uuid
+  action       String
+  resourceKind String
+  resourceId   String?
+  reason       String?
+  payloadHash  String?  @db.Char(64)
+  traceId      String?
+  at           DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, at])
+  @@map("audit_event")
+}

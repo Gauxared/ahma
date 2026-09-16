@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СтройИнтеллект - Premium Sales Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* Premium Design System */
+:root {
+  --red: #E60000;
+  --red-gradient: linear-gradient(135deg, #FF1A1A 0%, #B30000 100%);
+  --white: #FFFFFF;
+  --black: #0A0A0A;
+  --bg-color: #F8F9FA;
+  --card-bg: #FFFFFF;
+  --text-main: #2D3136;
+  --text-muted: #8A929A;
+  --border-light: rgba(0,0,0,0.05);
+  --shadow-soft: 0 20px 50px rgba(0,0,0,0.04);
+  --shadow-hover: 0 30px 60px rgba(230,0,0,0.08);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Montserrat', sans-serif; background-color: #E5E7EB;
+  display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 80px;
+}
+
+.slide {
+  width: 1920px; height: 1080px; background-color: var(--bg-color);
+  position: relative; overflow: hidden; box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+  page-break-after: always; flex-shrink: 0; color: var(--text-main);
+  background-image: radial-gradient(circle at 100% 0%, rgba(230,0,0,0.02) 0%, transparent 40%);
+}
+@media print {
+  body { background: none; padding: 0; gap: 0; display: block; }
+  .slide { width: 1920px; height: 1080px; box-shadow: none; page-break-after: always; margin: 0; }
+  @page { size: 1920px 1080px; margin: 0; }
+}
+
+h1 { font-size: 56px; font-weight: 800; color: var(--black); margin-bottom: 20px; letter-spacing: -1px; }
+.subtitle { font-size: 28px; font-weight: 400; color: var(--text-muted); margin-bottom: 70px; line-height: 1.4; }
+p, li { font-size: 24px; color: var(--text-main); line-height: 1.6; margin-bottom: 20px; font-weight: 400; }
+.highlight { color: var(--red); font-weight: 600; }
+.strong { font-weight: 700; color: var(--black); }
+
+.logo { font-size: 48px; font-weight: 800; color: var(--black); letter-spacing: -1.5px; position: absolute; left: 80px; top: 80px; }
+.logo span { color: var(--red); }
+
+.footer {
+  position: absolute; bottom: 60px; left: 80px; right: 80px;
+  display: flex; justify-content: space-between; align-items: center;
+  border-top: 1px solid var(--border-light); padding-top: 30px;
+}
+.footer-text { font-size: 16px; font-weight: 600; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; }
+.page-num { font-size: 18px; font-weight: 700; color: var(--red); }
+
+.content { padding: 220px 80px 150px 80px; height: 100%; display: flex; flex-direction: column; }
+
+/* BENTO GRID SYSTEM */
+.bento-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 40px; flex-grow: 1; }
+.bento-card {
+  background: var(--card-bg); border-radius: 24px; padding: 50px;
+  box-shadow: var(--shadow-soft); border: 1px solid var(--border-light);
+  display: flex; flex-direction: column; position: relative; overflow: hidden;
+}
+.card-icon {
+  width: 64px; height: 64px; border-radius: 16px; background: var(--black);
+  color: var(--white); display: flex; align-items: center; justify-content: center;
+  font-size: 28px; margin-bottom: 30px;
+}
+.card-title { font-size: 32px; font-weight: 700; color: var(--black); margin-bottom: 20px; letter-spacing: -0.5px; }
+
+.hero-num {
+  font-size: 120px; font-weight: 800; background: var(--red-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  line-height: 1; margin: 20px 0; letter-spacing: -3px;
+}
+.hero-label { font-size: 22px; font-weight: 500; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
+
+.col-4 { grid-column: span 4; }
+.col-6 { grid-column: span 6; }
+.col-8 { grid-column: span 8; }
+.col-12 { grid-column: span 12; }
+.row-2 { grid-row: span 2; }
+
+.glass-tag {
+  background: rgba(230,0,0,0.05); color: var(--red); padding: 8px 16px;
+  border-radius: 12px; font-size: 16px; font-weight: 700; text-transform: uppercase;
+  display: inline-block; margin-bottom: 20px;
+}
+
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide">
+  <div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+  <div style="position: absolute; top: 0; right: 0; bottom: 0; width: 40%; background: var(--card-bg); z-index: 1;"></div>
+  
+  <div class="content" style="z-index: 2; padding-top: 300px; flex-direction: row;">
+    <div style="width: 60%; padding-right: 100px;">
+      <div class="glass-tag">Internal Sales Playbook</div>
+      <h1 style="font-size: 86px; line-height: 1.1; margin-bottom: 40px;">Стратегия продаж СтройИнтеллект</h1>
+      <p style="font-size: 32px; font-weight: 300; max-width: 800px;">Как продавать Enterprise-продукт за 35 млн рублей, говоря с клиентом на языке финансов, а не ИТ.</p>
+    </div>
+    <div style="width: 40%; padding-left: 80px; display: flex; flex-direction: column; justify-content: center; gap: 60px;">
+      <div>
+        <div class="hero-num" style="font-size: 70px;">BANT</div>
+        <div class="hero-label">Квалификация лида</div>
+      </div>
+      <div>
+        <div class="hero-num" style="font-size: 70px;">Cost of Inaction</div>
+        <div class="hero-label">Стоимость бездействия</div>
+      </div>
+      <div>
+        <div class="hero-num" style="font-size: 70px;">Enterprise</div>
+        <div class="hero-label">Цикл сделки (6-9 мес)</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: ICP -->
+<div class="slide">
+  <div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+  <div class="content">
+    <h1>Профиль Идеального Клиента (ICP)</h1>
+    <div class="subtitle">Кого мы ищем и как квалифицируем на старте.</div>
+    
+    <div class="bento-grid">
+      <div class="bento-card col-8">
+        <div class="glass-tag">Профиль (ICP)</div>
+        <div class="card-title">Кому действительно нужен СтройИнтеллект</div>
+        <p>Мы не продаём «нейросети». Мы продаём защиту маржи. Наш идеальный клиент — это системный застройщик, который вышел за пределы ручного управления.</p>
+        <p>Ключевой маркер: <span class="strong">От 3 параллельных строек с бюджетом СМР от 500 млн руб каждая</span>. На таких объёмах Excel и ручная проверка смет генерируют математически неизбежные убытки (2-5% бюджета).</p>
+      </div>
+      
+      <div class="bento-card col-4" style="background: var(--red-gradient); color: white;">
+        <div style="color: rgba(255,255,255,0.7); font-weight: 600; text-transform: uppercase; letter-spacing: 1px;">Красный Флаг</div>
+        <div class="hero-num" style="color: white; -webkit-text-fill-color: white; margin: 30px 0; font-size: 50px;">DISQUALIFY</div>
+        <p style="color: white; font-size: 20px;">Генподрядчик с оборотом до 1 млрд, ищущий дешёвую замену 1С. Мы — не сметная программа, мы премиальный аналитический инструмент.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">Sales Playbook / Lead Scoring</div><div class="page-num">02</div></div>
+</div>
+
+<!-- SLIDE 3: ЛПР и Триггеры -->
+<div class="slide">
+  <div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+  <div class="content">
+    <h1>Карта принятия решений</h1>
+    <div class="subtitle">С кем мы говорим и какие боли мы "лечим".</div>
+    
+    <div class="bento-grid">
+      <div class="bento-card col-4">
+        <div class="card-icon"><i class="fas fa-briefcase"></i></div>
+        <div class="card-title">CEO / CFO</div>
+        <p><span class="highlight">Боль:</span> Кассовые разрывы. Падение внутренней нормы доходности (IRR). Шантаж со стороны подрядчиков.</p>
+        <p><span class="strong">Пич:</span> "Мы защищаем ваш CAPEX. Каждые сэкономленные 2% на смете — это чистая прибыль в ваш карман. Инвестиция окупается до старта стройки."</p>
+      </div>
+      
+      <div class="bento-card col-4">
+        <div class="card-icon" style="background: #333;"><i class="fas fa-hard-hat"></i></div>
+        <div class="card-title">Директор по стройке</div>
+        <p><span class="highlight">Боль:</span> Огромный вал бумаг. Инженеры ПТО выгорают. Сроки подписания актов срываются из-за ошибок.</p>
+        <p><span class="strong">Пич:</span> "Система выдаёт реестр отклонений за 15 минут. 9 виртуальных инженеров снимут рутину с ваших людей."</p>
+      </div>
+      
+      <div class="bento-card col-4">
+        <div class="card-icon" style="background: #666;"><i class="fas fa-server"></i></div>
+        <div class="card-title">CIO (ИТ-Директор)</div>
+        <p><span class="highlight">Боль:</span> Зоопарк систем, утечки данных (ИБ), сложность внедрения облаков.</p>
+        <p><span class="strong">Пич:</span> "On-Premise развёртывание. Локальные LLM-модели (без ChatGPT). Абсолютный контроль над коммерческой тайной."</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">Sales Playbook / DM Map</div><div class="page-num">03</div></div>
+</div>
+
+<!-- SLIDE 4: Возражения (Дорого) -->
+<div class="slide">
+  <div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+  <div class="content">
+    <h1>Отработка: «Это слишком дорого для софта»</h1>
+    <div class="subtitle">Смена парадигмы: перевод бюджета из IT в CAPEX.</div>
+    
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="glass-tag" style="background: var(--text-muted); color: white;">Что слышит клиент</div>
+        <div class="card-title">"35 миллионов за программу?"</div>
+        <p>ИТ-бюджет средней компании не рассчитан на такие разовые траты. Если вы продаёте это как «программу», вы проиграете тендер классическим сметным калькуляторам за 2 млн рублей.</p>
+      </div>
+      
+      <div class="bento-card col-6" style="border: 2px solid var(--red);">
+        <div class="glass-tag">Ответ продавца</div>
+        <div class="card-title">Математика Cost of Inaction</div>
+        <p>"Вы не покупаете софт, вы страхуете бюджет стройки. Давайте посчитаем: ваш текущий объект — 2 млрд руб. При ручной проверке статистически пропускается 3% переплат. <span class="highlight">Вы уже теряете 60 млн рублей.</span> Наша лицензия стоит в два раза дешевле вашей одной ошибки."</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">Sales Playbook / Objection Handling</div><div class="page-num">04</div></div>
+</div>
+
+<!-- SLIDE 5: Возражения (ИИ ошибается) -->
+<div class="slide">
+  <div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+  <div class="content">
+    <h1>Отработка: «Мы не верим нейросетям»</h1>
+    <div class="subtitle">Техническая защита архитектуры. Рассеиваем страх "чёрного ящика".</div>
+    
+    <div class="bento-grid">
+      <div class="bento-card col-6">
+        <div class="glass-tag" style="background: var(--text-muted); color: white;">Страх клиента</div>
+        <div class="card-title">Галлюцинации LLM</div>
+        <p>"В строительстве ошибка в запятой — это миллионы. Нейросети придумывают факты. Мы не можем доверить им расчёт налогов и смет."</p>
+      </div>
+      
+      <div class="bento-card col-6">
+        <div class="glass-tag">Ответ продавца</div>
+        <div class="card-title">Изоляция логики</div>
+        <p>"Вы правы, нейросетям нельзя доверять математику. Именно поэтому в СтройИнтеллекте <span class="strong">ИИ не считает цифры</span>. Нейросеть только извлекает текст (парсинг)."</p>
+        <p>"Вся арифметика и расчёты происходят в жёстком <span class="highlight">детерминированном модуле на базе типа Decimal</span>. У нас нулевая толерантность к вычислительным ошибкам."</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">Sales Playbook / Objection Handling</div><div class="page-num">05</div></div>
+</div>
+
+<!-- SLIDE 6: Цены -->
+<div class="slide">
+  <div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+  <div class="content">
+    <h1>Ценообразование и SLA</h1>
+    <div class="subtitle">Переход от разовой лицензии к пожизненному партнёрству.</div>
+    
+    <div class="bento-grid">
+      <div class="bento-card col-4">
+        <div class="hero-label">Pilot (Пилот)</div>
+        <div class="hero-num" style="font-size: 50px;">~ 22.5 млн</div>
+        <p>Быстрый старт. Установка On-Premise, настройка 9 агентов и прогон по 3 историческим объектам для доказательства финансового эффекта.</p>
+      </div>
+      <div class="bento-card col-4" style="border-top: 6px solid var(--red);">
+        <div class="hero-label">Enterprise</div>
+        <div class="hero-num" style="font-size: 50px;">~ 34.9 млн</div>
+        <p>Бессрочная лицензия без ограничений на пользователей. Глубокая интеграция с 1C/ERP клиента по API.</p>
+      </div>
+      <div class="bento-card col-4">
+        <div class="hero-label">SLA (Поддержка)</div>
+        <div class="hero-num" style="font-size: 50px;">3 - 5 млн / г.</div>
+        <p>Абонентское обслуживание: обновление баз данных, калибровка моделей LLM под новые стандарты и поддержка интеграций.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">Sales Playbook / Pricing</div><div class="page-num">06</div></div>
+</div>
+
+<!-- SLIDE 7: Главный Инструмент Продаж -->
+<div class="slide">
+  <div class="logo">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+  <div class="content">
+    <h1>Лучший пич — это слепой тест (Blind Test)</h1>
+    <div class="subtitle">Не продавайте слайды. Продавайте найденные ошибки.</div>
+    
+    <div class="bento-grid">
+      <div class="bento-card col-12 row-2" style="background: var(--black); color: white;">
+        <div class="card-title" style="color: white; font-size: 48px; margin-bottom: 30px;">Скрипт закрытия на сделку</div>
+        <p style="color: #CCC; font-size: 28px; line-height: 1.6; max-width: 1400px; margin-bottom: 40px;">
+          «Слова ничего не значат без цифр. Давайте проведём эксперимент. Дайте нам пакет документов (смета, КС-2) по вашему <span style="color:var(--red); font-weight: 700;">уже закрытому объекту</span>, по которому вы уже расплатились с подрядчиком.<br><br>
+          Мы прогоним этот объект через СтройИнтеллект. Если мы не найдём скрытых потерь, переплат и задвоений — мы пожмём друг другу руки и уйдём. Но если мы найдём 20-30 миллионов потерянных рублей, мы переходим к обсуждению контракта. Согласны?»
+        </p>
+        <div class="glass-tag" style="background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white;">Конверсия этого захода: > 60%</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="footer-text">Sales Playbook / The Pitch</div><div class="page-num">07</div></div>
+</div>
+
+</body>
+</html>

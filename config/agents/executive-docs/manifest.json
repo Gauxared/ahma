@@ -1,0 +1,55 @@
+{
+  "id": "executive-docs",
+  "version": 1,
+  "kind": "agent",
+  "implements": "1.0.0",
+  "contour": "internal",
+  "dataClasses": [
+    "positions",
+    "prices"
+  ],
+  "requiresPermissions": [
+    "check.run"
+  ],
+  "provides": [
+    "executive_docs"
+  ],
+  "displayName": "ПТО",
+  "sourcePrompt": "reference-system-new/Выход/Палыч_ПТО_v9.6.txt",
+  "promptFile": "prompt.md",
+  "modelRole": "primary",
+  "checklistId": "палыч",
+  "referenceBase": "config/crew/bases/Опорная_база_Палыч_ПТО_v1.0.xlsx",
+  "requiredSections": [
+    {
+      "id": "start_checklist",
+      "title": "Чек-лист старта",
+      "why": "что должно быть закрыто до выхода на объект; незакрытый пункт — это недели простоя",
+      "columns": [
+        "Пункт",
+        "Состояние",
+        "Кто закрывает",
+        "Срок",
+        "Последствие незакрытия"
+      ]
+    },
+    {
+      "id": "id_register",
+      "title": "Реестр исполнительной документации",
+      "why": "какие формы ИД потребуются и кто их ведёт; без реестра ИД собирается задним числом",
+      "columns": [
+        "Форма ИД",
+        "К каким работам",
+        "Кто ведёт",
+        "Когда оформляется",
+        "Основание"
+      ]
+    }
+  ],
+  "roster": {
+    "person": "Палыч",
+    "capability": "executive_docs",
+    "scope": "объект",
+    "order": 7
+  }
+}

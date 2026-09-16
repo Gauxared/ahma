@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СтройИнтеллект - Premium Tech Architecture</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --red: #D90429; --red-dark: #8D0801; --white: #FFFFFF; --black: #0B090A;
+  --gray-900: #161A1D; --gray-800: #212529; --gray-100: #F8F9FA;
+  --font: 'Inter', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font); background: #ccc; display: flex; flex-direction: column; align-items: center; }
+
+.slide {
+  width: 1920px; height: 1080px; background: var(--white); position: relative;
+  overflow: hidden; flex-shrink: 0; margin-bottom: 20px; color: var(--black);
+  display: flex; flex-direction: column; page-break-after: always;
+}
+@media print {
+  body { background: none; margin: 0; }
+  .slide { margin: 0; box-shadow: none; page-break-after: always; }
+  @page { size: 1920px 1080px; margin: 0; }
+}
+
+.layout-split { display: flex; height: 100%; flex-direction: row; }
+.layout-split .img-half { width: 50%; height: 100%; object-fit: cover; }
+.layout-split .text-half { width: 50%; padding: 120px 100px; display: flex; flex-direction: column; justify-content: center; }
+
+.theme-dark { background: var(--black); color: var(--white); }
+.theme-dark .text-muted { color: #888; }
+.theme-dark .border-line { border-color: #333; }
+
+.layout-matrix { display: flex; flex-direction: column; padding: 100px; height: 100%; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 60px; margin-top: 60px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 80px; margin-top: 60px; }
+
+.layout-stats { display: flex; flex-direction: column; padding: 120px 100px; height: 100%; justify-content: center; align-items: center; text-align: center; }
+.stat-huge { font-size: 280px; font-weight: 900; letter-spacing: -10px; line-height: 1; color: var(--red); margin: 40px 0; }
+
+h1 { font-size: 84px; font-weight: 800; letter-spacing: -3px; line-height: 1.1; margin-bottom: 30px; }
+h2 { font-size: 56px; font-weight: 700; letter-spacing: -2px; margin-bottom: 30px; }
+h3 { font-size: 36px; font-weight: 700; letter-spacing: -1px; margin-bottom: 20px; }
+p { font-size: 24px; font-weight: 400; line-height: 1.6; margin-bottom: 30px; color: #444; }
+.theme-dark p { color: #BBB; }
+.text-muted { font-size: 28px; font-weight: 300; color: #666; margin-bottom: 50px; line-height: 1.4; }
+
+ul.dense-list { list-style: none; margin-bottom: 40px; }
+ul.dense-list li { font-size: 22px; line-height: 1.5; margin-bottom: 25px; padding-left: 40px; position: relative; color: #333; }
+.theme-dark ul.dense-list li { color: #DDD; }
+ul.dense-list li::before { content: '→'; position: absolute; left: 0; color: var(--red); font-weight: 800; font-size: 24px; }
+
+.badge { display: inline-block; background: var(--red); color: white; padding: 12px 24px; font-size: 18px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; border-radius: 8px; margin-bottom: 30px; }
+.badge-outline { background: transparent; border: 2px solid var(--red); color: var(--red); }
+.theme-dark .badge-outline { border-color: #555; color: #FFF; }
+
+.header-top { position: absolute; top: 60px; left: 100px; right: 100px; display: flex; justify-content: space-between; z-index: 10; }
+.logo-text { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+.logo-text span { color: var(--red); }
+.slide-num { font-size: 24px; font-weight: 700; color: var(--red); }
+
+.box { background: var(--gray-100); padding: 50px; border-radius: 20px; border: 1px solid #E5E5E5; }
+.theme-dark .box { background: var(--gray-900); border-color: #333; }
+
+.table-row { display: flex; justify-content: space-between; border-bottom: 1px solid #EEE; padding: 25px 0; font-size: 22px; }
+.theme-dark .table-row { border-color: #333; }
+.table-row.header { font-weight: 700; color: var(--black); border-bottom: 3px solid var(--black); text-transform: uppercase; font-size: 18px; letter-spacing: 1px; }
+.theme-dark .table-row.header { color: #FFF; border-color: #FFF; }
+.col-1 { width: 40%; } .col-2 { width: 30%; } .col-3 { width: 30%; text-align: right; }
+</style>
+</head>
+<body>
+
+<div class="slide layout-split theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="text-half">
+    <div class="badge">Technical Architecture v3.0</div>
+    <h1 style="font-size: 110px;">Инженерная<br>Безупречность</h1>
+    <div class="text-muted" style="font-size: 36px;">Zero Trust изоляция, детерминированная математика Decimal и локальные открытые веса (LLM).</div>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/zero_trust_lock_1786483307284.png" class="img-half">
+</div>
+
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">02</div></div>
+  <div class="badge badge-outline">Информационная Безопасность</div>
+  <h1>Принцип Zero Trust</h1>
+  <div class="text-muted">Абсолютная изоляция вашей коммерческой тайны. Физическое отсутствие связи с публичными облаками.</div>
+  <div class="grid-2">
+    <div>
+      <h3>Изоляция данных</h3>
+      <p>Система разворачивается на выделенных серверах (Bare Metal или изолированных ВМ) внутри контура Заказчика.</p>
+      <ul class="dense-list">
+        <li>Сметы, финмодели, историческая БД обрабатываются исключительно локальными моделями.</li>
+        <li>Никаких API вызовов к OpenAI, Yandex или Sber.</li>
+      </ul>
+    </div>
+    <div class="box theme-dark">
+      <h3 style="color:var(--red);">Два Контура</h3>
+      <p>Внутренний контур (Закрытый) используется для смет и договоров. Внешний контур (Анонимный) применяется для поиска подрядчиков. Передача данных во внешний контур выполняется после алгоритмического удаления ИНН, адресов и сумм.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide layout-stats">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">03</div></div>
+  <h2>Стоимость генерации токенов в контуре (Zero Token Cost):</h2>
+  <div class="stat-huge">$0.00</div>
+  <p style="font-size: 32px; max-width: 1400px; font-weight: 300;">Плата за обращения к локальной LLM-модели не взимается и не зависит от интенсивности использования. Модель — ваша собственность.</p>
+</div>
+
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">04</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Core Engine</div>
+  <h1>Математика Decimal</h1>
+  <div class="text-muted">Полный отказ от галлюцинаций LLM при работе с финансовыми показателями.</div>
+  <div class="grid-2">
+    <div class="box" style="background:var(--red-dark); border:none;">
+      <h3 style="color:white;">ИИ только читает. Python считает.</h3>
+      <p style="color:#EEE;">Генеративные модели (LLM) используются исключительно для семантического анализа текстов, парсинга таблиц и поиска структурных аномалий.</p>
+    </div>
+    <div>
+      <h3>Детерминированные вычисления</h3>
+      <p>Все числовые показатели (сумма по разделам, НДС, БДДС, маржа) рассчитывает строгий детерминированный алгоритм на Python (с использованием библиотеки `decimal`).</p>
+      <ul class="dense-list" style="color:white;">
+        <li style="color:white;">Сумма разделов сходится с итогом источника до рубля.</li>
+        <li style="color:white;">Никаких округлений чисел с плавающей точкой (float).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">05</div></div>
+  <div class="badge badge-outline">Пайплайн данных</div>
+  <h1>ETL и Pydantic Валидация</h1>
+  <div class="text-muted">Превращение строительного хаоса (PDF, Excel, сканы) в строгий JSON.</div>
+  <div class="grid-2">
+    <div>
+      <h3>Машинное зрение (Computer Vision)</h3>
+      <p>Агент-Администратор использует модели LayoutLM для извлечения таблиц из сложных документов, включая сканы с синими печатями, подписями и искажениями перспективы.</p>
+    </div>
+    <div class="box">
+      <h3 style="color:var(--red);">Pydantic Схемы</h3>
+      <p>Все извлечённые нейросетью данные проходят жёсткую валидацию типов через библиотеку Pydantic. Если ИИ попытался вставить текст в поле суммы, весь JSON-блок отклоняется и отправляется на перегенерацию.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">06</div></div>
+  <div class="text-half">
+    <div class="badge badge-outline">Hardware</div>
+    <h1>Сайзинг Инфраструктуры</h1>
+    <p>Для обеспечения производительности (SLA проверки сметы < 1 часа) требуются мощные GPU.</p>
+    <div class="table-row header"><div class="col-1">Компонент</div><div class="col-2">Мин. требования</div></div>
+    <div class="table-row"><div class="col-1">VRAM (GPU)</div><div class="col-2">2x 24GB (A30/A10G)</div></div>
+    <div class="table-row"><div class="col-1">ОЗУ (RAM)</div><div class="col-2">256 GB</div></div>
+    <div class="table-row"><div class="col-1">Storage</div><div class="col-2">2 TB NVMe SSD</div></div>
+    <p style="margin-top:20px; font-size:16px; color:#888;">* Оптимальная конфигурация: 4x NVIDIA A100 (80GB).</p>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/red_white_servers_1786482354735.png" class="img-half">
+</div>
+
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">07</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Микросервисы</div>
+  <h1>Оркестрация Агентов (RabbitMQ)</h1>
+  <div class="text-muted">Как 9 агентов работают параллельно, не блокируя друг друга.</div>
+  <div class="grid-3">
+    <div class="box">
+      <h3 style="color:var(--red);">Message Broker</h3>
+      <p>Используем RabbitMQ для асинхронного обмена сообщениями между микросервисами (агентами).</p>
+    </div>
+    <div class="box">
+      <h3 style="color:var(--red);">Параллелизм</h3>
+      <p>Агент-Юрист и Агент-Сметчик работают над одним документом одновременно. Оркестратор собирает их ответы.</p>
+    </div>
+    <div class="box">
+      <h3 style="color:var(--red);">Масштабирование</h3>
+      <p>Горизонтальное масштабирование через Kubernetes. Больше документов = больше workers.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">08</div></div>
+  <div class="badge badge-outline">Интеграция</div>
+  <h1>Границы проекта (Scope)</h1>
+  <div class="text-muted">Мы запускаемся за 135 дней, потому что не пишем костыли к вашему монолиту 1С.</div>
+  <div class="grid-2">
+    <div>
+      <h3>StorHaus и API</h3>
+      <p>Наполнение данными решается посредством интеграции со StorHaus (нашим Data Warehouse) или через классические REST API.</p>
+    </div>
+    <div class="box theme-dark">
+      <h3 style="color:var(--red);">Ограничение: 1С:ERP</h3>
+      <p>Глубокая двусторонняя интеграция (написание кастомных коннекторов, обратная запись в регистры бухгалтерии) <strong>не входит в базовый этап запуска</strong>. Это минимизирует риски поломки ваших текущих бизнес-процессов.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 09: Архитектура NLP (SPLIT) -->
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">09</div></div>
+  <div class="text-half">
+    <div class="badge badge-outline">Модуль 1</div>
+    <h1>Архитектура NLP (LayoutLM)</h1>
+    <p>Почему мы не используем классические OCR (Tesseract или ABBYY)?</p>
+    <ul class="dense-list">
+      <li><strong>Проблема классики:</strong> OCR просто переводит пиксели в текст, но не понимает, что число "100" в столбце "Объём" связано с названием "Бетон" на две строки выше.</li>
+      <li><strong>Решение LayoutLM:</strong> Трансформер анализирует не только текст, но и 2D-расположение блоков на листе. Он "видит" структуру документа так же, как человек.</li>
+      <li><strong>Устойчивость:</strong> Модель игнорирует синие печати, подписи ручкой и заломы отсканированной бумаги.</li>
+    </ul>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/blueprint_code_1786483279938.png" class="img-half">
+</div>
+
+<!-- СЛАЙД 10: Pydantic (MATRIX DARK) -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">10</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Модуль 2</div>
+  <h1>Жёсткая Валидация Pydantic</h1>
+  <div class="text-muted">Защита от структурных галлюцинаций LLM.</div>
+  
+  <div class="grid-2">
+    <div>
+      <h3>Проблема генеративных моделей</h3>
+      <p>Иногда LLM вместо числа `100.5` выдаёт строку `около ста`. Если это попадёт в математический модуль — система упадёт с TypeError.</p>
+    </div>
+    <div class="box" style="background:var(--red-dark); border:none;">
+      <h3 style="color:white;">Решение (Схемы)</h3>
+      <p style="color:#EEE;">Вывод LLM перехватывается Pydantic. Если поле `volume` (float) содержит текст, Pydantic выбрасывает Validation Error.</p>
+      <p style="color:white; font-size: 20px; font-weight:700; margin-top:10px;">Оркестратор (LangChain) ловит ошибку, добавляет её в prompt и заставляет LLM перегенерировать ответ. В базу попадает только 100% чистый JSON.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 11: RAG (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">11</div></div>
+  <div class="badge badge-outline">Модуль 3</div>
+  <h1>Векторное хранилище (RAG)</h1>
+  <div class="text-muted">Как система понимает, что "Цемент М500" и "Портландцемент М500" — это одно и то же.</div>
+  
+  <div class="grid-3">
+    <div class="box">
+      <h3>Эмбеддинги (Embeddings)</h3>
+      <p>Каждая из 10 000 позиций исторической сметы переводится в числовой вектор из 768 измерений.</p>
+    </div>
+    <div class="box" style="border: 2px solid var(--red);">
+      <h3 style="color:var(--red);">Qdrant Vector DB</h3>
+      <p>При поступлении новой сметы система ищет ближайшие вектора в многомерном пространстве. Поиск занимает 20 миллисекунд.</p>
+    </div>
+    <div class="box">
+      <h3>Семантический мэтчинг</h3>
+      <p>ИИ находит аналог не по точному совпадению букв, а по <strong>смыслу</strong>. Это решает проблему опечаток и сокращений.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 12: RabbitMQ (SPLIT) -->
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">12</div></div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/red_white_servers_1786482354735.png" class="img-half">
+  <div class="text-half">
+    <div class="badge badge-outline">Модуль 4</div>
+    <h1>Оркестрация очередей</h1>
+    <p>Асинхронная архитектура позволяет выдерживать пиковые нагрузки в период закрытия актов КС-2 (конец месяца).</p>
+    <ul class="dense-list">
+      <li><strong>Message Broker:</strong> RabbitMQ принимает задачи на анализ и складывает в очередь.</li>
+      <li><strong>Workers:</strong> 9 Агентов подписаны на разные топики. Агент-Юрист ждет договоры, Агент-ПТО ждет акты.</li>
+      <li><strong>Resilience:</strong> Если воркер падает (Out of Memory на GPU), задача не теряется, а возвращается в очередь для другого воркера (Celery).</li>
+    </ul>
+  </div>
+</div>
+
+<!-- СЛАЙД 13: CI/CD (MATRIX DARK) -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">13</div></div>
+  <div class="badge badge-outline" style="border-color:white;">DevOps</div>
+  <h1>Пайплайн развертывания (CI/CD)</h1>
+  <div class="text-muted">Бесшовные обновления без даунтайма критической инфраструктуры.</div>
+  
+  <div class="grid-2">
+    <div>
+      <h3>Docker & Kubernetes</h3>
+      <p>Весь программный комплекс поставляется в виде набора контейнеров (Microservices). Кластер K8s управляет их жизненным циклом и масштабированием.</p>
+    </div>
+    <div class="box">
+      <h3 style="color:var(--red);">Blue/Green Deployment</h3>
+      <p>При выходе новой версии модели весов, мы поднимаем её параллельно старой (Green контур). Трафик плавно переводится на новую модель. Если метрики падают — автоматический Rollback за 1 секунду.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 14: Disaster Recovery (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">14</div></div>
+  <div class="badge badge-outline">DevOps</div>
+  <h1>Отказоустойчивость & Бэкапы</h1>
+  
+  <div class="grid-2">
+    <div class="box">
+      <h3>Active-Passive Cluster</h3>
+      <p>Для Enterprise-внедрений мы рекомендуем развертывание двух нод базы данных (PostgreSQL + Qdrant) в разных дата-центрах или стойках.</p>
+    </div>
+    <div class="box">
+      <h3>Точки восстановления (RPO / RTO)</h3>
+      <ul class="dense-list" style="margin-bottom:0;">
+        <li><strong>RPO (Потеря данных):</strong> < 5 минут (за счет репликации WAL-логов).</li>
+        <li><strong>RTO (Время восстановления):</strong> < 1 часа (автоматический failover).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 15: Observability (SPLIT) -->
+<div class="slide layout-split theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">15</div></div>
+  <div class="text-half">
+    <div class="badge badge-outline" style="border-color:white; color:white;">Monitoring</div>
+    <h1>ELK Stack & Grafana</h1>
+    <p>Полный контроль над состоянием системы и логгирование каждого шага ИИ.</p>
+    <ul class="dense-list">
+      <li style="color:white;"><strong>Grafana:</strong> Дашборды мониторинга загрузки GPU (температура, VRAM), CPU и ОЗУ.</li>
+      <li style="color:white;"><strong>Prometheus:</strong> Сбор метрик ответов (Latency LLM, длина очереди).</li>
+      <li style="color:white;"><strong>ELK (Elastic, Logstash, Kibana):</strong> Централизованный сбор логов. CISO всегда знает, кто и какой PDF загрузил в систему.</li>
+    </ul>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/financial_dash_1786483289266.png" class="img-half">
+</div>
+
+<!-- СЛАЙД 16: Интеграция API (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">16</div></div>
+  <div class="badge badge-outline">Интеграция</div>
+  <h1>Связь со внешними системами</h1>
+  <div class="text-muted">Мы не монолит. Мы открытая экосистема.</div>
+  
+  <div class="grid-3" style="gap:40px;">
+    <div class="box">
+      <h3>REST API / GraphQL</h3>
+      <p>Любая ERP-система (1С, SAP) может отправить нам PDF через POST-запрос и получить обратно размеченный JSON с выявленными ошибками.</p>
+    </div>
+    <div class="box">
+      <h3>StorHaus DWH</h3>
+      <p>Нативная интеграция с корпоративным хранилищем данных для построения сквозной BI-аналитики (PowerBI / Superset).</p>
+    </div>
+    <div class="box">
+      <h3>Active Directory</h3>
+      <p>SSO-авторизация (SAML 2.0 / OAuth). Права доступа (RBAC) синхронизируются с вашей корпоративной сетью.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 17: LLM Агностика (MATRIX DARK) -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">17</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Технологии</div>
+  <h1>Независимость от моделей (Vendor Lock-in)</h1>
+  <div class="grid-2">
+    <div>
+      <h3>Свобода выбора</h3>
+      <p>Мы не привязываем вас к одной модели (например, Llama 3). Архитектура позволяет менять "мозг" системы простым изменением YAML-конфига в LangChain.</p>
+    </div>
+    <div class="box" style="background:var(--red-dark); border:none;">
+      <h3 style="color:white;">Защита от санкций</h3>
+      <p style="color:white;">Вышли новые мощные открытые веса (Mistral, Qwen)? Мы просто скачиваем их и разворачиваем в вашем контуре. Вы всегда на острие технологий без риска отключения API.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 18: Decimal Deep Dive (SPLIT) -->
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">18</div></div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/blueprint_code_1786483279938.png" class="img-half">
+  <div class="text-half">
+    <div class="badge badge-outline">Core</div>
+    <h1>Почему Float — это зло?</h1>
+    <p>Для финансовых расчетов мы используем исключительно `decimal` модуль Python.</p>
+    <ul class="dense-list">
+      <li><strong>Проблема Float:</strong> Компьютер не может точно представить дробные числа. `0.1 + 0.2` во Float равно `0.30000000000000004`.</li>
+      <li><strong>Накопительная ошибка:</strong> На смете в 15 000 строк эта погрешность выливается в расхождение итоговой суммы на десятки рублей. Бухгалтерия Заказчика завернет такой акт.</li>
+      <li><strong>Решение Decimal:</strong> Гарантирует абсолютную математическую точность до последней копейки.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- СЛАЙД 19: Security (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">19</div></div>
+  <div class="badge badge-outline">Security</div>
+  <h1>Защита от внутренних угроз</h1>
+  <div class="grid-2">
+    <div class="box">
+      <h3>Аудитный след (Audit Trail)</h3>
+      <p>Каждое изменение в смете (кто подтвердил аномалию, кто проигнорировал её) записывается в неизменяемый лог. Сговор инженера технадзора с подрядчиком становится математически невозможным.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 20: Скорость (HERO STATS) -->
+<div class="slide layout-stats theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">20</div></div>
+  <h2>Время парсинга и валидации 500 стр. PDF:</h2>
+  <div class="stat-huge" style="font-size: 250px;">~45 мин</div>
+  <p style="font-size: 32px; max-width: 1400px; font-weight: 300;">На кластере из 4x NVIDIA A100. Это в 150 раз быстрее человеческого отдела ПТО.</p>
+</div>
+
+<!-- СЛАЙД 21: Архитектура (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">21</div></div>
+  <h1>Логический слой</h1>
+  <div class="grid-3">
+    <div class="box">
+      <h3>Agent 1-3 (Data)</h3>
+      <p>Распознавание, очистка, ETL, приведение к единой номенклатуре.</p>
+    </div>
+    <div class="box">
+      <h3>Agent 4-7 (Logic)</h3>
+      <p>Смысловые проверки (Двойной учет, подмена материалов).</p>
+    </div>
+    <div class="box">
+      <h3>Agent 8-9 (Finance)</h3>
+      <p>Сводная математика, БДДС, график кредитования.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 22: Roadmap (SPLIT) -->
+<div class="slide layout-split theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">22</div></div>
+  <div class="text-half">
+    <div class="badge badge-outline" style="border-color:white; color:white;">Roadmap</div>
+    <h1>Масштабируемость платформы</h1>
+    <p>Архитектура спроектирована так, чтобы добавлять новые функции без изменения ядра.</p>
+    <ul class="dense-list">
+      <li style="color:white;"><strong>Год 2:</strong> Интеграция с BIM-моделями (IFC парсинг) для сверки объемов напрямую с 3D-чертежами.</li>
+      <li style="color:white;"><strong>Год 3:</strong> Предиктивная аналитика срывов сроков на базе IoT датчиков со стройплощадки.</li>
+    </ul>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/zero_trust_lock_1786483307284.png" class="img-half" style="object-fit: contain; background: white; padding: 100px;">
+</div>
+
+<!-- СЛАЙД 23: SLA (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">23</div></div>
+  <h1>Матрица ответственности (SLA)</h1>
+  <div class="grid-2">
+    <div class="box" style="border: 2px solid var(--red);">
+      <h3 style="color:var(--red);">L3 Support</h3>
+      <p>Мы гарантируем исправление критических багов (система упала, парсинг не работает) в течение 24 часов.</p>
+    </div>
+    <div class="box">
+      <h3>Обучение модели</h3>
+      <p>Корректировка промптов и дообучение RAG-базы под новые нестандартные формы смет подрядчиков — плановое релизное окно 1 раз в квартал.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 24: Аудит (MATRIX DARK) -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">24</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Start</div>
+  <h1>Технический аудит ЦОД</h1>
+  <div class="grid-2">
+    <div>
+      <p>Для старта проекта нашему архитектору необходим 1 час общения с вашим IT-директором для заполнения опросного листа:</p>
+      <ul class="dense-list">
+        <li style="color:white;">Сетевая топология (VLAN, Firewall).</li>
+        <li style="color:white;">Выделение виртуальных машин / Bare Metal.</li>
+        <li style="color:white;">Доступность GPU.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 25: Call to Action (HERO STATS) -->
+<div class="slide layout-stats">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">25</div></div>
+  <h2 style="font-size: 80px; letter-spacing: -2px;">Технологическое Лидерство</h2>
+  <div class="stat-huge" style="font-size: 140px;">Zero Trust</div>
+  <p style="font-size: 36px; color:var(--red); font-weight:700;">+7 (495) 198-14-77</p>
+</div>
+
+</body>
+</html>

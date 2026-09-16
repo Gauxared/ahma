@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СтройИнтеллект - Premium Sales Playbook</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --red: #D90429; --red-dark: #8D0801; --white: #FFFFFF; --black: #0B090A;
+  --gray-900: #161A1D; --gray-800: #212529; --gray-100: #F8F9FA;
+  --font: 'Inter', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font); background: #ccc; display: flex; flex-direction: column; align-items: center; }
+
+.slide {
+  width: 1920px; height: 1080px; background: var(--white); position: relative;
+  overflow: hidden; flex-shrink: 0; margin-bottom: 20px; color: var(--black);
+  display: flex; flex-direction: column; page-break-after: always;
+}
+@media print {
+  body { background: none; margin: 0; }
+  .slide { margin: 0; box-shadow: none; page-break-after: always; }
+  @page { size: 1920px 1080px; margin: 0; }
+}
+
+.layout-split { display: flex; height: 100%; flex-direction: row; }
+.layout-split .img-half { width: 50%; height: 100%; object-fit: cover; }
+.layout-split .text-half { width: 50%; padding: 80px; display: flex; flex-direction: column; justify-content: center; }
+
+.theme-dark { background: var(--black); color: var(--white); }
+.theme-dark .text-muted { color: #888; }
+.theme-dark .border-line { border-color: #333; }
+
+.layout-matrix { display: flex; flex-direction: column; padding: 80px; height: 100%; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 30px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 30px; }
+
+.layout-stats { display: flex; flex-direction: column; padding: 80px; height: 100%; justify-content: center; align-items: center; text-align: center; }
+.stat-huge { font-size: 240px; font-weight: 900; letter-spacing: -10px; line-height: 1; color: var(--red); margin: 30px 0; }
+
+h1 { font-size: 72px; font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px; }
+h2 { font-size: 52px; font-weight: 700; letter-spacing: -1px; margin-bottom: 20px; }
+h3 { font-size: 32px; font-weight: 700; letter-spacing: -1px; margin-bottom: 15px; }
+p { font-size: 22px; font-weight: 400; line-height: 1.5; margin-bottom: 20px; color: #444; }
+.theme-dark p { color: #BBB; }
+.text-muted { font-size: 24px; font-weight: 300; color: #666; margin-bottom: 30px; line-height: 1.4; }
+
+ul.dense-list { list-style: none; margin-bottom: 30px; }
+ul.dense-list li { font-size: 20px; line-height: 1.5; margin-bottom: 15px; padding-left: 30px; position: relative; color: #333; }
+.theme-dark ul.dense-list li { color: #DDD; }
+ul.dense-list li::before { content: '→'; position: absolute; left: 0; color: var(--red); font-weight: 800; font-size: 22px; }
+
+.badge { display: inline-block; background: var(--red); color: white; padding: 10px 20px; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; border-radius: 6px; margin-bottom: 20px; }
+.badge-outline { background: transparent; border: 2px solid var(--red); color: var(--red); }
+.theme-dark .badge-outline { border-color: #555; color: #FFF; }
+
+.header-top { position: absolute; top: 60px; left: 100px; right: 100px; display: flex; justify-content: space-between; z-index: 10; }
+.logo-text { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+.logo-text span { color: var(--red); }
+.slide-num { font-size: 24px; font-weight: 700; color: var(--red); }
+
+.box { background: var(--gray-100); padding: 35px; border-radius: 16px; border: 1px solid #E5E5E5; }
+.theme-dark .box { background: var(--gray-900); border-color: #333; }
+
+.table-row { display: flex; justify-content: space-between; border-bottom: 1px solid #EEE; padding: 25px 0; font-size: 22px; }
+.theme-dark .table-row { border-color: #333; }
+.table-row.header { font-weight: 700; color: var(--black); border-bottom: 3px solid var(--black); text-transform: uppercase; font-size: 18px; letter-spacing: 1px; }
+.theme-dark .table-row.header { color: #FFF; border-color: #FFF; }
+.col-1 { width: 40%; } .col-2 { width: 30%; } .col-3 { width: 30%; text-align: right; }
+</style>
+</head>
+<body>
+
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="text-half">
+    <div class="badge">Sales Playbook v3.0</div>
+    <h1 style="font-size: 110px;">Продажа<br>Смысла</h1>
+    <div class="text-muted" style="font-size: 36px;">Скрипты, BANT-скоринг и психология ЛПР. Мы продаём не софт, а сохранённую EBITDA.</div>
+    <div style="margin-top: 80px; border-top: 2px solid #EEE; padding-top: 40px; display: flex; gap: 60px;">
+      <div><div style="font-size:16px; color:#888; text-transform:uppercase; font-weight:700;">Статус</div><div style="font-size:28px; font-weight:800;">Internal</div></div>
+    </div>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/financial_dash_1786483289266.png" class="img-half">
+</div>
+
+<div class="slide theme-dark layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">02</div></div>
+  <div class="badge badge-outline">Стратегия</div>
+  <h1>Сдвиг парадигмы</h1>
+  <div class="text-muted">Перестаньте продавать "ИИ-агентов". Клиентам плевать на нейросети. Им не плевать на кассовые разрывы и воровство подрядчиков.</div>
+  <div class="grid-2">
+    <div class="box">
+      <h3 style="color:var(--red);">Неправильный Питч</h3>
+      <p>"У нас есть 9 агентов на базе LLM, которые читают PDF и интегрируются по API".</p>
+    </div>
+    <div class="box theme-dark" style="border-color:var(--red);">
+      <h3 style="color:var(--red);">Правильный Питч</h3>
+      <p>"Среднее завышение сметы — 3.8%. При бюджете 5 млрд вы теряете 190 млн. Наш алгоритм находит эти деньги до подписания актов КС-2. Давайте сделаем слепой тест."</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">03</div></div>
+  <div class="badge badge-outline">Квалификация</div>
+  <h1>BANT-Скоринг</h1>
+  <div class="text-muted">Не тратьте время на компании, не готовые к Enterprise-внедрению.</div>
+  <div class="grid-2">
+    <div>
+      <h3>B - Budget</h3>
+      <p>Сделка предполагает единовременный CAPEX. Ищем компании, способные оплатить проект с экономии ФОТ или маржи. Нет бюджета — нет пилота.</p>
+    </div>
+    <div>
+      <h3>A - Authority</h3>
+      <p>Линейный инженер ПТО никогда не купит систему (для него это угроза). Спонсор проекта всегда на уровне C-Level (CEO, CFO, CPO).</p>
+    </div>
+    <div>
+      <h3>N - Need</h3>
+      <p>Боль должна быть оцифрована. "Нам нужен ИИ" — это не боль. "У нас кассовые разрывы из-за кривого БДДС" — это боль.</p>
+    </div>
+    <div class="box theme-dark">
+      <h3 style="color:var(--red);">T - Timeline</h3>
+      <p>Готовность выделить сервера под развёртывание Этапа 1 (Инфраструктура) в ближайшие 2 месяца.</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide layout-stats theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">04</div></div>
+  <h2>Главный инструмент закрытия сделки:</h2>
+  <div class="stat-huge" style="font-size: 140px; letter-spacing: -5px;">СЛЕПОЙ ТЕСТ</div>
+  <p style="font-size: 32px; max-width: 1400px; font-weight: 300;">Не верьте нам. Дайте смету по уже построенному ЖК. Мы найдем там спрятанные миллионы. Если нет — система вам не нужна.</p>
+</div>
+
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">05</div></div>
+  <div class="badge badge-outline">Профили ЛПР</div>
+  <h1>CEO / Владелец</h1>
+  <div class="text-muted">Фокус на прозрачности и чистой прибыли.</div>
+  <div class="grid-2">
+    <div class="box">
+      <h3 style="color:var(--red);">Скрытая боль</h3>
+      <p>Ощущение потери контроля. Подозрение, что подрядчики и собственный технадзор в сговоре.</p>
+    </div>
+    <div class="box theme-dark">
+      <h3 style="color:var(--red);">Аргумент</h3>
+      <p>"9 ИИ-агентов неподкупны. Они выявляют двойной учёт без человеческого фактора. Рост EBITDA на 2-4%."</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">06</div></div>
+  <div class="badge badge-outline">Профили ЛПР</div>
+  <h1>Финансовый Директор (CFO)</h1>
+  <div class="text-muted">Фокус на Cash Flow и стоимости владения.</div>
+  <div class="grid-2">
+    <div class="box">
+      <h3 style="color:var(--red);">Скрытая боль</h3>
+      <p>Уплата процентов за неиспользуемое банковское финансирование. Непредсказуемость платежей (CAPEX vs OPEX).</p>
+    </div>
+    <div class="box theme-dark">
+      <h3 style="color:var(--red);">Аргумент</h3>
+      <p>"Агент-Экономист строит точный график раскрытия эскроу-счетов. Финансовая модель проекта On-Premise исключает плату за токены (Zero Token Cost)."</p>
+    </div>
+  </div>
+</div>
+
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">07</div></div>
+  <div class="text-half">
+    <div class="badge badge-outline">Профили ЛПР</div>
+    <h1>Директор по ИБ (CISO)</h1>
+    <ul class="dense-list">
+      <li><strong>Боль:</strong> Использование сотрудниками публичного ChatGPT для анализа коммерческой тайны.</li>
+      <li><strong>Решение:</strong> Установка локальной LLM. Изолированный внутренний контур (без интернета).</li>
+      <li><strong>Доказательство:</strong> "Мы внедряем алгоритм маскирования: ИНН и суммы удаляются до выхода во внешний контур."</li>
+    </ul>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/zero_trust_lock_1786483307284.png" class="img-half">
+</div>
+
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">08</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Возражения</div>
+  <h1>Отработка: "ИИ Галлюцинирует"</h1>
+  <div class="text-muted">"Мы не доверим алгоритмам считать наши налоги и маржу."</div>
+  <div class="grid-2">
+    <div>
+      <h3 style="color:var(--red);">Скрытый страх</h3>
+      <p>Они боятся, что если система ошибется, ответственность за юридически значимый акт (КС-2) ляжет на них, а не на нейросеть.</p>
+    </div>
+    <div class="box" style="background:var(--red-dark); border:none;">
+      <h3 style="color:white;">Скрипт ответа</h3>
+      <p style="color:white;">"Вы абсолютно правы. ИИ не умеет считать. Поэтому в нашей архитектуре нейросети занимаются только чтением текста и парсингом таблиц из PDF."</p>
+      <p style="color:white;">"Вся математика выполняется классическим модулем Decimal. Точность до копейки. Галлюцинации невозможны."</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 09: Возражения (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">09</div></div>
+  <div class="badge badge-outline">Возражения</div>
+  <h1>Отработка: "Слишком дорого"</h1>
+  <div class="text-muted">Переводим диалог из зоны CAPEX (затрат) в зону ROI (инвестиций).</div>
+  
+  <div class="grid-2">
+    <div>
+      <h3>Неправильный ответ</h3>
+      <p>"У нас самые мощные нейросети, разработка стоила дорого, поэтому лицензия стоит 35 миллионов". Это позиция слабости.</p>
+    </div>
+    <div class="box">
+      <h3 style="color:var(--red);">Скрипт перехвата</h3>
+      <p>"Стоимость ошибки в смете ЖК за 2 млрд руб составляет 76 млн руб. Лицензия на СтройИнтеллект окупается на первой же проверке одного ЖК. Вы инвестируете 35 млн, чтобы вернуть 76 млн. Вопрос не в том, дорого ли это, а в том, почему вы до сих пор дарите эти деньги подрядчикам."</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 10: Возражения (SPLIT) -->
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">10</div></div>
+  <div class="text-half">
+    <div class="badge badge-outline">Возражения</div>
+    <h1>Отработка: "У нас есть 1С:ERP"</h1>
+    <ul class="dense-list">
+      <li><strong>Скрипт:</strong> "1С — это отличный маршрутизатор. Он передаёт PDF-файл от подрядчика к технадзору."</li>
+      <li>"Но 1С не умеет читать смысл. Он не скажет, что в этом PDF бетон заложен по цене на 20% выше рынка."</li>
+      <li>"СтройИнтеллект не заменяет 1С. Он встаёт рядом как умный фильтр, который проверяет математику и смысл документа до того, как он попадет в 1С для оплаты."</li>
+    </ul>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/red_white_neural_ai_1786482363903.png" class="img-half">
+</div>
+
+<!-- СЛАЙД 11: Возражения (MATRIX DARK) -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">11</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Возражения</div>
+  <h1>Отработка: "IT-директор против"</h1>
+  <div class="text-muted">Главный блок CISO — страх перед передачей коммерческой тайны в LLM.</div>
+  
+  <div class="grid-2">
+    <div>
+      <h3>Тактика обхода</h3>
+      <p>Никогда не спорьте с IT на общих встречах. Назначьте отдельный технический звонок с нашим архитектором.</p>
+    </div>
+    <div class="box" style="background:var(--red-dark); border:none;">
+      <h3 style="color:white;">Аргументы для CISO</h3>
+      <ul class="dense-list">
+        <li style="color:white;">Полный On-Premise. Отключите сервер от интернета — мы продолжим работать.</li>
+        <li style="color:white;">Алгоритм маскирования: ИНН и суммы удаляются до любых интеграций.</li>
+        <li style="color:white;">Интеграция через защищенный API (мы не лезем в ядро их БД).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 12: Таймлайн Продажи (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">12</div></div>
+  <div class="badge badge-outline">Процесс</div>
+  <h1>Цикл сделки (6-9 месяцев)</h1>
+  <div class="text-muted">Enterprise-продажи не делаются за неделю. Контролируйте каждый этап пайплайна.</div>
+  
+  <div class="grid-3" style="margin-top: 40px; gap: 40px;">
+    <div class="box">
+      <h3>1. Discovery (Месяц 1)</h3>
+      <p>Сбор BANT. Поиск спонсора (CFO/CEO). Получение NDA.</p>
+    </div>
+    <div class="box">
+      <h3>2. Blind Test (Месяц 2-3)</h3>
+      <p>Проверка исторической сметы. Показ упущенной выгоды.</p>
+    </div>
+    <div class="box" style="border: 2px solid var(--red);">
+      <h3 style="color:var(--red);">3. Пилот / PoV (Месяц 4-6)</h3>
+      <p>Критический этап. Тест на "живом" объекте в Shadow Mode.</p>
+    </div>
+    <div class="box">
+      <h3>4. Бюджетирование (Месяц 7)</h3>
+      <p>Прохождение инвесткомитета Заказчика.</p>
+    </div>
+    <div class="box">
+      <h3>5. ИБ Аудит (Месяц 8)</h3>
+      <p>Секьюрити-ревью кода и архитектуры.</p>
+    </div>
+    <div class="box theme-dark">
+      <h3 style="color:var(--red);">6. Контракт (Месяц 9)</h3>
+      <p>Подписание, получение аванса.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 13: Чек-лист пресейл (SPLIT) -->
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">13</div></div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/blueprint_code_1786483279938.png" class="img-half">
+  <div class="text-half">
+    <div class="badge badge-outline">Пресейл</div>
+    <h1>Чек-лист Аудита</h1>
+    <p>Перед тем как обещать клиенту золотые горы, пресейл-инженер должен проверить:</p>
+    <ul class="dense-list">
+      <li>Качество исходников: Принимают ли они сканы с синими печатями?</li>
+      <li>Историческая БД: Есть ли у них вообще сметы по прошлым проектам для базы бенчмаркинга?</li>
+      <li>Инфраструктура: Готов ли IT-департамент закупить NVIDIA A100?</li>
+    </ul>
+  </div>
+</div>
+
+<!-- СЛАЙД 14: Proof of Value (MATRIX) -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">14</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Пилот</div>
+  <h1>Стратегия Proof of Value</h1>
+  <div class="text-muted">Никогда не делайте бесплатные пилоты. Пилот — это проект.</div>
+  
+  <div class="grid-2">
+    <div>
+      <h3>Защита от обесценивания</h3>
+      <p>Когда вы найдёте ошибку на 50 млн, внутренний ПТО Заказчика начнёт её отрицать ("это специфика объекта", "мы бы и сами нашли").</p>
+      <p><strong>Решение:</strong> Заранее зафиксируйте в Уставе Пилота критерии успешности и состав комиссии, принимающей результаты.</p>
+    </div>
+    <div class="box theme-dark" style="border:1px solid var(--red);">
+      <h3 style="color:var(--red);">Платный пилот</h3>
+      <p>Мы берём оплату за PoV (1-2 млн руб), которая позже вычитается из стоимости основной лицензии. Это гарантирует вовлечённость топ-менеджмента.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 15: Ценообразование (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">15</div></div>
+  <div class="badge badge-outline">Финансы</div>
+  <h1>Структура контракта</h1>
+  <div class="text-muted">Мы продаем капитальные инвестиции, а не подписки.</div>
+  
+  <div class="grid-3">
+    <div class="box">
+      <h3>1. Лицензия (Core)</h3>
+      <p>On-Premise ядро на 9 агентов. Единоразовый платеж.</p>
+    </div>
+    <div class="box">
+      <h3>2. Интеграция</h3>
+      <p>Оплата часов архитекторов и инженеров по настройке контура и парсингу 250 исторических объектов.</p>
+    </div>
+    <div class="box">
+      <h3>3. Обучение / SLA</h3>
+      <p>Включено на 12 месяцев. Со 2-го года — 20% от стоимости лицензии в год (по желанию Заказчика).</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 16: Красные линии (MATRIX DARK) -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">16</div></div>
+  <div class="badge badge-outline" style="border-color:var(--red); color:var(--red);">Negotiations</div>
+  <h1>Красные линии в переговорах</h1>
+  <div class="text-muted">От чего мы НИКОГДА не отказываемся ради закрытия сделки.</div>
+  
+  <div class="grid-2">
+    <div>
+      <ul class="dense-list">
+        <li style="color:white;"><strong>Снижение точности:</strong> Не соглашаемся на SLA выше 85% на этапе PoV. Это ИИ, а не калькулятор. Ожидания должны быть реальными.</li>
+        <li style="color:white;"><strong>Бесконечные доработки 1С:</strong> Мы не берем на себя переписывание их сломанного ERP. Мы выдаем чистый JSON, они забирают его сами.</li>
+      </ul>
+    </div>
+    <div class="box" style="background:var(--red-dark); border:none;">
+      <h3 style="color:white;">Главное правило</h3>
+      <p style="color:white;">Готовность отказаться от сделки. Если клиент настаивает на размещении конфиденциальных смет в облачном ChatGPT — мы уходим. Риск утечки ударит по нашему бренду.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 17: Upsell (SPLIT) -->
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">17</div></div>
+  <div class="text-half">
+    <div class="badge badge-outline">LTV</div>
+    <h1>Стратегия Upsell</h1>
+    <p>Продажа на 2-й год эксплуатации.</p>
+    <ul class="dense-list">
+      <li><strong>Дообучение RAG:</strong> Подрядчики постоянно придумывают новые схемы воровства. Предлагайте пакет перекалибровки агентов.</li>
+      <li><strong>Новые Агенты:</strong> Подключение модулей анализа графиков в MS Project или Primavera.</li>
+    </ul>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/financial_dash_1786483289266.png" class="img-half">
+</div>
+
+<!-- СЛАЙД 18: Sales KPI (HERO STATS) -->
+<div class="slide layout-stats">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">18</div></div>
+  <h2>Главный KPI пресейла:</h2>
+  <div class="stat-huge" style="font-size: 200px; letter-spacing: -5px;">Слепой Тест</div>
+  <p style="font-size: 32px; max-width: 1400px; font-weight: 300;">Ваша единственная задача на первой встрече — получить историческую смету и акт КС-2 под NDA. Всё остальное продаст математика.</p>
+</div>
+
+<!-- СЛАЙД 19: Стратегия Троянский Конь (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">19</div></div>
+  <div class="badge badge-outline">Tactics</div>
+  <h1>Стратегия "Троянский конь"</h1>
+  <div class="text-muted">Как войти в компанию, где ПТО сопротивляется инновациям.</div>
+  
+  <div class="grid-2">
+    <div>
+      <h3 style="color:var(--red);">Проблема</h3>
+      <p>Главный инженер и отдел ПТО саботируют внедрение, потому что наша система раскрывает их некомпетентность или сговор с подрядчиками.</p>
+    </div>
+    <div class="box">
+      <h3>Зайдите через Снабжение</h3>
+      <p>Снабжение хочет автоматизировать тендеры (Агент 4). Продайте модуль тендерного скоринга как отдельную услугу, а затем масштабируйте систему на всю компанию.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 20: Результаты (SPLIT) -->
+<div class="slide layout-split theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">20</div></div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/zero_trust_lock_1786483307284.png" class="img-half" style="object-fit: contain; background: white; padding: 100px;">
+  <div class="text-half">
+    <div class="badge badge-outline" style="border-color:white; color:white;">Презентация</div>
+    <h1>Защита Слепого Теста</h1>
+    <ul class="dense-list">
+      <li style="color:white;">Никогда не присылайте отчет по почте. Только личная встреча.</li>
+      <li style="color:white;">Начинайте с крупных потерь (сотни миллионов).</li>
+      <li style="color:white;">Не атакуйте сотрудников Заказчика. Обвиняйте подрядчиков в сложных скрытых махинациях, которые "невозможно найти вручную".</li>
+    </ul>
+  </div>
+</div>
+
+<!-- СЛАЙД 21: Обход IT (MATRIX DARK) -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">21</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Tactics</div>
+  <h1>Обход блокировок IT</h1>
+  <div class="grid-2">
+    <div>
+      <h3 style="color:var(--red);">Страх потери контроля</h3>
+      <p>IT-отдел ненавидит SaaS решения, потому что они не могут их контролировать и мониторить (Black Box).</p>
+    </div>
+    <div class="box" style="background:var(--gray-900);">
+      <h3>Терминология</h3>
+      <p>Не говорите "мы поставим вам ChatGPT". Говорите "мы развернем изолированную детерминированную ETL-шину с векторным хранилищем и модулем NLP".</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 22: Closing CEO (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">22</div></div>
+  <div class="badge badge-outline">Closing</div>
+  <h1>Закрытие CEO</h1>
+  <div class="grid-2">
+    <div>
+      <h3 style="color:var(--red);">Смена фокуса</h3>
+      <p>Никогда не показывайте CEO технический интерфейс платформы, код или дашборды серверов. Это убьет сделку.</p>
+    </div>
+    <div class="box">
+      <h3>Язык Владельца</h3>
+      <p>CEO не понимает в промптах и токенах. Он понимает графики EBITDA. Покажите ему, что 3.8% сохраненной маржи на портфеле в 100 млрд руб — это <strong>3.8 МИЛЛИАРДА чистой прибыли</strong>.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 23: Kick-off (MATRIX) -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">23</div></div>
+  <h1>Kick-off Внедрения</h1>
+  <div class="grid-2">
+    <div class="box">
+      <h3>Синхронизация</h3>
+      <p>Сбор команды IT, ПТО и Финансов за одним столом.</p>
+    </div>
+    <div class="box">
+      <h3>Фиксация Сроков</h3>
+      <p>Отсчет 135 дней начинается только после выделения серверов.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 24: Чего не говорить (MATRIX DARK) -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">24</div></div>
+  <div class="badge badge-outline" style="border-color:var(--red); color:var(--red);">Опасно</div>
+  <h1>Слова-Табу на презентации</h1>
+  <div class="grid-2">
+    <div>
+      <h3 style="color:white;">Обещания</h3>
+      <p style="color:#BBB;">Пресейл часто дает невыполнимые обещания ради закрытия сделки, что приводит к разрыву контракта на этапе внедрения.</p>
+    </div>
+    <div class="box" style="border: 2px solid var(--red); background: var(--gray-900);">
+      <ul class="dense-list" style="margin-bottom:0;">
+        <li style="color:white;">"ИИ полностью заменит ваших сметчиков" (Вызовет саботаж).</li>
+        <li style="color:white;">"Мы интегрируемся за неделю" (Ложь, убивающая доверие).</li>
+        <li style="color:white;">"Это как ChatGPT, только для стройки" (Убьет сделку с CISO).</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 25: Итог (HERO DARK) -->
+<div class="slide layout-stats theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">25</div></div>
+  <h2 style="font-size: 80px; letter-spacing: -2px;">Итог Playbook</h2>
+  <div class="stat-huge" style="font-size: 140px; color:white;">Продавайте<br><span style="color:var(--red);">Прибыль</span></div>
+</div>
+
+</body>
+</html>

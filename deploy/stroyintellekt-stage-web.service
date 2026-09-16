@@ -1,0 +1,40 @@
+[Unit]
+Description=СтройИнтеллект СТЕНД — веб
+After=network.target postgresql@16-stage.service
+# Стенд держит СВОЙ кластер базы (порт 5433): роль приложения в PostgreSQL
+# принадлежит кластеру, и общий кластер означал бы общий пароль с боевой базой.
+Requires=postgresql@16-stage.service
+
+[Service]
+Type=simple
+User=ubuntu
+# Рабочий каталог — ССЫЛКА на текущий выпуск, а не сам выпуск.
+# Выпуск собирается рядом и подключается переводом ссылки: пока идёт
+# сборка, служба читает прежний каталог и продолжает отвечать
+# (см. deploy/release.sh).
+WorkingDirectory=/opt/stroyintellekt-stage/current
+# Окружение читается файлом с правами 600: ключ модели не попадает ни в
+# командную строку, ни в journalctl.
+EnvironmentFile=/opt/stroyintellekt-stage/.env
+Environment=NODE_ENV=production
+Environment=PORT=3100
+# БЕЗ ЭТОЙ СТРОКИ HTTPS_PROXY В .env НИЧЕГО НЕ ДЕЛАЕТ.
+# Пояснение — в deploy/stroyintellekt-web.service: встроенный `fetch` (undici)
+# прокси-переменные среды сам не читает, и настройка выглядит применённой,
+# ничего не меняя.
+Environment=NODE_USE_ENV_PROXY=1
+ExecStart=/usr/bin/npx next start apps/web -H 127.0.0.1 -p 3100
+Restart=always
+RestartSec=5
+
+# СТЕНД УСТУПАЕТ ПРОДУ, А НЕ КОНКУРИРУЕТ С НИМ.
+#
+# Оба контура стоят на одной машине: 4 ядра, 11 ГБ, подкачки нет. Без предела
+# памяти утечка на стенде уводит в OOM весь сервер, и ядро выбирает жертву
+# само — с равной вероятностью боевой воркер. Предел превращает «сервер лёг»
+# в «стенд перезапустился».
+MemoryMax=2G
+CPUWeight=20
+
+[Install]
+WantedBy=multi-user.target

@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СтройИнтеллект - Техническая Архитектура</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --red: #FF0000; --white: #FFFFFF; --black: #000000;
+  --light-gray: #F5F5F5; --text-dark: #333333; --text-gray: #666666; --text-light: #999999; --divider: #E0E0E0;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Montserrat', sans-serif; background-color: #222; display: flex; flex-direction: column; align-items: center; padding: 40px; gap: 80px; }
+.slide { width: 1920px; height: 1080px; background-color: var(--white); position: relative; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.4); page-break-after: always; flex-shrink: 0; color: var(--text-dark); }
+@media print {
+  body { background: none; padding: 0; gap: 0; display: block; }
+  .slide { width: 1920px; height: 1080px; box-shadow: none; page-break-after: always; margin: 0; }
+  @page { size: 1920px 1080px; margin: 0; }
+}
+h1 { font-size: 54px; font-weight: 700; color: var(--black); margin-bottom: 60px; line-height: 1.2; }
+p, li { font-size: 28px; color: var(--text-dark); line-height: 1.5; margin-bottom: 25px; }
+.highlight-red { color: var(--red); font-weight: 700; }
+.highlight-bold { font-weight: 700; }
+.text-small { font-size: 22px; color: var(--text-gray); }
+.logo-text { font-size: 56px; font-weight: 700; color: var(--black); white-space: nowrap; letter-spacing: -0.5px; }
+.logo-text span { color: var(--red); }
+.logo-text-small { font-size: 18px; font-weight: 700; color: var(--black); }
+.logo-text-small span { color: var(--red); }
+.logo-large { font-size: 80px; font-weight: 700; color: var(--black); white-space: nowrap; }
+.logo-large span { color: var(--red); }
+.content-slide { padding: 90px 100px 140px 120px; }
+.red-line { position: absolute; left: 50px; top: 90px; bottom: 140px; width: 12px; background-color: var(--red); }
+.footer { position: absolute; bottom: 0; left: 0; right: 0; height: 60px; background-color: var(--light-gray); display: flex; align-items: center; justify-content: flex-end; padding-right: 60px; }
+
+/* Layouts */
+.title-slide { display: flex; }
+.title-slide .left { width: 35%; border-right: 2px solid var(--divider); display: flex; align-items: center; justify-content: center; }
+.title-slide .right { width: 65%; padding: 120px; display: flex; flex-direction: column; justify-content: center; }
+.title-main { font-size: 78px; font-weight: 700; margin-bottom: 25px; line-height: 1.1; }
+.title-sub { font-size: 38px; color: var(--text-gray); margin-bottom: 100px; }
+.title-metrics { display: flex; gap: 30px; }
+.metric-box { background-color: var(--light-gray); padding: 35px; flex: 1; text-align: center; }
+.metric-box-val { font-size: 42px; font-weight: 700; color: var(--red); margin-bottom: 10px; }
+.metric-box-label { font-size: 22px; color: var(--text-gray); }
+
+.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; height: 680px; }
+.grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; height: 680px; }
+.block-gray { background-color: var(--light-gray); padding: 50px; height: 100%; display: flex; flex-direction: column; }
+.block-header { display: flex; align-items: center; gap: 25px; margin-bottom: 40px; }
+.icon-sq { width: 72px; height: 72px; background-color: var(--red); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 36px; }
+.icon-sq-sm { width: 48px; height: 48px; font-size: 24px; background-color: var(--red); color: white; display: flex; align-items: center; justify-content: center; }
+.block-header .title { font-size: 36px; font-weight: 700; color: var(--black); }
+
+.card-shadow { display: flex; flex-direction: column; height: 100%; box-shadow: 4px 4px 15px rgba(0,0,0,0.06); }
+.card-header-red { background-color: var(--red); color: var(--white); padding: 25px 30px; display: flex; align-items: center; gap: 20px; font-weight: 700; font-size: 32px; }
+.card-body { padding: 40px; background-color: var(--light-gray); flex-grow: 1; display: flex; flex-direction: column; justify-content: center; }
+
+.grid-text-metrics { display: grid; grid-template-columns: 1fr 450px; gap: 60px; height: 680px; }
+.metrics-stack { display: flex; flex-direction: column; justify-content: space-between; height: 100%; gap: 30px; }
+.metric-card-right { background-color: var(--light-gray); padding: 40px; box-shadow: 4px 4px 15px rgba(0,0,0,0.06); flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.metric-card-right .val { font-size: 64px; font-weight: 700; color: var(--red); line-height: 1; margin: 20px 0 10px 0; }
+.metric-card-right .lbl { font-size: 22px; color: var(--text-gray); }
+
+/* Timeline */
+.timeline-wrapper { height: 680px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+.timeline-track { position: absolute; top: 116px; left: 8%; right: 8%; height: 14px; background-color: var(--red); z-index: 1; }
+.timeline-nodes { display: flex; justify-content: space-between; position: relative; z-index: 2; padding: 0 8%; margin-bottom: 60px; }
+.timeline-node { width: 80px; height: 80px; background-color: var(--red); border-radius: 50%; color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; border: 10px solid var(--white); }
+.timeline-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+.timeline-card { background-color: var(--light-gray); padding: 40px; box-shadow: 4px 4px 15px rgba(0,0,0,0.06); position: relative; display: flex; flex-direction: column; }
+.badge { display: inline-block; background-color: var(--red); color: var(--white); padding: 12px 24px; font-weight: 700; font-size: 22px; margin-top: auto; align-self: flex-start; }
+
+/* Contact Slide */
+.contact-slide { display: flex; }
+.contact-slide .red-line { left: 0; top: 0; bottom: 0; width: 14px; }
+.contact-slide .left { width: 50%; border-right: 2px solid var(--divider); padding: 150px; display: flex; flex-direction: column; justify-content: center; }
+.contact-slide .right { width: 50%; display: flex; align-items: center; justify-content: center; }
+.contact-title { font-size: 64px; font-weight: 700; margin-bottom: 40px; }
+
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Title -->
+<div class="slide title-slide">
+  <div class="left"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="right">
+    <h1 class="title-main">Tech Deep Dive</h1>
+    <div class="title-sub">Архитектура и безопасность платформы СтройИнтеллект</div>
+    <div class="title-metrics">
+      <div class="metric-box"><div class="metric-box-val">On-Prem</div><div class="metric-box-label">Локальное размещение</div></div>
+      <div class="metric-box"><div class="metric-box-val">2 Контура</div><div class="metric-box-label">Информационная безопасность</div></div>
+      <div class="metric-box"><div class="metric-box-val">API-First</div><div class="metric-box-label">Интеграционная шина</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: Архитектурные принципы -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Базовые принципы архитектуры</h1>
+  <div class="grid-text-metrics">
+    <div class="block-gray">
+      <p>Платформа СтройИнтеллект изначально проектировалась для <span class="highlight-red">Enterprise-сегмента</span>, где безопасность коммерческой тайны и масштабируемость ставятся во главу угла.</p>
+      <p>Архитектура построена по принципу <span class="highlight-bold">микросервисов</span>, разделяющих тяжёлые задачи (парсинг 500-страничных PDF, вызов LLM) и детерминированную математику (расчёт БДДС и себестоимости).</p>
+      <p>Основа системы — высокопроизводительный <span class="highlight-bold">FastAPI Gateway</span>, управляющий очередями через брокеры сообщений (RabbitMQ / Redis).</p>
+    </div>
+    <div class="metrics-stack">
+      <div class="metric-card-right">
+        <div class="icon-sq-sm"><i class="fas fa-microchip"></i></div>
+        <div class="val">>80 GB</div>
+        <div class="lbl">VRAM для запуска локальных моделей</div>
+      </div>
+      <div class="metric-card-right">
+        <div class="icon-sq-sm"><i class="fas fa-server"></i></div>
+        <div class="val">100%</div>
+        <div class="lbl">Локальное выполнение бизнес-логики</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 3: Информационная безопасность: Два контура -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Информационная безопасность: Система двух контуров</h1>
+  <div class="grid-2col">
+    <div class="block-gray">
+      <div class="block-header">
+        <div class="icon-sq"><i class="fas fa-lock"></i></div>
+        <div class="title">Внутренний контур (Закрытый)</div>
+      </div>
+      <p>Здесь обрабатывается <span class="highlight-bold">коммерческая тайна</span> Заказчика: сметы, финмодели, договоры и историческая база данных.</p>
+      <p>Работает исключительно на <span class="highlight-red">моделях с открытыми весами</span> (например, Llama 3 / Qwen), развёрнутых на серверах внутри вашей инфраструктуры. Выход в интернет физически закрыт.</p>
+    </div>
+    <div class="block-gray">
+      <div class="block-header">
+        <div class="icon-sq"><i class="fas fa-globe"></i></div>
+        <div class="title">Внешний контур (Анонимный)</div>
+      </div>
+      <p>Применяется для задач, требующих парсинга рыночных цен или работы с внешними API.</p>
+      <p>Передача данных во внешний контур выполняется только по согласованному регламенту с <span class="highlight-red">обязательным маскированием и анонимизацией</span> всех атрибутов компании.</p>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 4: Разделение ИИ и Математики -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Проблема галлюцинаций решена на уровне архитектуры</h1>
+  <div class="grid-3col">
+    <div class="card-shadow">
+      <div class="card-header-red"><i class="fas fa-robot"></i> 1. Роль нейросетей</div>
+      <div class="card-body">
+        <p>Большие языковые модели (LLM) используются <span class="highlight-bold">исключительно для семантического анализа</span>.</p>
+        <p>Они читают PDF/XML, находят нужные сущности, классифицируют риски в договорах, но <span class="highlight-red">никогда не складывают числа</span>.</p>
+      </div>
+    </div>
+    <div class="card-shadow">
+      <div class="card-header-red"><i class="fas fa-exchange-alt"></i> 2. Формализация (JSON)</div>
+      <div class="card-body">
+        <p>Нейросеть извлекает данные и строго формализует их в структурированный JSON-формат, который валидируется по схеме (Pydantic).</p>
+      </div>
+    </div>
+    <div class="card-shadow">
+      <div class="card-header-red"><i class="fas fa-calculator"></i> 3. Расчётный модуль</div>
+      <div class="card-body">
+        <p>Финансовую модель, себестоимость и итоговые суммы считает <span class="highlight-bold">детерминированный движок на базе Decimal</span>.</p>
+        <p>Нулевой риск арифметических "галлюцинаций" и идеальная точность.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 5: Интеграционный контур -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Интеграция с существующим ИТ-ландшафтом</h1>
+  <div class="grid-2col">
+    <div class="block-gray">
+      <div class="block-header">
+        <div class="icon-sq"><i class="fas fa-sign-in-alt"></i></div>
+        <div class="title">Входные данные (Input)</div>
+      </div>
+      <p>Система не требует ручного вбивания данных. Она поддерживает парсинг:</p>
+      <ul style="margin-left: 30px; font-size: 24px;">
+        <li>Гранд-Смета (XML) и Главгосэкспертиза.</li>
+        <li>Неструктурированные сметы в Excel (любой формат).</li>
+        <li>Сканы PDF (через встроенный модуль OCR).</li>
+      </ul>
+      <p><span class="highlight-red">API позволяет автоматически забирать</span> документы прямо из вашего 1С:ДО, ERP или СОД (Pilot-BICE).</p>
+    </div>
+    <div class="block-gray">
+      <div class="block-header">
+        <div class="icon-sq"><i class="fas fa-sign-out-alt"></i></div>
+        <div class="title">Выходные данные (Output)</div>
+      </div>
+      <p>Результат работы — это не просто красивый дашборд. Система отдаёт:</p>
+      <ul style="margin-left: 30px; font-size: 24px;">
+        <li>Размеченный реестр отклонений (XLSX).</li>
+        <li>Готовую финансовую модель.</li>
+      </ul>
+      <p>Через <span class="highlight-bold">REST/SSE API</span> можно вернуть результаты проверки обратно в ERP для блокировки платежей или запуска процессов согласования.</p>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 6: Roadmap -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Roadmap: Вектор развития платформы</h1>
+  <div class="timeline-wrapper">
+    <div class="timeline-track"></div>
+    <div class="timeline-nodes">
+      <div class="timeline-node" style="font-size:24px;">Q1</div>
+      <div class="timeline-node" style="font-size:24px;">Q2</div>
+      <div class="timeline-node" style="font-size:24px;">Q3</div>
+      <div class="timeline-node" style="font-size:24px;">Q4</div>
+    </div>
+    <div class="timeline-cards">
+      <div class="timeline-card">
+        <div class="icon-sq" style="width:50px;height:50px;font-size:24px;margin-bottom:20px;"><i class="fas fa-layer-group"></i></div>
+        <h3 style="font-size:26px;margin-bottom:15px;font-weight:700;">Портфельный режим</h3>
+        <p style="font-size:20px;">Кросс-анализ сразу по всем строящимся объектам компании. Сводный дашборд рисков на уровне холдинга.</p>
+        <div class="badge">Выполнено</div>
+      </div>
+      <div class="timeline-card">
+        <div class="icon-sq" style="width:50px;height:50px;font-size:24px;margin-bottom:20px;"><i class="fas fa-cubes"></i></div>
+        <h3 style="font-size:26px;margin-bottom:15px;font-weight:700;">BIM / ТИМ</h3>
+        <p style="font-size:20px;">Прямая интеграция с 3D-моделями (IFC). Автоматическая сверка объёмов из модели с цифрами в коммерческих сметах.</p>
+        <div class="badge">В разработке</div>
+      </div>
+      <div class="timeline-card">
+        <div class="icon-sq" style="width:50px;height:50px;font-size:24px;margin-bottom:20px;"><i class="fas fa-mobile-alt"></i></div>
+        <h3 style="font-size:26px;margin-bottom:15px;font-weight:700;">Мобильный контроль</h3>
+        <p style="font-size:20px;">Приложение для инженера на стройплощадке. Распознавание фото и автоматическое формирование актов скрытых работ.</p>
+        <div class="badge">Прототип</div>
+      </div>
+      <div class="timeline-card">
+        <div class="icon-sq" style="width:50px;height:50px;font-size:24px;margin-bottom:20px;"><i class="fas fa-chart-pie"></i></div>
+        <h3 style="font-size:26px;margin-bottom:15px;font-weight:700;">Predictive Analytics</h3>
+        <p style="font-size:20px;">Предиктивная аналитика срыва сроков подрядчиками на базе исторических паттернов их поведения.</p>
+        <div class="badge">Планируется</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 7: Contact -->
+<div class="slide contact-slide">
+  <div class="red-line" style="position:absolute;"></div>
+  <div class="left">
+    <div class="contact-title">Техническая команда</div>
+    <div class="contact-cta">Готовы провести глубокий архитектурный брифинг для вашей ИТ и ИБ службы. Предоставим полную спецификацию серверов и API-документацию.</div>
+    <div class="contact-info">
+      <div><i class="fas fa-envelope"></i> <a href="mailto:it@7rlines.com">it@7rlines.com</a></div>
+      <div style="margin-top: 15px;"><i class="fas fa-code-branch"></i> Документация API: предоставляется по запросу (NDA)</div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="logo-large">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+  </div>
+</div>
+
+</body>
+</html>

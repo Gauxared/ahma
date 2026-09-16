@@ -1,0 +1,25 @@
+# Документы клиента в образ НЕ попадают.
+#
+# Образ может уехать в реестр, а реестр — не место для смет заказчика. Папки
+# объектов подключаются томом при запуске, и это не удобство, а требование §11:
+# данные остаются там, где им положено.
+reference-system
+reference-system-new
+product
+tmp
+var
+my-docs
+
+node_modules
+.next
+apps/web/.next
+apps/*/tsconfig.tsbuildinfo
+*.tsbuildinfo
+
+.git
+.env
+.venv
+docs
+**/*.test.ts
+**/*.test.tsx
+playwright.config.ts

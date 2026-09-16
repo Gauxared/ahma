@@ -1,0 +1,29 @@
+{
+  "customer": "АПРИ",
+  "clause": "ТЗ §4",
+  "roles": [
+    {
+      "id": "user",
+      "title": "Пользователь",
+      "permissions": [
+        "document:upload",
+        "check:start",
+        "check:read",
+        "artifact:read",
+        "artifact:export",
+        "calculation:edit-parameters"
+      ]
+    },
+    {
+      "id": "admin",
+      "title": "Администратор",
+      "inherits": "user",
+      "permissions": [
+        "user:manage",
+        "reference-base:upload",
+        "channel:configure",
+        "audit:read"
+      ]
+    }
+  ]
+}

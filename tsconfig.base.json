@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "noImplicitOverride": true,
+    "noFallthroughCasesInSwitch": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "verbatimModuleSyntax": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "types": ["node"],
+    "paths": {
+      "@modules/*": ["./modules/*"],
+      "@platform/*": ["./platform/*"],
+      "@contracts/*": ["./packages/contracts/*"],
+      "@web/*": ["./apps/web/*"]
+    }
+  },
+  "include": ["packages/**/*.ts", "platform/**/*.ts", "modules/**/*.ts", "apps/cli/**/*.ts", "apps/worker/**/*.ts", "tooling/**/*.ts", "tests/**/*.ts"],
+  "exclude": ["node_modules", "reference-system", "reference-system-new", "tmp", "product", "docs"]
+}

@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СтройИнтеллект - Cases & Social Proof</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+:root {
+  --red: #D90429; --red-dark: #8D0801; --white: #FFFFFF; --black: #0B090A;
+  --gray-900: #161A1D; --gray-800: #212529; --gray-100: #F8F9FA;
+  --font: 'Inter', sans-serif;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: var(--font); background: #ccc; display: flex; flex-direction: column; align-items: center; }
+
+.slide {
+  width: 1920px; height: 1080px; background: var(--white); position: relative;
+  overflow: hidden; flex-shrink: 0; margin-bottom: 20px; color: var(--black);
+  display: flex; flex-direction: column; page-break-after: always;
+}
+@media print {
+  body { background: none; margin: 0; }
+  .slide { margin: 0; box-shadow: none; page-break-after: always; }
+  @page { size: 1920px 1080px; margin: 0; }
+}
+
+.layout-split { display: flex; height: 100%; flex-direction: row; }
+.layout-split .img-half { width: 50%; height: 100%; object-fit: cover; }
+.layout-split .text-half { width: 50%; padding: 80px; display: flex; flex-direction: column; justify-content: center; }
+
+.theme-dark { background: var(--black); color: var(--white); }
+.theme-dark .text-muted { color: #888; }
+.theme-dark .border-line { border-color: #333; }
+
+.layout-matrix { display: flex; flex-direction: column; padding: 80px; height: 100%; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 30px; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; margin-top: 30px; }
+
+.layout-stats { display: flex; flex-direction: column; padding: 80px; height: 100%; justify-content: center; align-items: center; text-align: center; }
+.stat-huge { font-size: 240px; font-weight: 900; letter-spacing: -10px; line-height: 1; color: var(--red); margin: 30px 0; }
+
+h1 { font-size: 72px; font-weight: 800; letter-spacing: -2px; line-height: 1.1; margin-bottom: 20px; }
+h2 { font-size: 52px; font-weight: 700; letter-spacing: -1px; margin-bottom: 20px; }
+h3 { font-size: 32px; font-weight: 700; letter-spacing: -1px; margin-bottom: 15px; }
+p { font-size: 22px; font-weight: 400; line-height: 1.5; margin-bottom: 20px; color: #444; }
+.theme-dark p { color: #BBB; }
+.text-muted { font-size: 24px; font-weight: 300; color: #666; margin-bottom: 30px; line-height: 1.4; }
+
+ul.dense-list { list-style: none; margin-bottom: 30px; }
+ul.dense-list li { font-size: 20px; line-height: 1.5; margin-bottom: 15px; padding-left: 30px; position: relative; color: #333; }
+.theme-dark ul.dense-list li { color: #DDD; }
+ul.dense-list li::before { content: '→'; position: absolute; left: 0; color: var(--red); font-weight: 800; font-size: 22px; }
+
+.badge { display: inline-block; background: var(--red); color: white; padding: 10px 20px; font-size: 16px; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; border-radius: 6px; margin-bottom: 20px; }
+.badge-outline { background: transparent; border: 2px solid var(--red); color: var(--red); }
+.theme-dark .badge-outline { border-color: #555; color: #FFF; }
+
+.header-top { position: absolute; top: 60px; left: 100px; right: 100px; display: flex; justify-content: space-between; z-index: 10; }
+.logo-text { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+.logo-text span { color: var(--red); }
+.slide-num { font-size: 24px; font-weight: 700; color: var(--red); }
+
+.box { background: var(--gray-100); padding: 35px; border-radius: 16px; border: 1px solid #E5E5E5; }
+.theme-dark .box { background: var(--gray-900); border-color: #333; }
+</style>
+</head>
+<body>
+
+<!-- СЛАЙД 01: Обложка -->
+<div class="slide layout-split theme-dark">
+  <div class="header-top"><div class="logo-text" style="color:white;">7 <span style="color:var(--red);">КРАСНЫХ</span> ЛИНИЙ</div></div>
+  <div class="text-half">
+    <div class="badge">Track Record & Cases</div>
+    <h1 style="font-size: 110px;">Доказанная<br><span style="color:var(--red);">Эффективность</span></h1>
+    <div class="text-muted" style="font-size: 36px;">Разбор реальных кейсов внедрения СтройИнтеллект: Входные данные, Аналитика ИИ и Возврат инвестиций (ROI).</div>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/red_white_neural_ai_1786482363903.png" class="img-half">
+</div>
+
+<!-- СЛАЙД 02: Проблема -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">02</div></div>
+  <div class="badge badge-outline">Проблема</div>
+  <h1>Слепая зона девелопмента</h1>
+  <div class="text-muted">По статистике 7КЛ, средний процент завышения стоимости в актах КС-2 составляет 3.8%. Причины не в математике, а в скрытых махинациях.</div>
+  
+  <div class="grid-3">
+    <div class="box">
+      <h3>Двойной учёт</h3>
+      <p>Одни и те же работы прячутся под разными формулировками в разных месяцах.</p>
+    </div>
+    <div class="box">
+      <h3>Подмена материалов</h3>
+      <p>Использование более дешевых аналогов (марки бетона, кабеля), при сохранении цены из сметы.</p>
+    </div>
+    <div class="box theme-dark">
+      <h3 style="color:var(--red);">Человеческий фактор</h3>
+      <p>Сметчик физически не может сверить 10 000 строк акта КС-2 со всей историей проекта за 3 дня закрытия месяца.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 03: Что на входе -->
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">03</div></div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/blueprint_code_1786483279938.png" class="img-half">
+  <div class="text-half">
+    <div class="badge badge-outline">Интерфейс</div>
+    <h1>Что получает ИИ на вход?</h1>
+    <ul class="dense-list">
+      <li><strong>Неструктурированные данные:</strong> PDF-сканы с синими печатями, перекошенные таблицы, фото актов.</li>
+      <li><strong>Excel-таблицы:</strong> Разрозненные прайс-листы подрядчиков в разных форматах.</li>
+      <li><strong>Спецификации:</strong> BIM-выгрузки и проектная документация.</li>
+    </ul>
+    <p>Система не требует идеального XML. Мы работаем с тем хаосом, который реально существует на стройке.</p>
+  </div>
+</div>
+
+<!-- СЛАЙД 04: Кейс 1 Intro -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">04</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Кейс №1</div>
+  <h1>Жилищный Комплекс (2 млрд руб)</h1>
+  <div class="text-muted">Задача: Аудит закрывающих актов за 6 месяцев строительства.</div>
+  
+  <div class="grid-2">
+    <div>
+      <h3 style="color:var(--red);">Профиль Клиента</h3>
+      <p>Федеральный застройщик. Проблема: постоянный кассовый разрыв к концу года. Подозревали, что подрядчик по монолиту завышает объемы.</p>
+    </div>
+    <div class="box" style="background:#111;">
+      <h3 style="color:white;">Входные данные</h3>
+      <ul class="dense-list" style="margin-bottom:0;">
+        <li style="color:white;">12 актов КС-2 (PDF, сканы).</li>
+        <li style="color:white;">Исходная смета в ГрандСмета.</li>
+        <li style="color:white;">Время на обработку ПТО вручную: 14 дней.</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 05: Кейс 1 Парсинг -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">05</div></div>
+  <h1>Этап 1: Распознавание (Агент 1)</h1>
+  <div class="grid-2">
+    <div class="box">
+      <h3>Скан с печатью</h3>
+      <p>В акте КС-2 была криво отсканированная страница, где синяя печать перекрывала столбец "Итоговая стоимость".</p>
+    </div>
+    <div class="box" style="border: 2px solid var(--red);">
+      <h3 style="color:var(--red);">Работа LayoutLM</h3>
+      <p>Нейросеть распознала контекст: она вычислила закрытое число, перемножив "Объем" на "Цену за ед.", и восстановила структуру строки.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 06: Кейс 1 Анализ -->
+<div class="slide layout-split theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">06</div></div>
+  <div class="text-half">
+    <div class="badge badge-outline" style="border-color:white; color:white;">Анализ</div>
+    <h1>Этап 2: Поиск скрытого</h1>
+    <p>Что обнаружил Агент-Сметчик (Модуль смыслового контроля):</p>
+    <ul class="dense-list">
+      <li style="color:white;"><strong>Двойной учет:</strong> В Акте №3 была "Аренда лесов" (5 млн руб). В Акте №5 она же прошла как "Монтаж временных конструкций".</li>
+      <li style="color:white;"><strong>Смысловой мэтчинг:</strong> Векторная база Qdrant поняла, что это одна и та же работа, несмотря на разные формулировки.</li>
+    </ul>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/zero_trust_lock_1786483307284.png" class="img-half" style="object-fit: contain; background: white; padding: 100px;">
+</div>
+
+<!-- СЛАЙД 07: Кейс 1 Результат -->
+<div class="slide layout-stats">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">07</div></div>
+  <h2>Сохраненная маржа Заказчика:</h2>
+  <div class="stat-huge" style="font-size: 220px;">76 млн ₽</div>
+  <p style="font-size: 32px;">Выявлено переплат на 3.8% от бюджета ЖК.</p>
+</div>
+
+<!-- СЛАЙД 08: Кейс 1 Время -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">08</div></div>
+  <h1>Сравнение скорости (Кейс 1)</h1>
+  <div class="grid-2">
+    <div>
+      <h3 style="color:#BBB;">Отдел ПТО (Руками)</h3>
+      <p style="font-size: 60px; font-weight:800; color:white;">14 Дней</p>
+      <p>Ограниченная проверка "по верхам". Двойной учет был пропущен.</p>
+    </div>
+    <div class="box" style="background:var(--red-dark); border:none;">
+      <h3 style="color:white;">СтройИнтеллект</h3>
+      <p style="font-size: 60px; font-weight:800; color:white;">2 Часа</p>
+      <p style="color:white;">Тотальная проверка 100% строк акта с пересчетом всей математики.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 09: Кейс 2 Intro -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">09</div></div>
+  <div class="badge badge-outline">Кейс №2</div>
+  <h1>Коммерческая недвижимость (Тендер)</h1>
+  <div class="text-muted">Задача: Выбор подрядчика на вентиляцию и кондиционирование. Бюджет 500 млн руб.</div>
+  
+  <div class="grid-2">
+    <div class="box">
+      <h3>Проблема</h3>
+      <p>Получено 4 коммерческих предложения. Все в разных форматах: от красивых PDF до кривых таблиц Excel. Позиции сгруппированы по-разному. Сравнить их руками объективно — невозможно.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 10: Кейс 2 Тендер -->
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">10</div></div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/financial_dash_1786483289266.png" class="img-half">
+  <div class="text-half">
+    <div class="badge badge-outline">Агент-Снабженец</div>
+    <h1>Матрица Сопоставления</h1>
+    <ul class="dense-list">
+      <li><strong>Нормализация:</strong> ИИ прочитал все 4 КП и привел их к единой номенклатуре.</li>
+      <li><strong>Аномалии:</strong> Подрядчик №2 дал общую скидку 10%, но "зашил" наценку 300% на крепежные материалы и пусконаладку.</li>
+      <li><strong>Вывод системы:</strong> Автоматически сгенерирована таблица "Яблоки с Яблоками" для Тендерного Комитета.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- СЛАЙД 11: Кейс 2 Результат -->
+<div class="slide layout-stats theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">11</div></div>
+  <h2>Экономия на закупках (CAPEX):</h2>
+  <div class="stat-huge" style="font-size: 220px; color:white;">45 млн ₽</div>
+  <p style="font-size: 32px; color:var(--red);">За счет исключения скрытых наценок подрядчика.</p>
+</div>
+
+<!-- СЛАЙД 12: Окупаемость лицензии -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">12</div></div>
+  <h1>Математика внедрения</h1>
+  <div class="grid-3">
+    <div class="box">
+      <h3>Стоимость Лицензии</h3>
+      <p style="font-size: 40px; font-weight:800; color:var(--red); margin:10px 0;">35 млн ₽</p>
+      <p>Единоразовый платеж за On-Premise.</p>
+    </div>
+    <div class="box theme-dark">
+      <h3 style="color:white;">Экономия с ОДНОГО ЖК</h3>
+      <p style="font-size: 40px; font-weight:800; color:white; margin:10px 0;">76 млн ₽</p>
+      <p style="color:#BBB;">Предотвращено хищений.</p>
+    </div>
+    <div class="box">
+      <h3>ROI</h3>
+      <p style="font-size: 40px; font-weight:800; color:var(--black); margin:10px 0;">217%</p>
+      <p>Окупаемость на первой же сделке.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 13: Кейс 3 Intro -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">13</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Кейс №3</div>
+  <h1>Промышленный объект (5 млрд)</h1>
+  <div class="text-muted">Задача: Анализ расценок на уникальные материалы и оборудование.</div>
+  
+  <div class="grid-2">
+    <div>
+      <h3 style="color:var(--red);">Профиль</h3>
+      <p>Заказчик строил уникальный завод. Сметчики не могли проверить цены, так как оборудования нет в публичных базах ФСНБ.</p>
+    </div>
+    <div class="box" style="background:#111;">
+      <h3 style="color:white;">Уникальный почерк</h3>
+      <p style="color:#EEE;">ИИ обучился на 20 прошлых закрытых объектах этого клиента и создал локальный бенчмарк цен.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 14: Интеграция с 1С -->
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">14</div></div>
+  <div class="text-half">
+    <div class="badge badge-outline">Интеграция</div>
+    <h1>Умный шлюз для 1С:ERP</h1>
+    <ul class="dense-list">
+      <li><strong>До ИИ:</strong> Бухгалтерия вслепую оплачивала счета из 1С, веря подписи инженера.</li>
+      <li><strong>После ИИ:</strong> Акт сначала проходит 9 агентов. Если найдено завышение — ИИ блокирует передачу в 1С и ставит красный флаг.</li>
+    </ul>
+    <p>СтройИнтеллект стал фильтром безопасности для бюджета компании.</p>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/blueprint_code_1786483279938.png" class="img-half">
+</div>
+
+<!-- СЛАЙД 15: Финансовая Модель -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">15</div></div>
+  <h1>Борьба с Кассовым Разрывом (Агент 9)</h1>
+  <div class="text-muted">Агент-Экономист предотвратил остановку стройки.</div>
+  
+  <div class="grid-2">
+    <div class="box">
+      <h3>Что нашел алгоритм</h3>
+      <p>Подрядчики искусственно переносили дорогие работы (монолит) на первые этапы, чтобы быстрее выбрать аванс. ИИ пересчитал График производства работ и выявил кассовый разрыв в 300 млн на 7-й месяц.</p>
+    </div>
+    <div class="box" style="border: 2px solid var(--red);">
+      <h3 style="color:var(--red);">Результат</h3>
+      <p>График пересогласован. Заказчик избежал кредитования под высокий процент для покрытия разрыва.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 16: Бенчмарк Скорости -->
+<div class="slide layout-stats theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">16</div></div>
+  <h2>Точность проверки чек-листа технадзора:</h2>
+  <div class="stat-huge" style="font-size: 250px;">89.4%</div>
+  <p style="font-size: 32px; max-width: 1400px; font-weight: 300;">Показатель достигается на 3-й месяц работы после калибровки RAG-базы под вашу номенклатуру.</p>
+</div>
+
+<!-- СЛАЙД 17: Гарантии -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">17</div></div>
+  <h1>Честная Архитектура</h1>
+  <div class="grid-3">
+    <div class="box">
+      <h3>Мы не заменяем людей</h3>
+      <p>ИИ не имеет права ЭЦП. Он готовит идеальный черновик (Copilot), подсвечивая махинации. Подписывает человек.</p>
+    </div>
+    <div class="box">
+      <h3>Zero Trust</h3>
+      <p>Логируется каждое действие. Если инженер проигнорировал красный флаг от ИИ и пропустил смету — это увидит СБ.</p>
+    </div>
+    <div class="box theme-dark">
+      <h3 style="color:var(--red);">On-Premise</h3>
+      <p>Ваши цифры не уходят в OpenAI. Модели (Llama) работают на ваших закрытых серверах.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 18: Отзывы 1 -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">18</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Отзыв</div>
+  <h1>Что говорит Бизнес (CEO)</h1>
+  <div class="grid-2">
+    <div class="box" style="background:#111; border:none; padding: 60px;">
+      <p style="font-size: 32px; color:white; font-weight:600; font-style:italic;">"Раньше я смотрел в отчеты ПТО и понимал, что цифры нарисованы, но не мог этого доказать. СтройИнтеллект дал мне математический скальпель. Мы срезали 120 млн лишних затрат за первый квартал."</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 19: Отзывы 2 -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">19</div></div>
+  <div class="badge badge-outline">Отзыв</div>
+  <h1>Что говорит IT (CTO)</h1>
+  <div class="grid-2">
+    <div class="box" style="padding: 60px;">
+      <p style="font-size: 32px; color:var(--black); font-weight:600; font-style:italic;">"Мы боялись внедрения ИИ из-за галлюцинаций. Ребята из 7КЛ обвязали LLM жесткими Pydantic-схемами и Decimal-модулем. Система выдает детерминированный JSON, который идеально заходит в нашу шину данных."</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 20: Отзывы 3 -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">20</div></div>
+  <div class="badge badge-outline">Отзыв</div>
+  <h1>Что говорит Снабжение</h1>
+  <div class="grid-2">
+    <div class="box" style="border: 2px solid var(--red); padding: 60px;">
+      <p style="font-size: 32px; color:var(--black); font-weight:600; font-style:italic;">"Тендер на 20+ позиций оборудования раньше сводил в Excel неделю. Сейчас я загружаю 5 разных КП от дилеров в PDF, и через час получаю готовую сравнительную таблицу с подсвеченными аномалиями."</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 21: Доверие и Безопасность -->
+<div class="slide layout-split theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">21</div></div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/zero_trust_lock_1786483307284.png" class="img-half" style="object-fit: contain; background: white; padding: 100px;">
+  <div class="text-half">
+    <div class="badge badge-outline" style="border-color:white; color:white;">ИБ</div>
+    <h1>Корпоративная Безопасность</h1>
+    <ul class="dense-list">
+      <li style="color:white;">Интеграция с Active Directory (SSO).</li>
+      <li style="color:white;">Маскирование персональных данных и ИНН.</li>
+      <li style="color:white;">Полный контроль над весами модели. Никакого Vendor Lock-in.</li>
+    </ul>
+  </div>
+</div>
+
+<!-- СЛАЙД 22: Roadmap внедрения -->
+<div class="slide layout-matrix">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">22</div></div>
+  <h1>Как мы запускаем проекты (135 дней)</h1>
+  <div class="grid-3">
+    <div class="box">
+      <h3>Месяц 1-2</h3>
+      <p>Сбор исторических смет (минимум 100 объектов). Оцифровка базы.</p>
+    </div>
+    <div class="box">
+      <h3>Месяц 3</h3>
+      <p>Обучение RAG-индекса под ваш ценовой профиль.</p>
+    </div>
+    <div class="box theme-dark">
+      <h3 style="color:var(--red);">Месяц 4-5</h3>
+      <p>Пилот в режиме "Чтения" параллельно с вашим ПТО.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 23: Оффер Слепого Теста -->
+<div class="slide layout-matrix theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">23</div></div>
+  <div class="badge badge-outline" style="border-color:white;">Challenge</div>
+  <h1>Предложение: Слепой Тест</h1>
+  <div class="grid-2">
+    <div>
+      <h3 style="color:var(--red);">Не верьте нам на слово</h3>
+      <p>Подписываем NDA. Вы даете нам одну закрытую и оплаченную смету по любому вашему ЖК. Мы прогоняем её через ядро СтройИнтеллект.</p>
+    </div>
+    <div class="box" style="background:#111;">
+      <h3 style="color:white;">Результат</h3>
+      <p style="color:#BBB;">Мы возвращаемся через 3 дня с отчетом, в котором показано, сколько миллионов вы переплатили подрядчику из-за ошибок ручной проверки.</p>
+    </div>
+  </div>
+</div>
+
+<!-- СЛАЙД 24: Выбор -->
+<div class="slide layout-split">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">24</div></div>
+  <div class="text-half">
+    <div class="badge badge-outline">Итог</div>
+    <h1>Цена отказа от ИИ</h1>
+    <p>Каждый месяц работы по старинке (в Excel) — это безвозвратная потеря 3-4% вашей чистой прибыли на проекте из-за человеческого фактора.</p>
+    <p style="margin-top: 30px; font-weight:700;">Инвестиции в автоматизацию окупаются за 1 закрытый акт КС-2.</p>
+  </div>
+  <img src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/red_white_neural_ai_1786482363903.png" class="img-half">
+</div>
+
+<!-- СЛАЙД 25: Call to Action (HERO STATS) -->
+<div class="slide layout-stats theme-dark">
+  <div class="header-top"><div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div><div class="slide-num">25</div></div>
+  <h2 style="font-size: 80px; letter-spacing: -2px;">Защитите свою маржу</h2>
+  <div class="stat-huge" style="font-size: 140px; color:white;">Начните<br><span style="color:var(--red);">Тест</span></div>
+</div>
+
+</body>
+</html>

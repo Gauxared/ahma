@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>СтройИнтеллект - Premium Pitch Deck</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --red: #D90429;
+      --red-dark: #8D0801;
+      --white: #FFFFFF;
+      --black: #0B090A;
+      --gray-900: #161A1D;
+      --gray-800: #212529;
+      --gray-100: #F8F9FA;
+      --font: 'Inter', sans-serif;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font);
+      background: #ccc;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .slide {
+      width: 1920px;
+      height: 1080px;
+      background: var(--white);
+      position: relative;
+      overflow: hidden;
+      flex-shrink: 0;
+      margin-bottom: 20px;
+      color: var(--black);
+      display: flex;
+      flex-direction: column;
+      page-break-after: always;
+    }
+
+    @media print {
+      body {
+        background: none;
+        margin: 0;
+      }
+
+      .slide {
+        margin: 0;
+        box-shadow: none;
+        page-break-after: always;
+      }
+
+      @page {
+        size: 1920px 1080px;
+        margin: 0;
+      }
+    }
+
+    /* ================= ЛЕЙАУТЫ (РИТМ) ================= */
+
+    /* 1. Split Layout (50/50 Image/Text) */
+    .layout-split {
+      display: flex;
+      height: 100%;
+      flex-direction: row;
+    }
+
+    .layout-split .img-half {
+      width: 50%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .layout-split .text-half {
+      width: 50%;
+      padding: 120px 100px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    /* 2. Dark Theme */
+    .theme-dark {
+      background: var(--black);
+      color: var(--white);
+    }
+
+    .theme-dark .text-muted {
+      color: #888;
+    }
+
+    .theme-dark .border-line {
+      border-color: #333;
+    }
+
+    /* 3. Matrix (Grid of Data) */
+    .layout-matrix {
+      display: flex;
+      flex-direction: column;
+      padding: 100px;
+      height: 100%;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 60px;
+      margin-top: 60px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 80px;
+      margin-top: 60px;
+    }
+
+    /* 4. Hero Stats */
+    .layout-stats {
+      display: flex;
+      flex-direction: column;
+      padding: 120px 100px;
+      height: 100%;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .stat-huge {
+      font-size: 280px;
+      font-weight: 900;
+      letter-spacing: -10px;
+      line-height: 1;
+      color: var(--red);
+      margin: 40px 0;
+    }
+
+    /* ================= ТИПОГРАФИКА ================= */
+    h1 {
+      font-size: 84px;
+      font-weight: 800;
+      letter-spacing: -3px;
+      line-height: 1.1;
+      margin-bottom: 30px;
+    }
+
+    h2 {
+      font-size: 56px;
+      font-weight: 700;
+      letter-spacing: -2px;
+      margin-bottom: 30px;
+    }
+
+    h3 {
+      font-size: 36px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 24px;
+      font-weight: 400;
+      line-height: 1.6;
+      margin-bottom: 30px;
+      color: #444;
+    }
+
+    .theme-dark p {
+      color: #BBB;
+    }
+
+    .text-muted {
+      font-size: 28px;
+      font-weight: 300;
+      color: #666;
+      margin-bottom: 50px;
+      line-height: 1.4;
+    }
+
+    ul.dense-list {
+      list-style: none;
+      margin-bottom: 40px;
+    }
+
+    ul.dense-list li {
+      font-size: 22px;
+      line-height: 1.5;
+      margin-bottom: 25px;
+      padding-left: 40px;
+      position: relative;
+      color: #333;
+    }
+
+    .theme-dark ul.dense-list li {
+      color: #DDD;
+    }
+
+    ul.dense-list li::before {
+      content: '→';
+      position: absolute;
+      left: 0;
+      color: var(--red);
+      font-weight: 800;
+      font-size: 24px;
+    }
+
+    .badge {
+      display: inline-block;
+      background: var(--red);
+      color: white;
+      padding: 12px 24px;
+      font-size: 18px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+    }
+
+    .badge-outline {
+      background: transparent;
+      border: 2px solid var(--red);
+      color: var(--red);
+    }
+
+    .theme-dark .badge-outline {
+      border-color: #555;
+      color: #FFF;
+    }
+
+    .header-top {
+      position: absolute;
+      top: 60px;
+      left: 100px;
+      right: 100px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 10;
+    }
+
+    .logo-text {
+      font-size: 28px;
+      font-weight: 900;
+      letter-spacing: -1px;
+    }
+
+    .logo-text span {
+      color: var(--red);
+    }
+
+    .slide-num {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--red);
+    }
+
+    .box {
+      background: var(--gray-100);
+      padding: 50px;
+      border-radius: 20px;
+      border: 1px solid #E5E5E5;
+    }
+
+    .theme-dark .box {
+      background: var(--gray-900);
+      border-color: #333;
+    }
+
+    .table-row {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #EEE;
+      padding: 25px 0;
+      font-size: 22px;
+    }
+
+    .theme-dark .table-row {
+      border-color: #333;
+    }
+
+    .table-row.header {
+      font-weight: 700;
+      color: var(--black);
+      border-bottom: 3px solid var(--black);
+      text-transform: uppercase;
+      font-size: 18px;
+      letter-spacing: 1px;
+    }
+
+    .theme-dark .table-row.header {
+      color: #FFF;
+      border-color: #FFF;
+    }
+
+    .col-1 {
+      width: 50%;
+    }
+
+    .col-2 {
+      width: 25%;
+    }
+
+    .col-3 {
+      width: 25%;
+      text-align: right;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- СЛАЙД 1: Обложка (SPLIT) -->
+  <div class="slide layout-split">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+    </div>
+    <div class="text-half">
+      <div class="badge">Developer Edition</div>
+      <h1 style="font-size: 110px;">Строй<br>Интеллект</h1>
+      <div class="text-muted" style="font-size: 36px;">Цифровая служба технического заказчика c применением
+        Искусственного Интеллекта.</div>
+      <div style="margin-top: 80px; border-top: 2px solid #EEE; padding-top: 40px; display: flex; gap: 60px;">
+        <div>
+          <div style="font-size:16px; color:#888; text-transform:uppercase; font-weight:700;">Версия</div>
+          <div style="font-size:28px; font-weight:800;">3.0 Final</div>
+        </div>
+        <div>
+          <div style="font-size:16px; color:#888; text-transform:uppercase; font-weight:700;">Статус</div>
+          <div style="font-size:28px; font-weight:800; color:var(--red);">On-Premise Ready</div>
+        </div>
+      </div>
+    </div>
+    <img
+      src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/isometric_construction_1786483298407.png"
+      class="img-half">
+  </div>
+
+  <!-- СЛАЙД 2: Проблема (DARK MATRIX) -->
+  <div class="slide theme-dark layout-matrix">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">01</div>
+    </div>
+    <div class="badge badge-outline">Проблематика рынка</div>
+    <h1>Иллюзия цифрового контроля</h1>
+    <div class="text-muted">Масштаб современного девелопмента сделал ручной контроль смет математически невозможным.
+      Внедрение ERP-систем не решает проблему убытков, а лишь ускоряет их согласование.</div>
+
+    <div class="grid-2" style="gap: 40px; margin-top: 40px;">
+      <div class="box">
+        <h3 style="color:var(--red);">1. ERP = Маршрутизация</h3>
+        <p>1С:Документооборот отлично передает PDF от подрядчика к техзаказчику. Но СОД <strong>не анализирует смысл</strong>. Система не защитит от подписания убыточной сметы, она лишь ускорит сбор ЭЦП под ней.</p>
+      </div>
+      <div class="box">
+        <h3 style="color:var(--red);">2. Слепота Сметного ПО</h3>
+        <p>Сметные программы проверяют соответствие ГЭСН/ФЕР (правильность умножения). Но они <strong>не знают рынка</strong>. Они подтвердят формулу, но не скажут, что соседний объект закупал этот бетон на 15% дешевле.</p>
+      </div>
+      <div class="box">
+        <h3 style="color:var(--red);">3. Человеческий фактор</h3>
+        <p>Современная смета — это 500+ страниц. Инженер ПТО физически не способен удержать в голове смежные разделы. Двойной учёт объёмов легализуется подписью в актах КС-2 из-за банальной усталости.</p>
+      </div>
+      <div class="box" style="border: 2px solid var(--red); display: flex; flex-direction: column; justify-content: center; text-align: center;">
+        <h3 style="color:white; margin-bottom: 0px;">Среднее невыявленное завышение:</h3>
+        <div style="font-size: 80px; font-weight: bold; color: var(--red); line-height: 1; margin: 10px 0;">до 10%</div>
+        <p style="font-size: 18px; color: #CCC; margin: 0;">На объекте в 1,5 млрд руб. слепая зона обойдется девелоперу до <strong>150 000 000 руб.</strong> упущенной прибыли.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 2: О Разработчике -->
+  <div class="slide layout-matrix">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">02</div>
+    </div>
+    <div class="badge badge-outline" style="background: var(--red); color: white; border: none; font-weight: bold; letter-spacing: 1px;">О РАЗРАБОТЧИКЕ</div>
+    <h1 style="margin-top: 15px;">Строители, пришедшие в ИТ</h1>
+    <div class="text-muted" style="max-width: 1400px;">«СтройИнтеллект» вырос из связки проектного института и генподрядчика. Мы знаем стройку изнутри — от чертежа до сдачи объекта, поэтому и смогли её оцифровать.</div>
+
+    <div class="grid-2" style="margin-top: 40px; gap: 40px;">
+      <div class="box">
+        <div style="color: var(--red); font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">Проектирование</div>
+        <h3 style="margin: 10px 0; font-size: 28px;">Проектный институт «Инжин»</h3>
+        <p style="font-size: 18px; color: #666; margin-bottom: 0;">Полный цикл проектно-изыскательских работ, ТЭО, экспертизы, BIM-модели. Экспертиза документа и расчёта.<br><br>ing-in.ru · Екатеринбург</p>
+      </div>
+      <div class="box" style="position: relative;">
+        <div style="position: absolute; left: -30px; top: 50%; transform: translateY(-50%); font-size: 40px; color: var(--red); font-weight: bold;">×</div>
+        <div style="color: var(--red); font-weight: 700; font-size: 14px; letter-spacing: 1px; text-transform: uppercase;">Генподряд</div>
+        <h3 style="margin: 10px 0; font-size: 28px;">«Альфастрой» / Acons Group</h3>
+        <p style="font-size: 18px; color: #666; margin-bottom: 0;">На рынке с 2004 года, более 150 реализованных объектов. Экспертиза площадки, реальных объёмов и денег на стройке.<br><br>acons.group · Екатеринбург — Москва</p>
+      </div>
+    </div>
+
+    <div style="background: var(--black); color: white; padding: 25px; text-align: center; margin-top: 30px; border-radius: 10px; font-size: 28px; font-weight: 700;">
+      Проектирование <span style="color:var(--red);">×</span> Стройка <span style="color:var(--red);">×</span> ИИ-технологии = <span style="color:var(--red);">«СтройИнтеллект»</span>
+    </div>
+
+    <div style="margin-top: 30px;">
+      <div style="color: var(--red); font-weight: 700; font-size: 14px; letter-spacing: 1px; margin-bottom: 15px; text-transform: uppercase;">Объекты группы — много разных и сложных</div>
+      <div class="grid-3" style="margin-top: 0; gap: 30px;">
+        <div class="box" style="padding: 25px;">
+          <h3 style="font-size: 22px; margin-bottom: 5px;">Аэропорты</h3>
+          <p style="font-size: 16px; color: #666; margin: 0;">Большое Савино (Пермь) · Геленджик · Кольцово</p>
+        </div>
+        <div class="box" style="padding: 25px;">
+          <h3 style="font-size: 22px; margin-bottom: 5px;">Жилые комплексы</h3>
+          <p style="font-size: 16px; color: #666; margin: 0;">Бадаевский (Москва) · Clever Park · Малевич · Мечта</p>
+        </div>
+        <div class="box" style="padding: 25px;">
+          <h3 style="font-size: 22px; margin-bottom: 5px;">Инфраструктура и МФК</h3>
+          <p style="font-size: 16px; color: #666; margin: 0;">Логопарк «Высота» · МФК Botanica · БЦ Clever Park</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 4: Решение (SPLIT) -->
+  <div class="slide layout-split">
+    <div class="header-top">
+      <div class="logo-text" style="color:white;">7 <span style="color:var(--red);">КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">03</div>
+    </div>
+    <img
+      src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/red_white_neural_ai_1786482363903.png"
+      class="img-half">
+    <div class="text-half">
+      <div class="badge">Архитектура СтройИнтеллекта</div>
+      <h1>9 ИИ-Агентов</h1>
+      <p>СтройИнтеллект — это микросервисная архитектура из 9 узкоспециализированных ИИ-агентов,
+        работающих параллельно в изолированном контуре Заказчика.</p>
+      <ul class="dense-list">
+        <li><strong>ИИ и Смысловой парсинг:</strong> Извлечение данных и интеллектуальный кросс-анализ проектной
+          документации, смет и внешних баз по материалам и работам.</li>
+        <li><strong>Глубокая экспертиза (28 лет):</strong> Алгоритмы проверок базируются на фундаментальном строительном
+          опыте. Платформа создана аккредитованной IT-компанией совместно с ведущими экспертами-проектировщиками и
+          девелоперской ГК «Альфа Строй».</li>
+        <li><strong>Динамическая база расчётов:</strong> Эталонная модель обучена на нашей опорной базе (250+
+          реализованных объектов). Она непрерывно обогащается рыночными прайсами и калибруется под исторические данные
+          Заказчика.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 5: Агент ГИП (MATRIX) -->
+  <div class="slide layout-matrix">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">04</div>
+    </div>
+    <div class="badge badge-outline">Агент 01</div>
+    <h1>Главный Инженер Проекта</h1>
+    <div class="text-muted">Смысловая и технологическая экспертиза проектных решений. Защита от необоснованных
+      удорожаний на этапе выбора технологии.</div>
+
+    <div class="grid-2">
+      <div>
+        <h3>Вектор контроля</h3>
+        <p>Агент ГИП анализирует соответствие заявленных в смете видов работ реальной проектной документации и
+          технологическим картам. Он выявляет логические аномалии, которые пропускает обычный софт.</p>
+        <ul class="dense-list">
+          <li>Контроль применения коэффициентов на "стеснённые условия".</li>
+          <li>Анализ сезонных зимних удорожаний (привязка к плану-графику).</li>
+          <li>Проверка обоснованности замены технологий (например, буронабивные сваи вместо забивных).</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3 style="color:var(--red);">Пример предотвращения потерь</h3>
+        <p style="font-size: 24px;"><strong>Кейс:</strong> Подрядчик заложил коэффициент 1.15 на "работу в охранной зоне
+          ЛЭП".</p>
+        <p style="font-size: 24px;"><strong>Действие Агента:</strong> ИИ сопоставил стройгенплан (СГП) и геоподоснову.
+          Выявил, что ЛЭП демонтирована на этапе подготовки территории.</p>
+        <div style="margin-top: 30px; font-size: 24px; font-weight: 600;">Результат: <span
+            style="color:var(--red);">-12% от стоимости
+            нулевого цикла</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 6: Агент Сметчик (MATRIX) -->
+  <div class="slide layout-matrix">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">05</div>
+    </div>
+    <div class="badge badge-outline">Агент 02</div>
+    <h1>Инженер-Сметчик</h1>
+    <div class="text-muted">
+      <strong>Служба технического Заказчика — Повышение прозрачности расчетов и контроль рисков.</strong><br>
+      Поиск скрытых наценок, двойного учёта и математических аномалий на уровне каждой строчки из 15 000 позиций.
+      Инструмент решает задачи радикального снижения рисков при принятии решений по проектам и подрядчикам — мы помогаем
+      вам построить объект вовремя, повысить финансовую прозрачность и вывести контроль на новый уровень.
+    </div>
+
+    <div class="grid-2">
+      <div>
+        <h3>Алгоритм выявления завышений</h3>
+        <ul class="dense-list">
+          <li><strong>Парсинг хаоса:</strong> Перевод "грязных" смет (с опечатками и сокращениями) в машиночитаемый вид.
+          </li>
+          <li><strong>Исторический бенчмаркинг:</strong> Сличение заявленной стоимости с эталонной моделью (250+
+            реализованных объектов), обогащенной рыночными прайсами и откалиброванной под исторические данные Заказчика.
+          </li>
+          <li><strong>Поиск двойного учёта:</strong> Самый сложный паттерн. Агент находит объёмы (например, леса или
+            вывоз грунта), дублирующиеся в разных разделах сметы.</li>
+          <li><strong>Управление рисками:</strong> Многоуровневый аудит обеспечивает безопасное и прозрачное принятие
+            решений о подрядчиках, гарантируя бесперебойное финансирование и строительство проекта.</li>
+        </ul>
+      </div>
+      <div class="box">
+        <h3 style="color:var(--red);">Скорость и Охват</h3>
+        <div class="table-row header">
+          <div class="col-1">Метрика</div>
+          <div class="col-2">Человек</div>
+          <div class="col-3">Агент</div>
+        </div>
+        <div class="table-row">
+          <div class="col-1">Охват позиций</div>
+          <div class="col-2">~15% (выборка)</div>
+          <div class="col-3" style="color:var(--red); font-weight:700;">100%</div>
+        </div>
+        <div class="table-row">
+          <div class="col-1">Время проверки (500 стр)</div>
+          <div class="col-2">4-6 дней</div>
+          <div class="col-3" style="color:var(--red); font-weight:700;">1 час</div>
+        </div>
+        <div class="table-row">
+          <div class="col-1">Вероятность ошибки</div>
+          <div class="col-2">Высокая (усталость)</div>
+          <div class="col-3" style="color:var(--red); font-weight:700;">0% (Decimal)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 7: Агент Снабжение (SPLIT) -->
+  <div class="slide layout-split theme-dark">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">06</div>
+    </div>
+    <div class="text-half">
+      <div class="badge badge-outline">Агент 03</div>
+      <h1>Снабжение и Подряд</h1>
+      <p>Поиск оптимальной цены на ТМЦ и расценок подрядчиков по региональным и внешним базам данных. Глубокий контроль
+        проектных спецификаций и защита от логистических накруток.</p>
+      <ul class="dense-list">
+        <li><strong>Аудит прайс-листов:</strong> Сравнение цен на черновые и чистовые материалы с рыночными индексами в
+          реальном времени.</li>
+        <li><strong>Предотвращение подмены:</strong> Выявление скрытой замены премиальных марок (заложенных в смету) на
+          дешёвые аналоги с сохранением высокой цены.</li>
+        <li><strong>Логистика:</strong> Контроль обоснованности Транспортно-Заготовительных Расходов (ТЗР) и складских
+          наценок генподрядчика.</li>
+        <li><strong>Обогащение базы:</strong> Данные по снабжению и закрытым подрядам Заказчика автоматически
+          интегрируются в систему, калибруя алгоритм под ваши уникальные бизнес-процессы.</li>
+      </ul>
+    </div>
+    <img
+      src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/blueprint_code_1786483279938.png"
+      class="img-half" style="opacity: 0.7;">
+  </div>
+
+  <!-- СЛАЙД 8: Агент Подряд (MATRIX) -->
+  <div class="slide layout-matrix">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">07</div>
+    </div>
+    <div class="badge badge-outline">Агент 04</div>
+    <h1>Специалист по тендерам подрядчиков</h1>
+    <div class="text-muted">Математическое приведение разрозненных коммерческих предложений к единому знаменателю.</div>
+
+    <div class="grid-2">
+      <div>
+        <h3>Тендерный Анализ</h3>
+        <p>3 разных подрядчика присылают 3 сметы в разных форматах. Один спрятал доставку в стоимость бетона, другой
+          вывел отдельно.</p>
+        <p>Агент автоматически парсит все КП, пересобирает их структуру и выводит единую сопоставимую таблицу. Вы
+          мгновенно видите медиану, дисперсию и "целевой диапазон" для жестких переговоров по каждой строке.</p>
+      </div>
+      <div class="box">
+        <h3 style="color:var(--red);">Скоринг Контрагентов</h3>
+        <p>Учёт исторической репутации:</p>
+        <ul class="dense-list" style="margin-bottom:0;">
+          <li>Процент срыва сроков в прошлых проектах.</li>
+          <li>Объём рекламаций и гарантийных удержаний.</li>
+          <li>Анализ арбитражной нагрузки (при интеграции с Контур.Фокус).</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 9: Агент Экономист (SPLIT) -->
+  <div class="slide layout-split">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">08</div>
+    </div>
+    <img
+      src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/financial_dash_1786483289266.png"
+      class="img-half">
+    <div class="text-half">
+      <div class="badge badge-outline">Агент 05</div>
+      <h1>Экономист</h1>
+      <p>Формирование динамической финансовой модели объекта. Управление маржинальностью, кассовыми разрывами и графиком проектного финансирования.</p>
+      <ul class="dense-list">
+        <li><strong>Финансовое моделирование (БДР и БДДС):</strong> Автоматическое построение Бюджета Доходов и Расходов (P&L) и Бюджета Движения Денежных Средств (Cash Flow) на основе извлечённых сметных данных.</li>
+        <li><strong>Проектное финансирование:</strong> Точный график выборки кредита. Защита от переплаты банковских
+          процентов за "лежащие" деньги.</li>
+        <li><strong>Эскроу:</strong> Моделирование сроков ввода объекта для расчёта точной даты раскрытия эскроу-счетов.
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 10: Агент ПТО (MATRIX) -->
+  <div class="slide layout-matrix theme-dark">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">09</div>
+    </div>
+    <div class="badge badge-outline" style="border-color:white;">Агент 06</div>
+    <h1>Инженер ПТО</h1>
+    <div class="text-muted">Тотальный контроль закрывающих актов (КС-2 / КС-3), аудит исполнительной документации и защита от перевыполнения.</div>
+
+    <div class="grid-2">
+      <div>
+        <h3>Жесткая блокировка переплат</h3>
+        <p>Агент ПТО скрупулёзно сличает подписанные объёмы в актах выполненных работ (КС-2) с изначальной утверждённой
+          сметой.</p>
+        <ul class="dense-list">
+          <li>Блокировка актов, превышающих утвержденный договорной объём.</li>
+          <li>Выявление несанкционированной замены материалов по факту (в смете заложен Knauf, в КС-2 пытаются закрыть Волма).</li>
+          <li>Анализ проектов и комплекта необходимой исполнительной документации (исполнительные схемы, акты скрытых работ, паспорта, сертификаты и прочее).</li>
+          <li>Контроль скрытого заимствования средств из будущих периодов.</li>
+        </ul>
+      </div>
+      <div class="box" style="background:var(--red-dark); border:none;">
+        <h3 style="color:white;">Симуляция инцидента</h3>
+        <p style="color:#EEE;"><strong>Факт:</strong> Подрядчик подаёт КС-2 в конце месяца на 45 млн руб. Прораб
+          подписывает не глядя на стройке.</p>
+        <p style="color:#EEE;"><strong>Перехват:</strong> Агент сверяет накопительную ведомость и блокирует акт:
+          "Позиция 4.1.2 перевыполнена на 14% относительно базовой сметы". Акт возвращается на доработку без оплаты.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 11: Агент Юрист & РП (SPLIT) -->
+  <div class="slide layout-split">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">10</div>
+    </div>
+    <div class="text-half">
+      <div class="badge badge-outline">Агент 07</div>
+      <h1>Юрист</h1>
+      <p>Анализ договорных рисков и коммерческих условий.</p>
+      <ul class="dense-list">
+        <li><strong>Правовой аудит:</strong> Интеллектуальное извлечение скрытых финансовых рисков из неструктурированных сканов договоров (штрафные санкции, пени, гарантийные удержания и условия возврата авансов).</li>
+        <li><strong>Комплаенс-контроль:</strong> Автоматическая подсветка критических отклонений от эталонного корпоративного стандарта и строгих внутренних регламентов службы безопасности Заказчика.</li>
+        <li><strong>Страхование рисков:</strong> Мгновенное формирование детальных предписаний для юридического департамента при выявлении токсичных условий или юридических лазеек подрядчика.</li>
+      </ul>
+    </div>
+    <div class="text-half" style="background: var(--gray-100);">
+      <div class="badge badge-outline">Агент 08</div>
+      <h1>Руководитель Проекта</h1>
+      <p>Сквозной контроль календарно-сетевого графика и аналитика дашборда объекта.</p>
+      <ul class="dense-list">
+        <li><strong>Синхронизация сроков:</strong> Интеллектуальное связывание строительных объемов с графиком производства работ.</li>
+        <li><strong>Управление дашбордом:</strong> Непрерывный мониторинг и анализ ключевых показателей стройки (метрики освоения, план/факт).</li>
+        <li><strong>Алерты:</strong> Мгновенное формирование предупреждений при угрозе срыва ключевых вех (милстоунов), влияющих на сроки ввода в эксплуатацию.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 12: Агент Администратор (MATRIX) -->
+  <div class="slide layout-matrix theme-dark">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">11</div>
+    </div>
+    <div class="badge badge-outline" style="border-color:white;">Агент 09</div>
+    <h1>Администратор</h1>
+    <div class="text-muted">Оркестратор системы. Именно этот агент формирует пайплайн данных и управляет задачами остальных 8 экспертов.</div>
+    <div class="grid-2">
+      <div>
+         <h3>Функционал оркестратора</h3>
+         <ul class="dense-list">
+           <li><strong>Компьютерное зрение (CV / OCR):</strong> Чтение и распознавание изображений и данных со схем с применением ИИ-технологий. Извлечение таблиц из PDF, сканов с синими печатями и Excel.</li>
+           <li><strong>Стандартизация:</strong> Интеллектуальный анализ извлеченных данных и приведение тысяч разрозненных строк к единому машиночитаемому формату.</li>
+         </ul>
+      </div>
+      <div class="box">
+         <h3 style="color:var(--red);">Управление процессами</h3>
+         <ul class="dense-list" style="margin-bottom:0;">
+           <li><strong>Протоколирование:</strong> Строгий контроль конвейера и последовательности работы алгоритмов, логики расчетов и условий активации агентов.</li>
+           <li><strong>Очередь задач:</strong> Формирование ежедневного плана работы для агентов и алгоритмов с учетом актуализации данных и изменяющихся показателей. Интеллектуальное управление очередностью проведения анализа.</li>
+         </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 13: 5 Векторов отклонений (MATRIX) -->
+  <div class="slide layout-matrix">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">12</div>
+    </div>
+    <div class="badge badge-outline">Аналитика</div>
+    <h1>9 векторов классификации отклонений</h1>
+    <div class="text-muted">Система не просто "находит ошибку", она классифицирует природу удорожания для точного
+      управленческого решения.</div>
+
+    <div class="grid-3" style="gap: 25px; margin-top: 40px;">
+      <div class="box" style="padding: 30px;">
+        <h3 style="font-size:22px; margin-top: 0;">1. Рыночное движение цен</h3>
+        <p style="font-size:16px; margin-bottom: 0;">Легитимная инфляция и дефицит на рынке. Обоснованное удорожание.</p>
+      </div>
+      <div class="box" style="padding: 30px;">
+        <h3 style="font-size:22px; margin-top: 0;">2. Особенность тех. решения</h3>
+        <p style="font-size:16px; margin-bottom: 0;">Специфика грунтов, требующая нестандартных инженерных подходов.</p>
+      </div>
+      <div class="box" style="padding: 30px; background: white; border: 2px solid var(--red);">
+        <h3 style="font-size:22px; color:var(--red); margin-top: 0;">3. Ошибка в объёмах</h3>
+        <p style="font-size:16px; margin-bottom: 0;">Расхождение спецификации с проектом (умысел или халатность подрядчика).</p>
+      </div>
+      <div class="box" style="padding: 30px; background: white; border: 2px solid var(--red);">
+        <h3 style="font-size:22px; color:var(--red); margin-top: 0;">4. Завышение расценки</h3>
+        <p style="font-size:16px; margin-bottom: 0;">Прямая маржинальная накрутка стоимости относительно медианы базы.</p>
+      </div>
+      <div class="box" style="padding: 30px; background: white; border: 2px solid var(--red);">
+        <h3 style="font-size:22px; color:var(--red); margin-top: 0;">5. Двойной учёт</h3>
+        <p style="font-size:16px; margin-bottom: 0;">Дублирование объёмов в разных разделах. Самый сложный паттерн для человека.</p>
+      </div>
+      <div class="box" style="padding: 30px; background: white; border: 2px solid var(--red);">
+        <h3 style="font-size:22px; color:var(--red); margin-top: 0;">6. Устаревшая нормбаза</h3>
+        <p style="font-size:16px; margin-bottom: 0;">Старые редакции ГЭСН/ФЕР, неверные индексы Минстроя или расчёт по НДС 20% вместо 22%.</p>
+      </div>
+      <div class="box" style="padding: 30px; background: white; border: 2px solid var(--red);">
+        <h3 style="font-size:22px; color:var(--red); margin-top: 0;">7. Необоснованные коэффициенты</h3>
+        <p style="font-size:16px; margin-bottom: 0;">Стеснённость, зимнее удорожание, вахта: применены без основания или на весь срок вместо периода.</p>
+      </div>
+      <div class="box" style="padding: 30px; background: white; border: 2px solid var(--red);">
+        <h3 style="font-size:22px; color:var(--red); margin-top: 0;">8. Разграничение поставки</h3>
+        <p style="font-size:16px; margin-bottom: 0;">Давальческое оборудование и материалы заказчика, ошибочно включённые в цену подрядчика.</p>
+      </div>
+      <div class="box" style="padding: 30px; background: var(--black); color: white;">
+        <h3 style="font-size:22px; color:white; margin-top: 0;">9. Недосчёт объёмов</h3>
+        <div style="color: var(--red); font-size: 12px; font-weight: bold; letter-spacing: 1px; text-transform: uppercase; margin: 10px 0;">РИСК НЕДООЦЕНКИ</div>
+        <p style="font-size:16px; color: #CCC; margin-bottom: 0;">Работы есть в чертежах и ВОР, но пропущены в смете. Риск удорожания и убытка в ходе стройки.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 14: Zero Trust (SPLIT) -->
+  <div class="slide layout-split theme-dark">
+    <div class="header-top">
+      <div class="logo-text" style="color: var(--black);">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">13</div>
+    </div>
+    <img
+      src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/zero_trust_lock_1786483307284.png"
+      class="img-half" style="object-fit: contain; padding: 100px; background: white;">
+    <div class="text-half">
+      <div class="badge badge-outline">Информационная Безопасность</div>
+      <h1>Архитектура Zero Trust</h1>
+      <p>Абсолютная изоляция вашей коммерческой тайны на базе двухконтурной системы обработки данных.</p>
+      <ul class="dense-list">
+        <li><strong>Наша локальная LLM:</strong> Сметы, финмодели и историческая база данных обрабатываются исключительно локальными ИИ-моделями на ваших серверах.</li>
+        <li><strong>Внешние LLM и маскирование (PII):</strong> Для аналитики рынка мы применяем внешние модели. Перед отправкой локальный скрипт полностью вырезает коммерческую тайну: удаляются ИНН, названия компаний, ФИО и финансовые итоги.</li>
+        <li><strong>Анонимный контур:</strong> Во внешнюю среду уходит только "голая" спецификация без привязки к объекту (например: <em>Бетон B25 - 100 кубов - Какая рыночная цена?</em>), что гарантирует 100% защиту от утечек данных.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 15: Интеграция & Roadmap (MATRIX) -->
+  <div class="slide layout-matrix">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">14</div>
+    </div>
+    <div class="badge badge-outline">Внедрение</div>
+    <h1>Дорожная карта: 135 дней до запуска</h1>
+    <div class="text-muted">Прозрачный процесс интеграции с корпоративным ПО и внутренними системами заказчика.</div>
+
+    <div class="grid-2" style="gap: 60px;">
+      <div>
+        <h3>Бесшовная интеграция</h3>
+        <p>Мы обеспечиваем процесс развёртывания решения, который <strong>не парализует</strong> работу вашей компании. Связь с различными учётными системами заказчика настраивается прозрачно, без перестроения текущих бизнес-процессов.</p>
+        <p>Вы получаете работающий инструмент и найденные деньги уже через 4 месяца.</p>
+
+        <div class="box" style="margin-top: 40px; padding: 25px; border-left: 4px solid var(--red);">
+          <h3 style="font-size: 20px; color: var(--red); margin-top: 0;">Команда с вашей стороны</h3>
+          <p style="font-size: 16px; margin-bottom: 0;">Нам потребуется только 1 системный администратор (на этапе 1) и 1 методолог ПТО (на этапе 3 для калибровки алгоритмов). Никакого отрыва от производства всего отдела.</p>
+        </div>
+      </div>
+      <div>
+        <h3>Таймлайн проекта</h3>
+        <div class="table-row">
+          <div class="col-1" style="font-weight: 700;">Месяц 1</div>
+          <div class="col-2" style="width: 70%;"><strong style="color:var(--red);">Сбор требований.</strong> Фиксация протоколов взаимодействий и архитектуры.</div>
+        </div>
+        <div class="table-row">
+          <div class="col-1" style="font-weight: 700;">Месяц 2</div>
+          <div class="col-2" style="width: 70%;"><strong style="color:var(--red);">Развертывание.</strong> Развертывание моделей, сайзинг железа и интеграция с внутренними системами заказчика.</div>
+        </div>
+        <div class="table-row">
+          <div class="col-1" style="font-weight: 700;">Месяц 3</div>
+          <div class="col-2" style="width: 70%;"><strong style="color:var(--red);">Обогащение.</strong> Обогащение моделей исторической базой данных заказчика.</div>
+        </div>
+        <div class="table-row">
+          <div class="col-1" style="font-weight: 700;">Месяц 4</div>
+          <div class="col-2" style="width: 70%; color:var(--red); font-weight:700;">Тестирование и опытная эксплуатация (Сдача в ОПЭ).</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 15: Слепой Тест (SPLIT) -->
+  <div class="slide layout-split theme-dark">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">15</div>
+    </div>
+    <div class="text-half">
+      <div class="badge badge-outline" style="border-color: white;">Next Steps</div>
+      <h1 style="font-size:60px; line-height: 1.1;">Proof of Value:<br>Слепой тест на вашем объекте</h1>
+      <p style="font-size: 24px; margin-top: 30px;">Наш продукт нельзя "посмотреть в демо-стенде". Его возможности нужно прочувствовать на реальных данных.</p>
+      <ul class="dense-list" style="margin-top: 30px;">
+        <li><strong>Документация:</strong> Просто дайте нам смежную документацию по объекту, который вы <strong>уже построили и оплатили</strong>.</li>
+        <li><strong>Превью:</strong> Мы прогоним данные через систему и покажем её возможности на этом тестовом объекте.</li>
+        <li><strong>Гарантия:</strong> Если ИИ не найдет скрытых потерь, которые пропустил ваш технадзор — мы признаем вашу систему идеальной.</li>
+      </ul>
+    </div>
+    <img
+      src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/red_white_servers_1786482354735.png"
+      class="img-half" style="object-fit: cover;">
+  </div>
+
+  <!-- СЛАЙД 17: Deep Dive Кейсы (MATRIX) -->
+  <div class="slide layout-matrix">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">16</div>
+    </div>
+    <div class="badge badge-outline">Точка утечки маржи №1</div>
+    <h1>Двойной учёт объёмов</h1>
+    <div class="text-muted">Самый сложный паттерн для человека. ИИ находит его за секунды.</div>
+
+    <div class="grid-2">
+      <div>
+        <h3>Кейс: Строительные леса</h3>
+        <p>В разделе "Фасады" подрядчик закладывает установку и разборку строительных лесов (4000 м2). Спустя 250
+          страниц в разделе "Окна" снова появляется позиция "Аренда и монтаж лесов" с чуть изменённым названием.</p>
+      </div>
+      <div class="box theme-dark">
+        <h3 style="color:var(--red);">Логика Агента</h3>
+        <p>Нейросеть выстраивает топологические связи: Фасад и Окна выполняются на одних и тех же высотных отметках в
+          один период времени. Агент блокирует вторую позицию как фиктивную.</p>
+        <div style="margin-top: 30px; font-size: 24px; font-weight: 700; color: white;">Экономия: <span
+            style="color:var(--red);">1 850 000 руб (на одном доме)</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 18: Подмена материалов (SPLIT) -->
+  <div class="slide layout-split">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">17</div>
+    </div>
+    <img
+      src="/home/govard/.gemini/antigravity-ide/brain/29b470a7-be3e-44c3-9fb3-9486b685691a/pipes_materials_blueprint_pro_1786543729717.png"
+      class="img-half">
+    <div class="text-half">
+      <div class="badge badge-outline">Точка утечки маржи №2</div>
+      <h1>Подмена Материалов</h1>
+      <p>На этапе тендера выигрывает подрядчик, заложивший премиальную немецкую трубу REHAU. При подаче акта КС-2 он
+        закрывает объёмы трубой РОСТЕРМ, но по цене REHAU.</p>
+      <ul class="dense-list">
+        <li><strong>Слепота человека:</strong> Инженер сверяет общую сумму раздела, которая не изменилась. Он
+          подписывает акт.</li>
+        <li><strong>Контроль ИИ:</strong> Агент-Снабженец мгновенно сличает строку КС-2 со строкой исходной сметы на
+          уровне артикулов. Акт блокируется до полного перерасчёта.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 19: Фиктивное стеснение (MATRIX) -->
+  <div class="slide layout-matrix theme-dark">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">18</div>
+    </div>
+    <div class="badge badge-outline" style="border-color:white;">Точка утечки маржи №3</div>
+    <h1>Фиктивное "Стеснение"</h1>
+    <div class="text-muted">Легальный способ подрядчика увеличить всю смету на 15-20%.</div>
+
+    <div class="grid-2">
+      <div>
+        <h3>Магия Коэффициентов</h3>
+        <p>Внесение коэффициента К=1.15 на "стесненные условия труда" (работа вблизи действующего предприятия) законно
+          увеличивает стоимость ВСЕХ работ.</p>
+        <ul class="dense-list">
+          <li>Подрядчик закладывает его на весь срок строительства.</li>
+          <li>Агент-ГИП сличает даты применения коэффициента с графиком вывода объекта из эксплуатации.</li>
+        </ul>
+      </div>
+      <div class="box" style="background:var(--red-dark); border:none;">
+        <h3 style="color:white;">Результат перехвата</h3>
+        <p style="color:#EEE;">ИИ выявляет, что соседний цех снесен на 2-м месяце стройки. Применение коэффициента на
+          3-й месяц незаконно.</p>
+        <p style="color:white; font-size: 24px; font-weight:700; margin-top:20px;">Срезано завышений на: <span
+            style="font-size:32px;">42 000 000 руб</span></p>
+      </div>
+    </div>
+  </div>
+
+  <!-- СЛАЙД 19: Ценности (MATRIX) -->
+  <div class="slide layout-matrix" style="background: #F9F9FB;">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num">19</div>
+    </div>
+    <div class="badge badge-outline" style="border-color:var(--red); color:var(--red);">Business Value</div>
+    <h1 style="font-size: 60px;">Ценность для бизнеса</h1>
+    <div class="text-muted" style="font-size: 22px;">Комплексный эффект от внедрения СтройИнтеллект выходит за рамки простой проверки смет.</div>
+
+    <div class="grid-3" style="gap: 30px; margin-top: 50px;">
+      <!-- Card 1 -->
+      <div class="box" style="border:none; border-top: 4px solid var(--red); background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <h3 style="color:var(--black); font-size: 24px;">Контроль рисков</h3>
+        <p style="color:#555; font-size: 18px; line-height: 1.5;">Снижение влияния человеческого фактора и предотвращение финансовых и юридических рисков на всех этапах стройки.</p>
+      </div>
+      <!-- Card 2 -->
+      <div class="box" style="border:none; border-top: 4px solid #333; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+        <h3 style="color:var(--black); font-size: 24px;">Повышение прозрачности</h3>
+        <p style="color:#555; font-size: 18px; line-height: 1.5;">Полный контроль над проектом. Сметы, акты и расценки становятся прозрачными и оцифрованными для руководства.</p>
+      </div>
+      <!-- Card 3 -->
+      <div class="box" style="border:none; border-top: 4px solid var(--red); background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+        <h3 style="color:var(--black); font-size: 24px;">Заработок на расхождениях</h3>
+        <p style="color:#555; font-size: 18px; line-height: 1.5;">Увеличение маржи компании за счет выявления необоснованных наценок и скрытой "жировой прослойки" подрядчиков.</p>
+      </div>
+      <!-- Card 4 -->
+      <div class="box" style="border:none; border-top: 4px solid #333; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+        <h3 style="color:var(--black); font-size: 24px;">Экономия на потерях</h3>
+        <p style="color:#555; font-size: 18px; line-height: 1.5;">Блокировка раздутых бюджетов еще на стадии тендера, что превентивно защищает от колоссальных потенциальных убытков.</p>
+      </div>
+      <!-- Card 5 -->
+      <div class="box" style="border:none; border-top: 4px solid #333; background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#333" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+        <h3 style="color:var(--black); font-size: 24px;">Оценка привлекательности</h3>
+        <p style="color:#555; font-size: 18px; line-height: 1.5;">Интеллектуальный и быстрый анализ инвестиционной привлекательности и рентабельности новых объектов в вашем портфеле.</p>
+      </div>
+      <!-- Card 6 -->
+      <div class="box" style="border:none; border-top: 4px solid var(--red); background: white; box-shadow: 0 10px 30px rgba(0,0,0,0.05); padding: 30px;">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--red)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 20px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+        <h3 style="color:var(--black); font-size: 24px;">Экономия времени</h3>
+        <p style="color:#555; font-size: 18px; line-height: 1.5;">Снятие рутинной операционки с отдела специалистов (ПТО, сметчиков), кратное повышение их скорости работы.</p>
+      </div>
+    </div>
+    
+    <div style="margin-top: 50px; padding: 25px; border-left: 4px solid var(--red); background: white; box-shadow: 0 5px 15px rgba(0,0,0,0.03);">
+        <p style="font-size: 22px; font-weight: 700; color: var(--black); margin: 0;">Мягкий возврат инвестиций (ROI)</p>
+        <p style="font-size: 18px; color: #555; margin-top: 10px; margin-bottom: 0;">Стоимость лицензии и внедрения системы часто полностью окупается уже на этапе тендерного аудита одного крупного объекта за счет предотвращения переплат.</p>
+    </div>
+  </div>
+
+
+
+
+  <!-- СЛАЙД 20: Коммерческое предложение и Контакты (SPLIT) -->
+  <div class="slide layout-split">
+    <div class="header-top">
+      <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+      <div class="slide-num" style="color: #666;">20</div>
+    </div>
+    
+    <div class="text-half" style="width: 50%; height: 100%; box-sizing: border-box; padding-right: 60px; background: white; display: flex; flex-direction: column; justify-content: center;">
+      <div class="badge badge-outline" style="border-color:var(--red); color:var(--red);">Коммерческое предложение</div>
+      <h1 style="font-size: 50px; margin-bottom: 25px; color: var(--black);">Прозрачное ценообразование</h1>
+      
+      <table style="width: 100%; border-collapse: collapse; font-size: 15px; margin-bottom: 30px;">
+        <tr style="border-bottom: 2px solid #EEE;">
+          <th style="text-align: left; padding: 10px 0; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">Статья расходов / Объем работ</th>
+          <th style="text-align: right; padding: 10px 0; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 1px; font-size: 12px;">Стоимость</th>
+        </tr>
+        <tr style="border-bottom: 1px solid #F5F5F5;">
+          <td style="padding: 14px 0; color: #555;">Развёртывание Системы и локальных моделей в контуре Заказчика</td>
+          <td style="padding: 14px 0; text-align: right; color: var(--black); white-space: nowrap; font-weight: 500;">Включено</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #F5F5F5;">
+          <td style="padding: 14px 0; color: #555;">Создание опорной базы и обучение на исторических данных</td>
+          <td style="padding: 14px 0; text-align: right; color: var(--black); white-space: nowrap; font-weight: 500;">Включено</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #F5F5F5;">
+          <td style="padding: 14px 0; color: #555;">Настройка 9 ИИ-агентов и аналитического расчётного модуля</td>
+          <td style="padding: 14px 0; text-align: right; color: var(--black); white-space: nowrap; font-weight: 500;">Включено</td>
+        </tr>
+        <tr style="border-bottom: 1px solid #EEE;">
+          <td style="padding: 14px 0; color: #555;">Гарантийное сопровождение (12 месяцев)</td>
+          <td style="padding: 14px 0; text-align: right; color: var(--black); white-space: nowrap; font-weight: 500;">Включено</td>
+        </tr>
+        <tr style="border-bottom: 1px dashed #DDD;">
+          <td style="padding: 16px 0 12px; color: var(--black); font-weight: 600; font-size: 16px;">Базовая стоимость работ (Этапы 1–4)</td>
+          <td style="padding: 16px 0 12px; text-align: right; color: var(--black); font-weight: 600; font-size: 16px; white-space: nowrap;">18 442 623 ₽</td>
+        </tr>
+        <tr style="border-bottom: 2px solid #EEE;">
+          <td style="padding: 12px 0 16px; color: #888;">НДС 22%</td>
+          <td style="padding: 12px 0 16px; text-align: right; color: #888; white-space: nowrap;">4 057 377 ₽</td>
+        </tr>
+        <tr>
+          <td style="padding: 24px 0; color: var(--red); font-size: 24px; font-weight: 700;">ИТОГО (Единый платёж)</td>
+          <td style="padding: 24px 0; text-align: right; color: var(--red); font-size: 24px; font-weight: 700; white-space: nowrap;">22 500 000 ₽</td>
+        </tr>
+      </table>
+      
+      <div style="background: #F9F9F9; border-left: 4px solid var(--red); padding: 15px;">
+        <p style="margin: 0; color: var(--black); font-weight: bold; font-size: 16px;">Никаких скрытых платежей</p>
+        <p style="margin: 5px 0 0 0; color: #666; font-size: 14px;">Лицензионные и абонентские платежи — 0 ₽. Честная Enterprise-лицензия с пожизненным правом использования.</p>
+      </div>
+    </div>
+
+    <!-- Обновленный блок интегратора -->
+    <div class="img-half theme-dark" style="width: 50%; height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 80px 100px; position: relative; overflow: hidden; background: #0A0A0A; box-sizing: border-box;">
+      
+      <h2 style="font-size: 56px; line-height: 1.1; margin-bottom: 25px; color: white; margin-top: 0;">Ваш надёжный <br><span style="color:var(--red);">ИТ-интегратор</span></h2>
+      <p style="font-size: 20px; color: #AAA; margin-bottom: 60px; line-height: 1.5; max-width: 95%;">
+        Федеральная ИТ-компания с профильной строительной экспертизой.
+      </p>
+      
+      <!-- Буллиты доверия в стиле сайта, 6 фактов, крупнее -->
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px 40px; margin-bottom: 80px; flex-grow: 1;">
+        <div style="border-top: 2px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <div style="font-size: 60px; font-weight: 700; color: white; line-height: 1; letter-spacing: -2px; margin-bottom: 10px;">2016</div>
+          <div style="font-size: 16px; color: white; font-weight: 600; margin-bottom: 5px;">год основания</div>
+          <div style="font-size: 14px; color: #666;">Аккредитация Минцифры</div>
+        </div>
+        <div style="border-top: 2px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <div style="font-size: 60px; font-weight: 700; color: white; line-height: 1; letter-spacing: -2px; margin-bottom: 10px;">10+</div>
+          <div style="font-size: 16px; color: white; font-weight: 600; margin-bottom: 5px;">лет опыта в команде</div>
+          <div style="font-size: 14px; color: #666;">Enterprise-рынок</div>
+        </div>
+        <div style="border-top: 2px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <div style="font-size: 60px; font-weight: 700; color: white; line-height: 1; letter-spacing: -2px; margin-bottom: 10px;">150+</div>
+          <div style="font-size: 16px; color: white; font-weight: 600; margin-bottom: 5px;">инженеров в штате</div>
+          <div style="font-size: 14px; color: #666;">AI, BI, RPA, DevOps</div>
+        </div>
+        <div style="border-top: 2px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <div style="font-size: 60px; font-weight: 700; color: white; line-height: 1; letter-spacing: -2px; margin-bottom: 10px;">300+</div>
+          <div style="font-size: 16px; color: white; font-weight: 600; margin-bottom: 5px;">проектов в проде</div>
+          <div style="font-size: 14px; color: #666;">от идеи до запуска</div>
+        </div>
+        <div style="border-top: 2px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <div style="font-size: 60px; font-weight: 700; color: white; line-height: 1; letter-spacing: -2px; margin-bottom: 10px;">500+</div>
+          <div style="font-size: 16px; color: white; font-weight: 600; margin-bottom: 5px;">клиентов</div>
+          <div style="font-size: 14px; color: #666;">банки, госкорп, стройка</div>
+        </div>
+        <div style="border-top: 2px solid rgba(255,255,255,0.1); padding-top: 20px;">
+          <div style="font-size: 60px; font-weight: 700; color: white; line-height: 1; letter-spacing: -2px; margin-bottom: 10px;">6</div>
+          <div style="font-size: 16px; color: white; font-weight: 600; margin-bottom: 5px;">городов присутствия</div>
+          <div style="font-size: 14px; color: #666;">ресурсные центры</div>
+        </div>
+      </div>
+
+      <!-- Контакты -->
+      <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 20px;">
+        <div>
+          <div style="font-size:16px; color:var(--red); text-transform:uppercase; letter-spacing: 2px; margin-bottom: 12px; font-weight: 600;">Готовы начать работу?</div>
+          <div style="font-size:32px; font-weight:700; color:white; margin-bottom: 5px;">info@7rlines.com</div>
+          <div style="font-size:32px; font-weight:700; color:white;">+7 (495) 198-14-77</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</body>
+
+</html>

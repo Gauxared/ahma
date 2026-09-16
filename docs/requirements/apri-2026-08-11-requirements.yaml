@@ -1,0 +1,267 @@
+manifest_id: APRI-TZ-2026-08-11
+source:
+  path: product/11_08_26_ТЗ_СтройИнтеллект_Приложение_1_к_КП_АПРИ_v3.docx
+  extracted_path: tmp/v3-source-extract/ТЗ_СтройИнтеллект_АПРИ_v3.md
+  sha256: b7c37d9034398d3ba7797447580f98cefdf3df417da6148699cd3d11ba48620b
+  revision: "2.0"
+  date: 2026-08-11
+coverage:
+  level: section-and-key-requirement
+  status: architecture_covered
+  literal_hash_gate: before_implementation
+  rule: Every literal paragraph or table-cell requirement receives a stable hash and exact anchor during the DOCX extraction gate.
+legacy_policy:
+  default: reference_only
+  allowlist_required: true
+requirements:
+  - id: REQ-TZ-TERM-01
+    section: "1"
+    anchor: "§1, Система"
+    statement: System includes web application, calculation module, own database, reference base, estimation model and language-model component.
+    disposition: include
+    architecture_refs: ["4", "6", "10", "18", "19"]
+  - id: REQ-TZ-SCOPE-01
+    section: "2-3"
+    anchor: "§2; §3.1"
+    statement: Perform developer-side financial-technical control for one object, including estimates, multiple contractor proposals, independent estimate, finance, contract risks and exports.
+    disposition: include
+    architecture_refs: ["4", "13", "18", "26"]
+  - id: REQ-TZ-ROLES-01
+    section: "4"
+    anchor: "§4, Роль / Права"
+    statement: Support User and Administrator roles; do not impose license limits on users, checks or objects.
+    disposition: include
+    architecture_refs: ["10.3", "23.3", "25", "31"]
+  - id: REQ-TZ-AGENT-01
+    section: "5.1"
+    anchor: "§5.1, table ИИ-агент"
+    statement: Provide nine separately evaluated functional agent results.
+    disposition: include
+    architecture_refs: ["14.2", "27.2"]
+  - id: REQ-TZ-COMP-01
+    section: "5.2"
+    anchor: "§5.2, comparison requirements"
+    statement: Accept an unbounded number of contractor proposals per Check, normalize positions, exclude non-comparable items, calculate spread, median and deviation, and show anomalies.
+    disposition: include
+    architecture_refs: ["13", "18.1", "25"]
+  - id: REQ-TZ-EST-01
+    section: "5.2"
+    anchor: "§5.2, estimation requirements"
+    statement: Produce a calculation-analytical estimate independently from contractor proposals using approved arrays, reference base and customer history.
+    disposition: include
+    architecture_refs: ["18.2", "27.3"]
+  - id: REQ-TZ-BUDGET-01
+    section: "5.3"
+    anchor: "§5.3, Сквозная оценка бюджета"
+    statement: Consolidated result includes budget compliance, baseline and adjusted margin, error range, critical threshold, three main risks and three corrective measures in rubles, and continuation conditions.
+    disposition: include
+    architecture_refs: ["13.1"]
+  - id: REQ-TZ-MODE-01
+    section: "5.4"
+    anchor: "§5.4, table Режим"
+    statement: Express is at most 15 lines without tables; Standard cites every number; Expert adds at least three alternatives and a matrix.
+    disposition: include
+    architecture_refs: ["13.1", "27.3"]
+  - id: REQ-TZ-UI-01
+    section: "5.5"
+    anchor: "§5.5, screen list"
+    statement: Provide six top-level screens including contractor-proposal comparison.
+    disposition: include
+    architecture_refs: ["9", "25", "27.1"]
+  - id: REQ-TZ-ASYNC-01
+    section: "5.6"
+    anchor: "§5.6, async execution"
+    statement: Run Standard and Expert checks asynchronously with queue state, notification, persistence and restart without re-upload.
+    disposition: include
+    architecture_refs: ["9", "21", "25"]
+  - id: REQ-TZ-DEPLOY-01
+    section: "6.1-6.3"
+    anchor: "§6.1-6.3"
+    statement: Deploy application and data in the customer perimeter and use configured local open-weight model endpoints by default.
+    disposition: include_with_owner_boundary
+    decision_ref: ADR-V3-005
+    architecture_refs: ["3", "6", "15", "30", "33"]
+  - id: REQ-TZ-INFRA-01
+    section: "6.2"
+    anchor: "§6.2, table Узел"
+    statement: Customer provides the minimum inference, application, database, network and Linux container infrastructure; final capacity is fixed by Stage 1 protocol.
+    disposition: include
+    architecture_refs: ["6.1", "31", "33"]
+  - id: REQ-TZ-CALC-01
+    section: "6.4"
+    anchor: "§6.4, calculation list"
+    statement: All numeric values in results and exports are computed by a deterministic calculation module; LLMs interpret and explain.
+    disposition: include
+    architecture_refs: ["4", "16", "18"]
+  - id: REQ-TZ-EXEMPLAR-01
+    section: "6.5"
+    anchor: "§6.5, Эталонные образцы"
+    statement: Prepare at least two customer-approved reference checks that define agent result format and checklist quality without transferring numbers between objects.
+    disposition: include
+    architecture_refs: ["12", "27.2", "33"]
+  - id: REQ-TZ-KNOWLEDGE-01
+    section: "7"
+    anchor: "§7, table Раздел"
+    statement: APRI reference base contains 14 named sections and is imported by an Administrator from a file of the agreed structure.
+    disposition: include
+    architecture_refs: ["19", "20", "25"]
+  - id: REQ-TZ-KNOWLEDGE-02
+    section: "7"
+    anchor: "§7, mandatory fields"
+    statement: Numeric records require value, unit, year, source, status and checked date; values older than 90 days produce a visible review warning.
+    disposition: include
+    architecture_refs: ["19", "27.3"]
+  - id: REQ-TZ-DOCS-01
+    section: "8.1"
+    anchor: "§8.1, table Формат"
+    statement: Support xlsx, xls, Grand Estimate XML, docx, text-layer PDF and agreed structured files, with preview, correction and reconciliation before calculation.
+    disposition: include
+    architecture_refs: ["17", "25", "27.1"]
+  - id: REQ-TZ-INT-01
+    section: "8.2"
+    anchor: "§8.2, data channels"
+    statement: Support StorHaus, versioned API and structured file channel with validation, idempotency, rejected-record reasons and audit.
+    disposition: include
+    architecture_refs: ["22", "22.1", "27.3"]
+  - id: REQ-TZ-DATA-01
+    section: "8.3"
+    anchor: "§8.3, contour rules"
+    statement: Keep customer secrets in the internal contour; permit external processing only under an approved data-transfer regulation after masking and anonymization.
+    disposition: include
+    architecture_refs: ["15", "23", "24", "27.1"]
+  - id: REQ-TZ-RESULT-01
+    section: "9"
+    anchor: "§9, result requirements"
+    statement: Every number has source status or FormulaTrace; normative status is current at answer date; open questions have owner and deadline; conflicts and recommendation are visible.
+    disposition: include
+    architecture_refs: ["12", "13.1", "16", "26"]
+  - id: REQ-TZ-RESULT-02
+    section: "9"
+    anchor: "§9, accuracy marker"
+    statement: Every estimate displays the contractual heuristic accuracy marker of ±10–15 percent without an estimate document and ±3–5 percent with one; the marker is not represented as achieved validated accuracy.
+    disposition: include
+    architecture_refs: ["13.1", "27.3"]
+  - id: REQ-TZ-EXPORT-01
+    section: "10"
+    anchor: "§10, table Документ"
+    statement: Generate calculation Excel with working formulas, parameter sheet and highlighted inputs; Word note with object passport, agent sections and consolidated conclusion; violations register with position, violation, amount, basis and resolution path; and proposal comparison with mapped positions, proposal prices, spread, system estimate, deviations and anomalies.
+    disposition: include
+    architecture_refs: ["16", "26", "27.1"]
+  - id: REQ-TZ-NFR-01
+    section: "11"
+    anchor: "§11, table Показатель"
+    statement: Meet Express 15 minutes, Standard 1 hour, Expert 5 hours, 2000 estimate positions, 99 percent working-hours availability and 12-month audit depth subject to customer infrastructure.
+    disposition: include
+    architecture_refs: ["21", "24", "31"]
+  - id: REQ-TZ-ACC-01
+    section: "12.1"
+    anchor: "§12.1, criteria а-л"
+    statement: Acceptance covers extraction, zero unexplained convergence delta, violation completeness, estimate explainability, data channels and contour separation.
+    disposition: include
+    architecture_refs: ["17", "18", "23", "27.3"]
+  - id: REQ-TZ-ACC-03
+    section: "12.1-12.2"
+    anchor: "§12.1г, §12.1и; §12.2, final sentence"
+    statement: Acceptance uses at least two objects and three proposals per object, includes Stage 2 and Stage 3 accuracy thresholds, and permits signed protocol calibration of the specified baseline metrics before acceptance.
+    disposition: include
+    architecture_refs: ["27.3"]
+  - id: REQ-TZ-ACC-02
+    section: "12.2"
+    anchor: "§12.2, agent checklist"
+    statement: Each of nine agents reaches at least 80 percent of its jointly agreed quality checklist on the control set.
+    disposition: include
+    architecture_refs: ["14.2", "27.2", "27.3"]
+  - id: REQ-TZ-DELIVERY-01
+    section: "13"
+    anchor: "§13, table Этап"
+    statement: Deliver four sequential stages over 135 calendar days, with agents and local runtime in stage 1, calculations in stage 2, comparison and estimate in stage 3, and UI, queue, integrations and UAT in stage 4.
+    disposition: include_with_owner_boundary
+    decision_ref: ADR-V3-005
+    architecture_refs: ["28", "33"]
+  - id: REQ-TZ-DELIVERY-02
+    section: "13"
+    anchor: "§13, paragraph after stage table"
+    statement: Customer reviews each stage result within one working day and submits requirement-linked comments; absent comments, the stage is deemed agreed, while delayed review shifts dependent work.
+    disposition: delivery_governance
+    architecture_refs: ["33"]
+  - id: REQ-TZ-OUT-01
+    section: "14"
+    anchor: "§14, exclusion list"
+    statement: Exclude OCR scans, ARPS, BIM or TIM, visual construction control, deep non-StorHaus integrations, object-level ACL, portfolio mode and equipment supply.
+    disposition: reference_scope
+    architecture_refs: ["17", "25", "30"]
+  - id: REQ-TZ-INPUT-01
+    section: "15.1"
+    anchor: "§15.1, table Материал"
+    statement: Customer provides infrastructure, at least three objects, document and proposal sets, historical data, reviewers, StorHaus materials, users and secrecy regime on stage-specific deadlines.
+    disposition: include
+    architecture_refs: ["6", "18", "19", "22", "33"]
+  - id: REQ-TZ-INPUT-02
+    section: "15.1"
+    anchor: "§15.1, complete material/volume/deadline table"
+    statement: Track every customer dependency without aggregation, with exact quantity and deadline for infrastructure, closed objects, parsing sets, comparison sets, historical data, financing and product parameters, StorHaus materials, reference and control objects, users and secrecy regime.
+    disposition: project_dependency
+    dependencies:
+      - material: infrastructure_and_access
+        quantity: "inference node and one combined application/database server"
+        deadline: "before Stage 1"
+      - material: closed_objects
+        quantity: "at least 3 objects covering customer product types; one complete object"
+        deadline: "one complete object before Stage 1; remaining objects within first 10 working days of Stage 1"
+      - material: parsing_sets
+        quantity: "at least 10 estimate/proposal sets"
+        deadline: "within first 10 working days of Stage 1"
+      - material: proposal_comparison_sets
+        quantity: "at least 5 sets; at least 3 proposals per set"
+        deadline: "before Stage 3"
+      - material: historical_estimate_data
+        quantity: "actual cost, contracts and estimates for transferred objects"
+        deadline: "Stages 1 and 3"
+      - material: financing_parameters
+        quantity: "financing rate, advance, retention and drawdown schedule per object"
+        deadline: "with object documents"
+      - material: area_and_product_matrix
+        quantity: "area and product matrix per object"
+        deadline: "with object documents"
+      - material: StorHaus_integration_materials
+        quantity: "full technical documentation, test contour and access"
+        deadline: "within first 15 working days of Stage 1"
+      - material: other_customer_api_materials
+        quantity: "technical documentation and API descriptions for the agreed list"
+        deadline: "within first 15 working days of Stage 1"
+      - material: data_transfer_regulation_approval
+        quantity: "not specified in source"
+        deadline: "Stage 1"
+      - material: exemplar_and_checklist_specialists
+        quantity: "specialist participation for at least 2 objects"
+        deadline: "Stage 1"
+      - material: manually_calculated_control_objects
+        quantity: "at least 2 objects"
+        deadline: "before Stage 4"
+      - material: document_owner_and_users
+        quantity: "responsible document owner and approved user list"
+        deadline: "before Stage 1"
+      - material: commercial_secrecy_regime
+        quantity: "approved list"
+        deadline: "before first documents"
+    architecture_refs: ["6.1", "27.3", "33"]
+  - id: REQ-TZ-EXECUTOR-01
+    section: "15.2"
+    anchor: "§15.2, first bullet"
+    statement: The source contract assigns local-model deployment to the Executor, while ADR-V3-005 excludes it from the application team boundary; an executed Stage 1 protocol or change request assigning responsibility is mandatory before Stage 1 starts.
+    disposition: conflict_requires_change_artifact
+    decision_ref: ADR-V3-005
+    required_evidence: signed_stage_1_protocol_or_change_request
+    architecture_refs: ["3", "6.1", "33"]
+  - id: REQ-TZ-DELAY-01
+    section: "15.3"
+    anchor: "§15.3, Последствия задержки"
+    statement: Delayed customer inputs shift dependent dates; fewer than three objects makes calibration of criterion 12.1г impossible and its threshold is then established from the materials actually provided; missing proposal sets prevents calibration of criterion 12.1и; missing StorHaus documentation, test environment or access prevents checking criterion 12.1к for integration.
+    disposition: include
+    architecture_refs: ["33"]
+  - id: REQ-TZ-WARRANTY-01
+    section: "16"
+    anchor: "§16, rights and warranty"
+    statement: Customer receives perpetual internal-use rights; customer data remains in its perimeter; warranty is 12 months with response within 24 astronomical hours excluding Saturday and Sunday, for software nonconformities and excluding infrastructure and new functionality.
+    disposition: include
+    architecture_refs: ["31.1"]

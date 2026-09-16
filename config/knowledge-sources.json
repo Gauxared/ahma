@@ -1,0 +1,49 @@
+{
+  "extensions": [
+    {
+      "id": "reference-base",
+      "version": 1,
+      "kind": "knowledge-source",
+      "implements": "1.0.0",
+      "contour": "internal",
+      "dataClasses": [
+        "prices",
+        "positions"
+      ],
+      "provides": [
+        "work_rates",
+        "materials",
+        "long_lead_equipment",
+        "cost_per_sqm_benchmark",
+        "financing_terms",
+        "labour_rates",
+        "output_norms",
+        "algorithms",
+        "normative_status",
+        "object_registry",
+        "plan_fact_reconciliation",
+        "contractors",
+        "proposal_comparison_history"
+      ]
+    },
+    {
+      "id": "object-documents",
+      "version": 1,
+      "kind": "knowledge-source",
+      "implements": "1.0.0",
+      "contour": "internal",
+      "dataClasses": [
+        "object_meta",
+        "positions",
+        "contract_terms"
+      ],
+      "provides": [
+        "estimate_documents",
+        "summary_documents",
+        "design_documents",
+        "contract_documents"
+      ],
+      "note": "ПРАВИЛО ТАКСОНОМИИ: источник объявляет СЫРЬЁ — то, что лежит в папке объекта. Извлечённые структуры объявляет операция, которая их извлекает. Смешение этих двух вещей делает область знания декоративной: если источник «предоставляет» позиции, разбору нечего у него требовать, и выключение источника ничего не останавливает."
+    }
+  ]
+}

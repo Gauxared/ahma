@@ -1,0 +1,53 @@
+{
+  "id": "verdict",
+  "version": 1,
+  "kind": "agent",
+  "implements": "1.0.0",
+  "contour": "internal",
+  "dataClasses": [
+    "positions",
+    "prices"
+  ],
+  "requiresPermissions": [
+    "check.run"
+  ],
+  "provides": [
+    "object_verdict"
+  ],
+  "displayName": "Руководитель",
+  "sourcePrompt": "reference-system-new/Выход/Артемий_РП_v9.7.txt",
+  "promptFile": "prompt.md",
+  "modelRole": "primary",
+  "checklistId": "артемий",
+  "referenceBase": "config/crew/bases/Опорный_документ_Артемий_РП_v1.0.xlsx",
+  "requiredSections": [
+    {
+      "id": "object_summary",
+      "title": "Сводка по объекту",
+      "why": "что сказал каждый смежник и как это сложилось в вердикт; без сводки вердикт не оспорить",
+      "columns": [
+        "Смежник",
+        "Вердикт",
+        "Главное замечание",
+        "Влияние на решение"
+      ]
+    },
+    {
+      "id": "start_conditions",
+      "title": "Условия старта",
+      "why": "что должно случиться, чтобы браться за объект; вердикт без условий — это мнение, а не решение",
+      "columns": [
+        "Условие",
+        "Кто закрывает",
+        "Срок",
+        "Что будет, если не закрыть"
+      ]
+    }
+  ],
+  "roster": {
+    "person": "Артемий",
+    "capability": "object_verdict",
+    "scope": "синтез",
+    "order": 9
+  }
+}

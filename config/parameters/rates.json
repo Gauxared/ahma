@@ -1,0 +1,31 @@
+{
+  "parameters": [
+    {
+      "id": "tax.vat.rate",
+      "unit": "fraction",
+      "values": [
+        {
+          "effectiveFrom": "2019-01-01",
+          "value": "0.20",
+          "source": "Федеральный закон № 303-ФЗ от 03.08.2018"
+        },
+        {
+          "effectiveFrom": "2026-01-01",
+          "value": "0.22",
+          "source": "ТЗ АПРИ от 11.08.2026, КП: НДС 22%"
+        }
+      ]
+    },
+    {
+      "id": "finance.key_rate",
+      "unit": "fraction_per_annum",
+      "values": [
+        {
+          "effectiveFrom": "2026-01-01",
+          "value": "0.21",
+          "source": "подлежит актуализации из опорной базы, раздел 05"
+        }
+      ]
+    }
+  ]
+}

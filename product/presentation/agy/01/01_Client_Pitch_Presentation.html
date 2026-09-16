@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>СтройИнтеллект - Клиентская презентация</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+/* 7КЛ Corporate Style Core */
+:root {
+  --red: #FF0000;
+  --white: #FFFFFF;
+  --black: #000000;
+  --light-gray: #F5F5F5;
+  --text-dark: #333333;
+  --text-gray: #666666;
+  --text-light: #999999;
+  --divider: #E0E0E0;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background-color: #222;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40px;
+  gap: 80px;
+}
+
+/* Slide Container (16:9 Layout) */
+.slide {
+  width: 1920px;
+  height: 1080px;
+  background-color: var(--white);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+  page-break-after: always;
+  flex-shrink: 0;
+  color: var(--text-dark);
+}
+
+@media print {
+  body { background: none; padding: 0; gap: 0; display: block; }
+  .slide { width: 1920px; height: 1080px; box-shadow: none; page-break-after: always; margin: 0; }
+  @page { size: 1920px 1080px; margin: 0; }
+}
+
+/* Core Typography */
+h1 { font-size: 54px; font-weight: 700; color: var(--black); margin-bottom: 60px; line-height: 1.2; }
+p, li { font-size: 28px; color: var(--text-dark); line-height: 1.5; margin-bottom: 25px; }
+.highlight-red { color: var(--red); font-weight: 700; }
+.highlight-bold { font-weight: 700; }
+.text-small { font-size: 22px; color: var(--text-gray); }
+
+/* Logo Branding (Strictly 1 line) */
+.logo-text { font-size: 56px; font-weight: 700; color: var(--black); white-space: nowrap; letter-spacing: -0.5px; }
+.logo-text span { color: var(--red); }
+.logo-text-small { font-size: 18px; font-weight: 700; color: var(--black); }
+.logo-text-small span { color: var(--red); }
+.logo-large { font-size: 80px; font-weight: 700; color: var(--black); white-space: nowrap; }
+.logo-large span { color: var(--red); }
+
+/* Standard Layouts */
+.content-slide { padding: 90px 100px 140px 120px; }
+.red-line { position: absolute; left: 50px; top: 90px; bottom: 140px; width: 12px; background-color: var(--red); }
+
+/* Footer */
+.footer {
+  position: absolute; bottom: 0; left: 0; right: 0; height: 60px;
+  background-color: var(--light-gray); display: flex; align-items: center; justify-content: flex-end; padding-right: 60px;
+}
+
+/* --- SLIDE TYPES --- */
+
+/* Title Slide */
+.title-slide { display: flex; }
+.title-slide .left {
+  width: 35%; border-right: 2px solid var(--divider); display: flex; align-items: center; justify-content: center;
+}
+.title-slide .right {
+  width: 65%; padding: 120px; display: flex; flex-direction: column; justify-content: center;
+}
+.title-main { font-size: 82px; font-weight: 700; margin-bottom: 25px; line-height: 1.1; }
+.title-sub { font-size: 38px; color: var(--text-gray); margin-bottom: 100px; }
+.title-metrics { display: flex; gap: 30px; }
+.metric-box { background-color: var(--light-gray); padding: 35px; flex: 1; text-align: center; }
+.metric-box-val { font-size: 42px; font-weight: 700; color: var(--red); margin-bottom: 10px; }
+.metric-box-label { font-size: 22px; color: var(--text-gray); }
+
+/* 2 Columns Equal */
+.grid-2col { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; height: 680px; }
+.block-gray { background-color: var(--light-gray); padding: 50px; height: 100%; display: flex; flex-direction: column; }
+.block-header { display: flex; align-items: center; gap: 25px; margin-bottom: 40px; }
+.icon-sq { width: 72px; height: 72px; background-color: var(--red); color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 36px; }
+.icon-sq-sm { width: 48px; height: 48px; font-size: 24px; }
+.block-header .title { font-size: 36px; font-weight: 700; color: var(--black); }
+
+/* Text + 3 Metrics (Right) */
+.grid-text-metrics { display: grid; grid-template-columns: 1fr 450px; gap: 60px; height: 680px; }
+.metrics-stack { display: flex; flex-direction: column; justify-content: space-between; height: 100%; gap: 30px; }
+.metric-card-right {
+  background-color: var(--light-gray); padding: 40px; box-shadow: 4px 4px 15px rgba(0,0,0,0.06); flex: 1;
+  display: flex; flex-direction: column; justify-content: center;
+}
+.metric-card-right .val { font-size: 64px; font-weight: 700; color: var(--red); line-height: 1; margin: 20px 0 10px 0; }
+.metric-card-right .lbl { font-size: 22px; color: var(--text-gray); }
+
+/* 3 Columns Cards */
+.grid-3col { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; height: 680px; }
+.card-shadow { display: flex; flex-direction: column; height: 100%; box-shadow: 4px 4px 15px rgba(0,0,0,0.06); }
+.card-header-red {
+  background-color: var(--red); color: var(--white); padding: 25px 30px; display: flex; align-items: center; gap: 20px; font-weight: 700; font-size: 32px;
+}
+.card-body { padding: 40px; background-color: var(--light-gray); flex-grow: 1; display: flex; flex-direction: column; }
+
+/* 5 Cards Grid (3 top, 2 bottom stretched) */
+.grid-5cards { display: flex; flex-direction: column; gap: 40px; height: 680px; }
+.grid-5cards-top { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; flex: 1; }
+.grid-5cards-bottom { display: grid; grid-template-columns: repeat(2, 1fr); gap: 40px; flex: 1; }
+
+/* 4 KPI Cards */
+.kpi-wrapper { display: flex; flex-direction: column; height: 680px; }
+.kpi-intro { font-size: 32px; margin-bottom: 50px; }
+.grid-4kpi { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; margin-bottom: 50px; flex-grow: 1; }
+.kpi-card { background-color: var(--light-gray); padding: 50px 40px; box-shadow: 4px 4px 15px rgba(0,0,0,0.06); text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.kpi-card .val { font-size: 72px; font-weight: 700; color: var(--red); margin: 30px 0 20px 0; line-height: 1; }
+.kpi-card .lbl { font-size: 24px; color: var(--text-dark); }
+.kpi-context { background-color: var(--light-gray); padding: 30px 40px; font-size: 28px; text-align: center; font-weight: 700; }
+
+/* Compare Do / Posle */
+.grid-compare { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; height: 680px; }
+.comp-col { background-color: var(--light-gray); display: flex; flex-direction: column; height: 100%; }
+.comp-header-gray { background-color: var(--text-light); color: var(--white); padding: 30px; font-size: 36px; font-weight: 700; text-align: center; }
+.comp-header-red { background-color: var(--red); color: var(--white); padding: 30px; font-size: 36px; font-weight: 700; text-align: center; }
+.comp-body { padding: 40px; flex-grow: 1; display: flex; flex-direction: column; gap: 30px; }
+.comp-item { display: flex; gap: 20px; align-items: flex-start; }
+.comp-icon-gray { width: 40px; height: 40px; background-color: var(--text-light); color: var(--white); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.comp-icon-red { width: 40px; height: 40px; background-color: var(--red); color: var(--white); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+
+/* Timeline */
+.timeline-wrapper { height: 680px; display: flex; flex-direction: column; justify-content: center; position: relative; }
+.timeline-track { position: absolute; top: 116px; left: 8%; right: 8%; height: 14px; background-color: var(--red); z-index: 1; }
+.timeline-nodes { display: flex; justify-content: space-between; position: relative; z-index: 2; padding: 0 8%; margin-bottom: 60px; }
+.timeline-node { width: 80px; height: 80px; background-color: var(--red); border-radius: 50%; color: var(--white); display: flex; align-items: center; justify-content: center; font-size: 36px; font-weight: 700; border: 10px solid var(--white); }
+.timeline-cards { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+.timeline-card { background-color: var(--light-gray); padding: 40px; box-shadow: 4px 4px 15px rgba(0,0,0,0.06); position: relative; display: flex; flex-direction: column; }
+.badge { display: inline-block; background-color: var(--red); color: var(--white); padding: 12px 24px; font-weight: 700; font-size: 22px; margin-top: auto; align-self: flex-start; }
+
+/* Contact Slide */
+.contact-slide { display: flex; }
+.contact-slide .red-line { left: 0; top: 0; bottom: 0; width: 14px; }
+.contact-slide .left { width: 50%; border-right: 2px solid var(--divider); padding: 150px; display: flex; flex-direction: column; justify-content: center; }
+.contact-slide .right { width: 50%; display: flex; align-items: center; justify-content: center; }
+.contact-title { font-size: 64px; font-weight: 700; margin-bottom: 40px; }
+.contact-cta { font-size: 32px; color: var(--red); font-weight: 700; margin-bottom: 60px; line-height: 1.4; }
+.contact-info { font-size: 32px; line-height: 2; }
+.contact-info a { color: var(--red); text-decoration: underline; font-weight: 700; }
+
+</style>
+</head>
+<body>
+
+<!-- SLIDE 1: Титульный -->
+<div class="slide title-slide">
+  <div class="left">
+    <div class="logo-text">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+  </div>
+  <div class="right">
+    <h1 class="title-main">СтройИнтеллект</h1>
+    <div class="title-sub">Цифровая служба технического заказчика</div>
+    <div class="title-metrics">
+      <div class="metric-box">
+        <div class="metric-box-val">135 дней</div>
+        <div class="metric-box-label">на полное внедрение</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-box-val">9</div>
+        <div class="metric-box-label">ИИ-экспертов</div>
+      </div>
+      <div class="metric-box">
+        <div class="metric-box-val">250+</div>
+        <div class="metric-box-label">объектов в базе</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SLIDE 2: Проблема 1 -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Статус-кво: иллюзия контроля бюджета</h1>
+  <div class="grid-text-metrics">
+    <div class="block-gray">
+      <p>В современном строительстве <span class="highlight-red">невозможно вручную уследить за каждой цифрой</span>. Подрядчики используют сложную документацию, и выявление двойного учёта или завышенных коэффициентов в 500-страничных сметах занимает колоссальное время.</p>
+      <p>Служба технического заказчика работает на пределе возможностей. Цена этой перегрузки — <span class="highlight-bold">скрытые переплаты</span>, которые обнаруживаются только тогда, когда акты уже подписаны, а деньги выплачены.</p>
+      <p>Кассовые разрывы и падение маржинальности часто становятся <span class="highlight-red">болезненным сюрпризом для финансового директора</span> постфактум.</p>
+    </div>
+    <div class="metrics-stack">
+      <div class="metric-card-right">
+        <div class="icon-sq-sm" style="background-color: var(--red); color: white; display: flex; align-items: center; justify-content: center;"><i class="fas fa-chart-pie"></i></div>
+        <div class="val">2–5%</div>
+        <div class="lbl">Потери от подрядного бюджета на скрытых переплатах</div>
+      </div>
+      <div class="metric-card-right">
+        <div class="icon-sq-sm" style="background-color: var(--red); color: white; display: flex; align-items: center; justify-content: center;"><i class="fas fa-clock"></i></div>
+        <div class="val">1–2 нед.</div>
+        <div class="lbl">Время ручной проверки одного пакета смет</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 3: Почему старые методы не работают -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Почему существующие ИТ-системы не решают проблему?</h1>
+  <div class="grid-2col">
+    <div class="block-gray">
+      <div class="block-header">
+        <div class="icon-sq"><i class="fas fa-folder-open"></i></div>
+        <div class="title">Системы документооборота</div>
+      </div>
+      <p>Популярные решения (например, среды общих данных, классические ERP) отлично справляются с <span class="highlight-bold">маршрутизацией и хранением</span> документов.</p>
+      <p>Но они не проверяют суть. Они передают смету от подрядчика к техзаказчику быстрее, но <span class="highlight-red">не выявляют математические и логические аномалии</span> внутри самого документа.</p>
+    </div>
+    <div class="block-gray">
+      <div class="block-header">
+        <div class="icon-sq"><i class="fas fa-calculator"></i></div>
+        <div class="title">Сметные программы</div>
+      </div>
+      <p>Сметное ПО проверяет соответствие нормативам, но <span class="highlight-bold">не даёт рыночной оценки стоимости</span>.</p>
+      <p>Они пересчитают формулы, но <span class="highlight-red">не подскажут, много это или мало</span>. Они не знают, за сколько этот же вид работ выполняли на ваших прошлых объектах.</p>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 4: Видение решения -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>СтройИнтеллект: ИИ-платформа финансово-технического контроля</h1>
+  <div class="grid-3col">
+    <div class="card-shadow">
+      <div class="card-header-red"><i class="fas fa-users"></i> 9 Цифровых агентов</div>
+      <div class="card-body">
+        <p>Каждый документ одновременно анализируют <span class="highlight-bold">девять специализированных ИИ-агентов</span> (ГИП, Сметчик, Юрист, Экономист и др.).</p>
+        <p>Вместо последовательной ручной работы — параллельный экспертный анализ.</p>
+      </div>
+    </div>
+    <div class="card-shadow">
+      <div class="card-header-red"><i class="fas fa-database"></i> База из 250+ объектов</div>
+      <div class="card-body">
+        <p>Основа системы — обезличенный <span class="highlight-red">исторический массив данных</span> по завершённым строительным проектам по всей России.</p>
+        <p>Система знает реальную рыночную стоимость любых работ и материалов.</p>
+      </div>
+    </div>
+    <div class="card-shadow">
+      <div class="card-header-red"><i class="fas fa-cogs"></i> Детерминированный расчёт</div>
+      <div class="card-body">
+        <p>Искусственный интеллект не считает цифры — он извлекает данные и интерпретирует их.</p>
+        <p>Арифметику, суммы и финмодели считает <span class="highlight-bold">строгий детерминированный модуль</span> без риска галлюцинаций.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 5: Агенты 1 -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Девять ИИ-агентов: полный контроль объекта (1/2)</h1>
+  <div class="grid-5cards">
+    <div class="grid-5cards-top">
+      <div class="card-shadow">
+        <div class="card-header-red"><i class="fas fa-hard-hat"></i> 1. Главный инженер (ГИП)</div>
+        <div class="card-body"><p>Проверяет технические параметры, объёмы, комплектность документов. Формирует <span class="highlight-bold">реестр технических несоответствий</span> и допущений проекта.</p></div>
+      </div>
+      <div class="card-shadow">
+        <div class="card-header-red"><i class="fas fa-calculator"></i> 2. Сметчик</div>
+        <div class="card-body"><p>Анализирует смету построчно. Сравнивает расценки и коэффициенты с рынком. Выдаёт <span class="highlight-red">реестр потенциальных переплат</span> и сумму отклонений.</p></div>
+      </div>
+      <div class="card-shadow">
+        <div class="card-header-red"><i class="fas fa-truck-loading"></i> 3. Снабжение</div>
+        <div class="card-body"><p>Проверяет стоимость материалов и оборудования, сопоставляет их с опорной базой. Подсвечивает <span class="highlight-bold">критические сроки заказа</span> и логистики.</p></div>
+      </div>
+    </div>
+    <div class="grid-5cards-bottom">
+      <div class="card-shadow">
+        <div class="card-header-red"><i class="fas fa-handshake"></i> 4. Поиск подрядчиков</div>
+        <div class="card-body"><p>Анализирует и сопоставляет коммерческие предложения. Выявляет <span class="highlight-red">ценовые аномалии</span> и формирует справедливый, рекомендованный диапазон цены.</p></div>
+      </div>
+      <div class="card-shadow">
+        <div class="card-header-red"><i class="fas fa-chart-line"></i> 5. Экономист</div>
+        <div class="card-body"><p>Считает себестоимость (₽/м²) и строит <span class="highlight-bold">финансовую модель в 3 сценариях</span>. Строит график выборки кредита и прогнозирует кассовые разрывы.</p></div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 6: Агенты 2 -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Девять ИИ-агентов: полный контроль объекта (2/2)</h1>
+  <div class="kpi-wrapper" style="height: auto;">
+    <div class="grid-2col" style="height: 680px;">
+      <div class="grid-5cards" style="display: grid; grid-template-columns: 1fr; gap: 40px; height: 100%;">
+        <div class="card-shadow">
+          <div class="card-header-red"><i class="fas fa-clipboard-check"></i> 6. Инженер ПТО</div>
+          <div class="card-body"><p>Анализирует формы выполнения КС-2 и КС-3, оценивая <span class="highlight-red">финансовое влияние расхождений</span> на итоговый бюджет и маржинальность проекта.</p></div>
+        </div>
+        <div class="card-shadow">
+          <div class="card-header-red"><i class="fas fa-balance-scale"></i> 7. Юрист</div>
+          <div class="card-body"><p>Исследует договор подряда с позиции защиты застройщика. Формирует <span class="highlight-bold">перечень юридических рисков</span> и даёт рекомендации по их урегулированию до подписания.</p></div>
+        </div>
+      </div>
+      <div class="grid-5cards" style="display: grid; grid-template-columns: 1fr; gap: 40px; height: 100%;">
+        <div class="card-shadow">
+          <div class="card-header-red"><i class="fas fa-user-tie"></i> 8. Руководитель проекта (РП)</div>
+          <div class="card-body"><p>Синтезирует выводы всех остальных агентов. Формирует <span class="highlight-bold">сводный управленческий вывод</span> по ключевым рискам, деньгам и срокам.</p></div>
+        </div>
+        <div class="card-shadow">
+          <div class="card-header-red"><i class="fas fa-clipboard-list"></i> 9. Администратор</div>
+          <div class="card-body"><p>Ведёт паспорт объекта и единый журнал работы. Контролирует <span class="highlight-red">ответственных лиц и дедлайны</span> по каждому открытому вопросу или риску.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 7: Главное отличие -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Как мы находим скрытые потери: Расчётная модель</h1>
+  <div class="grid-text-metrics">
+    <div class="block-gray">
+      <p>Сопоставление сметы с единственным предложением подрядчика не даёт релевантной оценки: <span class="highlight-bold">отсутствует база сравнения</span>.</p>
+      <p>Система решает эту задачу <span class="highlight-red">собственной расчётно-аналитической оценкой</span>. Мы формируем независимую оценку стоимости по каждой значимой позиции, независимо от того, что предложил подрядчик.</p>
+      <p>Затем предложения подрядчиков сопоставляются с нашей оценкой: система показывает разброс, медиану, аномалии и <span class="highlight-bold">рекомендованный диапазон цены</span>.</p>
+    </div>
+    <div class="metrics-stack">
+      <div class="metric-card-right">
+        <div class="icon-sq-sm" style="background-color: var(--red); color: white; display: flex; align-items: center; justify-content: center;"><i class="fas fa-search-dollar"></i></div>
+        <div class="val">250+</div>
+        <div class="lbl">Реальных объектов в базе обучения</div>
+      </div>
+      <div class="metric-card-right">
+        <div class="icon-sq-sm" style="background-color: var(--red); color: white; display: flex; align-items: center; justify-content: center;"><i class="fas fa-history"></i></div>
+        <div class="val">100%</div>
+        <div class="lbl">Адаптация под исторические данные клиента</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 8: Экономика / ROI -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Экономический эффект внедрения системы</h1>
+  <div class="kpi-wrapper">
+    <div class="kpi-intro">
+      Главная единица ценности СтройИнтеллект — это <span class="highlight-red">предотвращённая финансовая потеря</span>. Рассмотрим математику возврата инвестиций (ROI) на типичном строительном проекте:
+    </div>
+    <div class="grid-4kpi">
+      <div class="kpi-card">
+        <div class="icon-sq" style="border-radius: 50%;"><i class="fas fa-building"></i></div>
+        <div class="val">1 млрд ₽</div>
+        <div class="lbl">Средний подрядный бюджет на 1 объект</div>
+      </div>
+      <div class="kpi-card">
+        <div class="icon-sq" style="border-radius: 50%;"><i class="fas fa-percentage"></i></div>
+        <div class="val">2%</div>
+        <div class="lbl">Средняя выявляемая экономия от бюджета</div>
+      </div>
+      <div class="kpi-card">
+        <div class="icon-sq" style="border-radius: 50%;"><i class="fas fa-wallet"></i></div>
+        <div class="val">20 млн ₽</div>
+        <div class="lbl">Сохранённая чистая прибыль (на 1 объект)</div>
+      </div>
+      <div class="kpi-card">
+        <div class="icon-sq" style="border-radius: 50%;"><i class="fas fa-chart-line"></i></div>
+        <div class="val">140%</div>
+        <div class="lbl">ROI в первый год (при 3 объектах)</div>
+      </div>
+    </div>
+    <div class="kpi-context">
+      Даже при минимальной оценке в 2% экономии, система <span class="highlight-red">полностью окупает себя уже на первом крупном объекте</span>.
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 9: Финмодель -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Глубокая работа с маржинальностью и БДДС</h1>
+  <div class="grid-2col">
+    <div class="block-gray">
+      <div class="block-header">
+        <div class="icon-sq"><i class="fas fa-project-diagram"></i></div>
+        <div class="title">Три сценария маржи</div>
+      </div>
+      <p>Агент-Экономист не просто считает расходы. Он автоматически строит финансовую модель проекта в <span class="highlight-bold">трёх сценариях</span>: оптимистичном, базовом и пессимистичном.</p>
+      <p>Вы заранее видите коридор рентабельности и можете принимать управленческие решения <span class="highlight-red">до входа в стройку</span>, а не констатировать убытки в конце.</p>
+    </div>
+    <div class="block-gray">
+      <div class="block-header">
+        <div class="icon-sq"><i class="fas fa-university"></i></div>
+        <div class="title">Проектное финансирование</div>
+      </div>
+      <p>Система формирует Бюджет движения денежных средств (БДДС) и <span class="highlight-bold">прогнозирует даты кассовых разрывов</span>.</p>
+      <p>Вы получаете точный график выборки кредита и расчёт даты раскрытия эскроу-счетов, что <span class="highlight-red">критически важно для работы с банками</span>.</p>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 10: Информационная безопасность -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Абсолютная защита ваших коммерческих данных</h1>
+  <div class="grid-3col">
+    <div class="card-shadow">
+      <div class="card-header-red"><i class="fas fa-server"></i> Локальные модели (On-Premise)</div>
+      <div class="card-body">
+        <p>Система работает <span class="highlight-bold">на ваших вычислительных мощностях</span> с использованием ИИ-моделей с открытыми весами.</p>
+        <p>Ваши сметы, договоры и коммерческая тайна <span class="highlight-red">никогда не покидают периметр</span> вашей компании.</p>
+      </div>
+    </div>
+    <div class="card-shadow">
+      <div class="card-header-red"><i class="fas fa-shield-alt"></i> Два контура безопасности</div>
+      <div class="card-body">
+        <p>Работа системы разделена: внутренний контур для анализа коммерческой тайны и строго ограниченный <span class="highlight-bold">внешний контур</span> (например, для парсинга рыночных цен).</p>
+        <p>Любые запросы вовне проходят обязательную <span class="highlight-red">анонимизацию и маскирование</span>.</p>
+      </div>
+    </div>
+    <div class="card-shadow">
+      <div class="card-header-red"><i class="fas fa-user-secret"></i> Никакого скрытого обучения</div>
+      <div class="card-body">
+        <p>Ваши исторические данные используются исключительно для <span class="highlight-bold">калибровки вашей личной версии</span> системы.</p>
+        <p>Ни один байт вашей информации не используется нами для обучения систем других клиентов.</p>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 11: Timeline внедрения -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Дорожная карта внедрения: 4 этапа за 135 дней</h1>
+  <div class="timeline-wrapper">
+    <div class="timeline-track"></div>
+    <div class="timeline-nodes">
+      <div class="timeline-node">1</div>
+      <div class="timeline-node">2</div>
+      <div class="timeline-node">3</div>
+      <div class="timeline-node">4</div>
+    </div>
+    <div class="timeline-cards">
+      <div class="timeline-card">
+        <div class="icon-sq" style="width:50px;height:50px;font-size:24px;margin-bottom:20px;"><i class="fas fa-cogs"></i></div>
+        <h3 style="font-size:26px;margin-bottom:15px;font-weight:700;">Развёртывание контура</h3>
+        <p style="font-size:20px;">Установка системы. Адаптация моделей и наполнение базы по 3+ историческим объектам клиента.</p>
+        <div class="badge">45 дней</div>
+      </div>
+      <div class="timeline-card">
+        <div class="icon-sq" style="width:50px;height:50px;font-size:24px;margin-bottom:20px;"><i class="fas fa-calculator"></i></div>
+        <h3 style="font-size:26px;margin-bottom:15px;font-weight:700;">Расчётный модуль</h3>
+        <p style="font-size:20px;">Настройка автоматического разбора смет (Excel/XML). Запуск финмодели и расчёта себестоимости ₽/м².</p>
+        <div class="badge">40 дней</div>
+      </div>
+      <div class="timeline-card">
+        <div class="icon-sq" style="width:50px;height:50px;font-size:24px;margin-bottom:20px;"><i class="fas fa-balance-scale-right"></i></div>
+        <h3 style="font-size:26px;margin-bottom:15px;font-weight:700;">Сравнительный контур</h3>
+        <p style="font-size:20px;">Запуск модели оценки стоимости. Автоматическое сопоставление предложений подрядчиков и поиск аномалий.</p>
+        <div class="badge">30 дней</div>
+      </div>
+      <div class="timeline-card">
+        <div class="icon-sq" style="width:50px;height:50px;font-size:24px;margin-bottom:20px;"><i class="fas fa-check-circle"></i></div>
+        <h3 style="font-size:26px;margin-bottom:15px;font-weight:700;">Интерфейс и приёмка</h3>
+        <p style="font-size:20px;">Запуск веб-экранов, интеграция очереди задач. Обучение пользователей. Сдача в опытно-промышленную эксплуатацию.</p>
+        <div class="badge">20 дней</div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 12: Итог (До / После) -->
+<div class="slide content-slide">
+  <div class="red-line"></div>
+  <h1>Резюме: трансформация финансового контроля</h1>
+  <div class="grid-compare">
+    <div class="comp-col">
+      <div class="comp-header-gray">Обычный процесс</div>
+      <div class="comp-body">
+        <div class="comp-item">
+          <div class="comp-icon-gray"><i class="fas fa-times"></i></div>
+          <p>Ручная проверка одной сметы занимает <span class="highlight-bold">недели</span> рабочего времени.</p>
+        </div>
+        <div class="comp-item">
+          <div class="comp-icon-gray"><i class="fas fa-times"></i></div>
+          <p>Слепой выбор подрядчика: <span class="highlight-bold">отсутствие независимой расчётной базы</span> для сравнения цен.</p>
+        </div>
+        <div class="comp-item">
+          <div class="comp-icon-gray"><i class="fas fa-times"></i></div>
+          <p>Скрытые переплаты в 2–5% обнаруживаются <span class="highlight-bold">после подписания актов</span> выполнения.</p>
+        </div>
+        <div class="comp-item">
+          <div class="comp-icon-gray"><i class="fas fa-times"></i></div>
+          <p>Постоянный <span class="highlight-bold">риск кассовых разрывов</span> из-за несвоевременного обновления финмодели.</p>
+        </div>
+      </div>
+    </div>
+    <div class="comp-col">
+      <div class="comp-header-red">СтройИнтеллект</div>
+      <div class="comp-body">
+        <div class="comp-item">
+          <div class="comp-icon-red"><i class="fas fa-check"></i></div>
+          <p>Комплексный анализ пакета документов за <span class="highlight-red">15 минут</span> (экспресс) или до 5 часов (углублённый).</p>
+        </div>
+        <div class="comp-item">
+          <div class="comp-icon-red"><i class="fas fa-check"></i></div>
+          <p>Мгновенное выявление ценовых аномалий на базе <span class="highlight-bold">250+ исторических объектов</span>.</p>
+        </div>
+        <div class="comp-item">
+          <div class="comp-icon-red"><i class="fas fa-check"></i></div>
+          <p>Предотвращение переплат: отклонения фиксируются <span class="highlight-red">до входа в стройку</span>.</p>
+        </div>
+        <div class="comp-item">
+          <div class="comp-icon-red"><i class="fas fa-check"></i></div>
+          <p>Предсказуемая маржинальность проекта и <span class="highlight-bold">автоматический расчёт графика кредитования</span>.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer"><div class="logo-text-small">7 <span>КРАСНЫХ</span> ЛИНИЙ</div></div>
+</div>
+
+<!-- SLIDE 13: Контактный -->
+<div class="slide contact-slide">
+  <div class="red-line" style="position:absolute;"></div>
+  <div class="left">
+    <div class="contact-title">Контакты</div>
+    <div class="contact-cta">Слова ничего не значат без цифр. Давайте бесплатно проведём расчёт на 1–2 ваших закрытых объектах и покажем реальные скрытые потери.</div>
+    <div class="contact-info">
+      <div><i class="fas fa-phone"></i> +7 (495) 198-14-77</div>
+      <div style="margin-top:15px;"><i class="fas fa-envelope"></i> <a href="mailto:info@7rlines.com">info@7rlines.com</a></div>
+      <div style="margin-top:15px;"><i class="fas fa-globe"></i> <a href="https://7rlines.ru">7rlines.ru</a></div>
+      <div style="margin-top: 35px;"><i class="fas fa-map-marker-alt"></i> 119049, Москва, ул. Шаболовка, 23к3</div>
+    </div>
+  </div>
+  <div class="right">
+    <div class="logo-large">7 <span>КРАСНЫХ</span> ЛИНИЙ</div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,65 @@
+{
+  "id": "finance-model",
+  "version": 1,
+  "kind": "agent",
+  "implements": "1.0.0",
+  "contour": "internal",
+  "dataClasses": [
+    "prices",
+    "positions"
+  ],
+  "requiresPermissions": [
+    "check.run"
+  ],
+  "provides": [
+    "finance_model"
+  ],
+  "displayName": "Эконом",
+  "sourcePrompt": "reference-system-new/Выход/Ваныч_Эконом_v9.6.txt",
+  "promptFile": "prompt.md",
+  "modelRole": "primary",
+  "checklistId": "ваныч",
+  "referenceBase": "config/crew/bases/Опорная_база_Ваныч_Эконом_v1.0.xlsx",
+  "requiredSections": [
+    {
+      "id": "parameters",
+      "title": "Параметры расчёта",
+      "why": "ставки и допущения, принятые в модели; без них цифра финрезультата непроверяема",
+      "columns": [
+        "Параметр",
+        "Принятое значение",
+        "Откуда взято",
+        "Чувствительность"
+      ]
+    },
+    {
+      "id": "cost_total",
+      "title": "Себестоимость: итог",
+      "why": "из чего складывается себестоимость объекта — это ответ эконома при любом предмете стройки",
+      "columns": [
+        "Статья затрат",
+        "Сумма, ₽",
+        "Доля, %",
+        "Основание"
+      ]
+    },
+    {
+      "id": "financial_result",
+      "title": "Финансовый результат",
+      "why": "выручка, себестоимость, маржа и то, чем маржа обеспечена",
+      "columns": [
+        "Показатель",
+        "Сумма, ₽",
+        "Доля выручки, %",
+        "Чем обеспечен",
+        "Риск"
+      ]
+    }
+  ],
+  "roster": {
+    "person": "Ваныч",
+    "capability": "finance_model",
+    "scope": "объект",
+    "order": 4
+  }
+}
