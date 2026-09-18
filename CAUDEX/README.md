@@ -101,15 +101,29 @@ LLM допустим для извлечения структуры из сла�
 9. [`09_ACCEPTANCE_CASES.md`](09_ACCEPTANCE_CASES.md) — измеримые кейсы Волковского и обязательная проверка на втором объекте.
 10. [`10_CURRENT_CODE_MAPPING.md`](10_CURRENT_CODE_MAPPING.md) — карта текущего кода `REUSE / ADAPT / FREEZE / REMOVE / MISSING` и migration strategy.
 11. [`11_DELIVERY_BACKLOG.md`](11_DELIVERY_BACKLOG.md) — delivery epics, PR-sized порядок реализации, release gate и граница первой задачи для Codex.
+12. [`12_TARGET_ARCHITECTURE.md`](12_TARGET_ARCHITECTURE.md) — целевая архитектура первого контура: ingestion, canonical ledger, lifecycle/blocker engines, UI read models и controlled AI boundary.
+13. [`13_ANALYTICS_SUMMARY.md`](13_ANALYTICS_SUMMARY.md) — человекочитаемая сводка для команды/руководства: проблема, продуктовый поворот, место AI, MVP, метрики и решения.
 
-## Следующий пакет
+## Статус аналитической базы
 
-До передачи production-реализации агенту остаётся два документа верхнего уровня:
+**CAUDEX v1 считается зафиксированным аналитическим baseline первого продуктового контура.**
 
-- `12_TARGET_ARCHITECTURE.md` — короткая целевая архитектура первого контура с границами модулей и потоками данных, без изобретения новой платформы;
-- `13_ANALYTICS_SUMMARY.md` — человекочитаемая сводка для коллеги/руководства: проблема, продуктовый поворот, место AI, MVP, что сохраняем и что перестаём развивать.
+Он описывает:
 
-После их фиксации Codex подключается сначала **в read-only режиме как технический аудитор** по заданию из `10_CURRENT_CODE_MAPPING.md` / `11_DELIVERY_BACKLOG.md`, а не как автор новой продуктовой архитектуры.
+`product boundary → AS-IS → problem map → AI boundary → TO-BE → domain model → data contracts → requirements → acceptance → current-code mapping → delivery backlog → target architecture → management summary`.
+
+Следующий шаг — не расширять аналитику ещё одним слоем абстракции, а проверить её против текущего кода.
+
+Codex подключается сначала **в read-only режиме как технический аудитор**:
+
+- проверить assumptions `10_CURRENT_CODE_MAPPING.md`;
+- подтвердить/оспорить reuse points;
+- найти реальные зависимости legacy agent flow;
+- предложить минимальный module boundary нового contour;
+- сопоставить persistence/contracts gaps;
+- определить, какие acceptance fixtures уже можно собрать из существующих тестов/reference data.
+
+Только после такого аудита начинается реализация `11_DELIVERY_BACKLOG.md`.
 
 ## Правило изменений
 
