@@ -96,14 +96,20 @@ LLM допустим для извлечения структуры из сла�
 4. [`04_PROBLEM_MAP.md`](04_PROBLEM_MAP.md) — симптомы → root causes → требования к продукту.
 5. [`05_TO_BE.md`](05_TO_BE.md) — целевой сквозной процесс от источников до business findings и денег.
 6. [`06_DOMAIN_MODEL.md`](06_DOMAIN_MODEL.md) — канонические сущности, события, blockers, invariants и read model.
+7. [`07_DATA_CONTRACTS.md`](07_DATA_CONTRACTS.md) — структуры входов, canonical payloads, unknown/conflict semantics и validation pipeline.
+8. [`08_MVP_REQUIREMENTS.md`](08_MVP_REQUIREMENTS.md) — функциональные/нефункциональные требования первого vertical slice.
+9. [`09_ACCEPTANCE_CASES.md`](09_ACCEPTANCE_CASES.md) — измеримые кейсы Волковского и обязательная проверка на втором объекте.
+10. [`10_CURRENT_CODE_MAPPING.md`](10_CURRENT_CODE_MAPPING.md) — карта текущего кода `REUSE / ADAPT / FREEZE / REMOVE / MISSING` и migration strategy.
+11. [`11_DELIVERY_BACKLOG.md`](11_DELIVERY_BACKLOG.md) — delivery epics, PR-sized порядок реализации, release gate и граница первой задачи для Codex.
 
-Следующий пакет:
+## Следующий пакет
 
-- `07_DATA_CONTRACTS.md` — структуры входов и canonical payloads;
-- `08_MVP_REQUIREMENTS.md` — функциональные/нефункциональные требования первого vertical slice;
-- `09_ACCEPTANCE_CASES.md` — измеримые кейсы Волковского и второго объекта;
-- `10_CURRENT_CODE_MAPPING.md` — что из текущего СтройИнтел reuse / adapt / freeze / remove;
-- `11_DELIVERY_BACKLOG.md` — задачи для разработчиков после утверждения аналитики.
+До передачи production-реализации агенту остаётся два документа верхнего уровня:
+
+- `12_TARGET_ARCHITECTURE.md` — короткая целевая архитектура первого контура с границами модулей и потоками данных, без изобретения новой платформы;
+- `13_ANALYTICS_SUMMARY.md` — человекочитаемая сводка для коллеги/руководства: проблема, продуктовый поворот, место AI, MVP, что сохраняем и что перестаём развивать.
+
+После их фиксации Codex подключается сначала **в read-only режиме как технический аудитор** по заданию из `10_CURRENT_CODE_MAPPING.md` / `11_DELIVERY_BACKLOG.md`, а не как автор новой продуктовой архитектуры.
 
 ## Правило изменений
 
